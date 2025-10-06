@@ -1,0 +1,23 @@
+<!--Ejercicio 1.3: Solicitar en un <input> un texto y mostrarlo en una capa <div>
+pulsando sobre un botón.-->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+ <meta charset="UTF-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Mostrar texto en div</title>
+</head>
+<body>
+ <input type="text" id="textoInput" placeholder="Introduce un texto">
+ <button id="mostrarBtn">Mostrar texto</button>
+ <div id="textoDiv"></div>
+
+ <script>
+  document.getElementById("mostrarBtn").addEventListener("click", function() {
+   let texto = document.getElementById("textoInput").value;
+   document.getElementById("textoDiv").innerText = texto;
+  });
+ </script>
+</body>
+</html>

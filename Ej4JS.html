@@ -1,0 +1,26 @@
+<!--Ejercicio 1.4: Cargar una lista plegable con nombres de imágenes que tienes guardadas en el disco y cuando se selecciona una de la lista, visualizar esa imagen.-->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+ <meta charset="UTF-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Mostrar imagen seleccionada</title>
+</head>
+<body>
+ <select id="imagenSelect">
+  <option value="imagen1.jpg">Imagen 1</option>
+  <option value="imagen2.jpg">Imagen 2</option>
+  <option value="imagen3.jpg">Imagen 3</option>
+ </select>
+ <button id="mostrarBtn">Mostrar imagen</button>
+ <div id="imagenDiv"></div>
+
+ <script>
+  document.getElementById("mostrarBtn").addEventListener("click", function() {
+   let imagen = document.getElementById("imagenSelect").value;
+   document.getElementById("imagenDiv").innerHTML = "<img src='" + imagen + "' alt='Imagen seleccionada'>";
+  });
+ </script>
+</body>
+</html>
