@@ -1,0 +1,24 @@
+<!--Ejercicio 1.2: Seleccionar de una lista plegada un color y mostrarlo por la consola-->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+ <meta charset="UTF-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Seleccionar color</title>
+</head>
+<body>
+    <select>
+        <option value="rojo">Rojo</option>
+        <option value="verde">Verde</option>
+        <option value="azul">Azul</option>
+    </select>
+    <button id="Seleccionar">Seleccionar</button>
+    <script>
+        document.getElementById('Seleccionar').addEventListener('click', function() {
+            let colorSeleccionado = document.querySelector('select').value;
+            console.log("Color seleccionado: " + colorSeleccionado);
+        });
+    </script>
+</body>
+</html>

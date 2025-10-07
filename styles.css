@@ -1,0 +1,244 @@
+/* Colores: Naranja (#f39f18), Morado (#b64172), Blanco (#ffffff) */
+
+/* ============================================== */
+/* ESTILOS GLOBALES Y ESTRUCTURA BASE (menu.html) */
+/* ============================================== */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff; 
+    color: #333;
+}
+
+/* Estructura de Frames */
+.contenedor-frames {
+    display: flex;
+    height: 100vh;
+    margin: 0;
+}
+
+/* El menú lateral (Sidebar) */
+.sidebar {
+    width: 280px;
+    background-color: #b64172; /* Fondo Morado */
+    color: white;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
+}
+
+.sidebar h2 {
+    color: #f39f18; /* Título Naranja */
+    margin-top: 0;
+    border-bottom: 2px solid #f39f18;
+    padding-bottom: 10px;
+}
+
+.unidad {
+    margin-bottom: 25px;
+}
+
+.unidad h3 {
+    color: #f39f18; /* Título de Unidad Naranja */
+    margin-bottom: 10px;
+}
+
+.unidad ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.unidad li a {
+    display: block;
+    padding: 8px 15px;
+    text-decoration: none;
+    color: #ffffff; /* Enlaces blancos */
+    transition: background-color 0.2s;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+}
+
+.unidad li a:hover {
+    color: #f39f18; /* Texto Naranja al pasar el ratón */
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Área de visualización de la actividad (iframe) */
+.contenido-actividad {
+    flex-grow: 1;
+}
+
+.visor-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* ============================================== */
+/* ESTILOS DE LA PORTADA (index.html) */
+/* ============================================== */
+
+.portada {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    background-color: #f39f18; /* Fondo Naranja */
+    color: white;
+    position: relative;
+    overflow: hidden; /* Para contener la animación */
+}
+
+/* Capa para mantener el contenido sobre las imágenes animadas */
+.content-wrapper {
+    z-index: 10;
+    position: relative;
+    padding: 20px;
+}
+
+.portada h1 {
+    font-size: 4em;
+    margin-bottom: 0.2em;
+}
+
+.portada p {
+    font-size: 1.5em;
+    margin-bottom: 2em;
+}
+
+.portada a.boton {
+    text-decoration: none;
+    background-color: #b64172; /* Botón Morado */
+    color: white;
+    padding: 15px 30px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 1.2em;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.portada a.boton:hover {
+    background-color: #8c2a55; /* Morado más oscuro */
+    transform: scale(1.05);
+}
+
+/* ============================================== */
+/* ESTILOS DE LA ANIMACIÓN DE IMÁGENES (.bubbles) */
+/* ============================================== */
+
+/* Contenedor de las burbujas */
+.bubbles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* Estilo base de cada contenedor <li> */
+.bubbles li {
+    position: absolute;
+    display: block;
+    bottom: -150px;
+    animation: animate 25s linear infinite;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    /* Para que el movimiento de rotación no afecte los bordes del li */
+    transform-origin: center; 
+}
+
+/* Estilo para las imágenes dentro de los <li> */
+.bubbles li img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%; /* Hace que la imagen sea circular */
+    /* filter: drop-shadow(0 0 5px rgba(182, 65, 114, 0.9)); */
+}
+
+
+/* Configuraciones individuales (Tamaño, Posición inicial, Velocidad) */
+.bubbles li:nth-child(1) {
+    left: 25%;
+    width: 80px;
+    height: 80px;
+    animation-delay: 0s;
+}
+.bubbles li:nth-child(2) {
+    left: 10%;
+    width: 40px;
+    height: 40px;
+    animation-delay: 2s;
+    animation-duration: 12s;
+}
+.bubbles li:nth-child(3) {
+    left: 70%;
+    width: 20px;
+    height: 20px;
+    animation-delay: 4s;
+}
+.bubbles li:nth-child(4) {
+    left: 40%;
+    width: 60px;
+    height: 60px;
+    animation-delay: 0s;
+    animation-duration: 18s;
+}
+.bubbles li:nth-child(5) {
+    left: 65%;
+    width: 30px;
+    height: 30px;
+    animation-delay: 0s;
+}
+.bubbles li:nth-child(6) {
+    left: 75%;
+    width: 110px;
+    height: 110px;
+    animation-delay: 3s;
+}
+.bubbles li:nth-child(7) {
+    left: 35%;
+    width: 150px;
+    height: 150px;
+    animation-delay: 7s;
+}
+.bubbles li:nth-child(8) {
+    left: 50%;
+    width: 25px;
+    height: 25px;
+    animation-delay: 15s;
+    animation-duration: 45s;
+}
+.bubbles li:nth-child(9) {
+    left: 20%;
+    width: 15px;
+    height: 15px;
+    animation-delay: 2s;
+    animation-duration: 35s;
+}
+.bubbles li:nth-child(10) {
+    left: 85%;
+    width: 150px;
+    height: 150px;
+    animation-delay: 0s;
+    animation-duration: 11s;
+}
+
+/* Definición de la Animación de Flotación */
+@keyframes animate {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-1000px) rotate(720deg);
+        opacity: 0;
+    }
+}

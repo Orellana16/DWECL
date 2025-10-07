@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido al Visor de Actividades</title>
+    <link rel="stylesheet" href="styles.css"> 
+    <style>
+        /* Estilos específicos para la página de bienvenida que no están en styles.css */
+        body {
+            /* Usamos propiedades de la clase .portada, pero aplicadas directamente al body */
+            /* Esto sobreescribe el body blanco base y aplica el estilo de la portada */
+            background-color: #f39f18; /* Fondo Naranja */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            color: white; /* Aseguramos texto blanco en el fondo naranja */
+            margin: 0;
+            padding: 0;
+        }
+
+        .mensaje {
+            padding: 30px 50px;
+            /* Fondo semi-transparente blanco para que el texto destaque */
+            background-color: rgba(255, 255, 255, 0.95); 
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            max-width: 80%;
+            z-index: 10;
+            position: relative;
+        }
+
+        .mensaje h1 {
+            color: #b64172; /* Título Morado */
+            font-size: 2.2em;
+            margin-bottom: 0.5em;
+        }
+
+        .mensaje p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #333; /* Texto oscuro */
+        }
+        
+        strong {
+            color: #f39f18; /* Naranja */
+        }
+    </style>
+</head>
+<body>
+    <div class="mensaje">
+        <h1>👋 ¡Hola! Bienvenido al Visor de Actividades</h1>
+        <p>Estás en el área de visualización de ejercicios.</p>
+        <p>Para empezar, selecciona una <strong>Unidad</strong> y una <strong>Actividad</strong> en el menú lateral morado. </p>
+        <p>¡Disfruta revisando el trabajo! ✨</p>
+    </div>
+
+    <ul class="bubbles">
+            <li><img src="https://i.pinimg.com/474x/25/8f/28/258f2822a81c17c0d6efa7bf6936006b.jpg" alt="Burbuja 1"></li>
+            <li><img src="https://upload.wikimedia.org/wikipedia/commons/e/e9/Rey_Mysterio_%2829081123617%29.jpg" alt="Burbuja 2"></li>
+            <li><img src="https://hips.hearstapps.com/hmg-prod/images/ronnie-coleman-1645521680.jpg" alt="Burbuja 3"></li>
+            <li><img src="https://upload.wikimedia.org/wikipedia/commons/2/2b/Pedro_S%C3%A1nchez_2020_%28portrait%29.jpg" alt="Burbuja 4"></li>
+            <li><img src="https://fundaciongirasol.es/wp-content/uploads/2021/07/tratamiento-ludopatia.jpg" alt="Burbuja 5"></li>
+            <li><img src="https://ichef.bbci.co.uk/ace/standard/1376/cpsprodpb/017d/live/8703abf0-2180-11ef-9628-ff2abcc9602e.jpg" alt="Burbuja 6"></li>
+            <li><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSic8INwP9qdpI7XeiYtuSOKJSSPFwvQaaDEQ&s" alt="Burbuja 7"></li>
+            <li><img src="https://i.pinimg.com/originals/9f/59/d5/9f59d5715d0e971c52c83dbef627dae3.gif" alt="Burbuja 8"></li>
+            <li><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Flag_of_Albania.svg/250px-Flag_of_Albania.svg.png" alt="Burbuja 9"></li>
+            <li><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQb8dusfaTyuKgn5yP_UL7MTWqcENeZ1YH4w&s" alt="Burbuja 10"></li>
+            <li><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXCaClyp6U4biuYIINqqE3gf60yR38T40FwA&s" alt="Burbuja 11"></li>
+    </ul>
+</body>
+</html>
