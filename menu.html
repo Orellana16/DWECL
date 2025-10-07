@@ -14,29 +14,19 @@
             <h2>Índice del Curso</h2>
 
             <div class="unidad">
-                <h3>Unidad 1: Estructura Básica HTML</h3>
-                <ul>
-                    <li>
-                        <a href="act/Prueba1.html" target="visorActividad">Mostrar Mensaje</a>
-                    </li>
-                    <li>
-                        <a href="act/Ej1JS.html" target="visorActividad">1. Introduce texto</a>
-                    </li>
-                    <li>
-                        <a href="act/Ej2JS.html" target="visorActividad">2. Seleccionar un color</a>
-                    </li>
-                    <li>
-                        <a href="act/Ej3JS.html" target="visorActividad">3. Introduce y muestra texto</a>
-                    </li>
-                    <li>
-                        <a href="act/Ej4JS.html" target="visorActividad">4. Seleccionar imagen y mostrar</a>
-                    </li>
-                    <li>
-                        <a href="act/Ej5JS.html" target="visorActividad">5. Elegir formato del texto</a>
-                    </li>
+                <h3 id="tu1" class="titulo-unidad" onclick="toggleUnidad(this)">
+                    Unidad 1: Estructura Básica HTML
+                </h3>
+                <ul class="actividades-lista" id="u1">
+                    <li><a href="act/Prueba1.html" target="visorActividad">Mostrar Mensaje</a></li>
+                    <li><a href="act/Ej1JS.html" target="visorActividad">1. Introduce texto</a></li>
+                    <li><a href="act/Ej2JS.html" target="visorActividad">2. Seleccionar un color</a></li>
+                    <li><a href="act/Ej3JS.html" target="visorActividad">3. Introduce y muestra texto</a></li>
+                    <li><a href="act/Ej4JS.html" target="visorActividad">4. Seleccionar imagen y mostrar</a></li>
+                    <li><a href="act/Ej5JS.html" target="visorActividad">5. Elegir formato del texto</a></li>
                 </ul>
             </div>
-        </nav>
+            </nav>
         
         <div class="contenido-actividad">
             <iframe 
@@ -49,5 +39,17 @@
 
     </div>
 
+    <script>
+        function toggleUnidad(elemento) {
+            // 1. Alterna la clase 'abierto' en el título (para rotar la flecha)
+            elemento.classList.toggle('abierto');
+            
+            // 2. Busca la lista <ul> inmediatamente siguiente
+            const lista = elemento.nextElementSibling; 
+            
+            // 3. Alterna la clase 'activo' en la lista (para el despliegue)
+            lista.classList.toggle('activo');
+        }
+    </script>
 </body>
 </html>

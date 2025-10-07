@@ -56,7 +56,7 @@
     <div class="mensaje">
         <h1>👋 ¡Hola! Bienvenido al Visor de Actividades</h1>
         <p>Estás en el área de visualización de ejercicios.</p>
-        <p>Para empezar, selecciona una <strong>Unidad</strong> y una <strong>Actividad</strong> en el menú lateral morado. </p>
+        <p>Para empezar, selecciona una <strong>Unidad</strong> y una <strong>Actividad</strong> en el menú lateral. </p>
         <p>¡Disfruta revisando el trabajo! ✨</p>
     </div>
 
@@ -73,5 +73,97 @@
             <li><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQb8dusfaTyuKgn5yP_UL7MTWqcENeZ1YH4w&s" alt="Burbuja 10"></li>
             <li><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXCaClyp6U4biuYIINqqE3gf60yR38T40FwA&s" alt="Burbuja 11"></li>
     </ul>
+    <script>
+        // Función para el menú desplegable (se mantiene)
+        function toggleUnidad(elemento) {
+            elemento.classList.toggle('abierto');
+            const lista = elemento.nextElementSibling; 
+            if (lista && lista.classList.contains('actividades-lista')) {
+                lista.classList.toggle('activo');
+            }
+        }
+
+        // --- CÓDIGO PARA LAS BURBUJAS REBOTANTES ---
+        const bubbleContainer = document.querySelector('.bubbles');
+        if (bubbleContainer) {
+            const bubbles = document.querySelectorAll('.bubbles li');
+            
+            // Rango de tamaños (en píxeles) y velocidad (en ms)
+            const MIN_SIZE = 20;
+            const MAX_SIZE = 150;
+            const MIN_SPEED = 5; // Pixels por ciclo
+            const MAX_SPEED = 20;
+
+            function getRandom(min, max) {
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            }
+
+            bubbles.forEach(bubble => {
+                let size = getRandom(MIN_SIZE, MAX_SIZE);
+                let x = getRandom(0, bubbleContainer.clientWidth - size);
+                let y = getRandom(0, bubbleContainer.clientHeight - size);
+                let dx = (Math.random() > 0.5 ? 1 : -1) * getRandom(MIN_SPEED, MAX_SPEED) * 0.1;
+                let dy = (Math.random() > 0.5 ? 1 : -1) * getRandom(MIN_SPEED, MAX_SPEED) * 0.1;
+                let rotation = 0;
+
+                // Aplicar estilos iniciales
+                bubble.style.width = `${size}px`;
+                bubble.style.height = `${size}px`;
+                
+                // Función principal de animación
+                function animate() {
+                // 1. Detección de Colisión (Eje X)
+                if (x + size > bubbleContainer.clientWidth || x < 0) {
+                    dx = -dx; // Invierte dirección
+        
+                    // CORRECCIÓN CLAVE: Reposiciona la burbuja si se sale.
+                    if (x < 0) {
+                        x = 0; // Coloca la burbuja exactamente en el borde izquierdo
+                    } else if (x + size > bubbleContainer.clientWidth) {
+                        x = bubbleContainer.clientWidth - size; // Coloca la burbuja exactamente en el borde derecho
+                    }
+
+                    // Aplica nuevo tamaño y velocidad horizontal/vertical
+                    size = getRandom(MIN_SIZE, MAX_SIZE);
+                    dx = (dx > 0 ? 1 : -1) * getRandom(MIN_SPEED, MAX_SPEED) * 0.1;
+                    dy = (dy > 0 ? 1 : -1) * getRandom(MIN_SPEED, MAX_SPEED) * 0.1;
+                    bubble.style.width = `${size}px`;
+                    bubble.style.height = `${size}px`;
+                    }
+    
+                    // 2. Detección de Colisión (Eje Y)
+                    if (y + size > bubbleContainer.clientHeight || y < 0) {
+                        dy = -dy; // Invierte dirección
+        
+                        // CORRECCIÓN CLAVE: Reposiciona la burbuja si se sale.
+                        if (y < 0) {
+                            y = 0; // Coloca la burbuja exactamente en el borde superior
+                        } else if (y + size > bubbleContainer.clientHeight) {
+                            y = bubbleContainer.clientHeight - size; // Coloca la burbuja exactamente en el borde inferior
+                        }
+
+                        // Aplica nuevo tamaño y velocidad horizontal/vertical
+                        size = getRandom(MIN_SIZE, MAX_SIZE);
+                        dx = (dx > 0 ? 1 : -1) * getRandom(MIN_SPEED, MAX_SPEED) * 0.1;
+                        dy = (dy > 0 ? 1 : -1) * getRandom(MIN_SPEED, MAX_SPEED) * 0.1;
+                        bubble.style.width = `${size}px`;
+                        bubble.style.height = `${size}px`;
+                    }
+
+                    // 3. Mover la burbuja
+                    x += dx;
+                    y += dy;
+                    rotation += dx * 2; 
+
+                    bubble.style.transform = `translate(${x}px, ${y}px) rotate(${rotation}deg)`;
+
+                    requestAnimationFrame(animate);
+                }
+
+                // Iniciar la animación
+                requestAnimationFrame(animate);
+            });
+        }
+    </script>
 </body>
 </html>
