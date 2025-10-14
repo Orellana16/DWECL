@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Actividad 1 - Número Aleatorio</title>
+</head>
+<body>
+  <h2>Función flecha - Número aleatorio</h2>
+  <p>Introduce un número entero:</p>
+  <input type="number" id="numero" placeholder="Ej: 10">
+  <button onclick="mostrarAleatorio()">Generar</button>
+  <p id="resultado"></p>
+
+  <script>
+    // Función flecha que devuelve un número aleatorio entre 1 y el valor recibido
+    const aleatorio = (max) => Math.floor(Math.random() * max) + 1;
+
+    function mostrarAleatorio() {
+      let valor = parseInt(document.getElementById("numero").value);
+      if (isNaN(valor) || valor < 1) {
+        document.getElementById("resultado").textContent = "Introduce un número válido.";
+        return;
+      }
+      let resultado = aleatorio(valor);
+      document.getElementById("resultado").textContent = "Número aleatorio: " + resultado;
+    }
+  </script>
+</body>
+</html>

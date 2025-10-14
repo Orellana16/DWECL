@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Actividad 3 - Ciudades y habitantes</title>
+</head>
+<body>
+  <h2>Gestión de ciudades y habitantes</h2>
+
+  <ul id="listaCiudades"></ul>
+
+  <button onclick="mostrarCiudades()">Mostrar todas</button>
+  <button onclick="contarCiudades()">Contar ciudades</button>
+  <button onclick="borrarCiudad()">Borrar ciudad</button>
+  <button onclick="añadirCiudad()">Añadir ciudad</button>
+  <button onclick="mostrarMayor()">Ciudad con más habitantes</button>
+  <button onclick="mostrarMenor()">Ciudad con menos habitantes</button>
+
+  <p id="info"></p>
+
+  <script>
+    // Crear el Map con algunas ciudades
+    const ciudades = new Map([
+      ["Madrid", 3200000],
+      ["Barcelona", 1600000],
+      ["Valencia", 800000],
+      ["Sevilla", 700000]
+    ]);
+
+    // Mostrar la lista al cargar
+    window.onload = () => mostrarCiudades();
+
+    function mostrarCiudades() {
+      const lista = document.getElementById("listaCiudades");
+      lista.innerHTML = "";
+      ciudades.forEach((habitantes, ciudad) => {
+        const li = document.createElement("li");
+        li.textContent = `${ciudad}: ${habitantes} habitantes`;
+        lista.appendChild(li);
+      });
+      document.getElementById("info").textContent = "";
+    }
+
+    function contarCiudades() {
+      document.getElementById("info").textContent = "Número de ciudades: " + ciudades.size;
+    }
+
+    function borrarCiudad() {
+      const nombre = prompt("Introduce el nombre de la ciudad a borrar:");
+      if (ciudades.delete(nombre)) {
+        mostrarCiudades();
+        document.getElementById("info").textContent = `Se eliminó ${nombre}.`;
+      } else {
+        document.getElementById("info").textContent = "Ciudad no encontrada.";
+      }
+    }
+
+    function añadirCiudad() {
+      const nombre = prompt("Introduce el nombre de la ciudad:");
+      const habitantes = parseInt(prompt("Introduce el número de habitantes:"));
+      if (nombre && !isNaN(habitantes)) {
+        ciudades.set(nombre, habitantes);
+        mostrarCiudades();
+        document.getElementById("info").textContent = `${nombre} añadida correctamente.`;
+      } else {
+        document.getElementById("info").textContent = "Datos inválidos.";
+      }
+    }
+
+    function mostrarMayor() {
+      let maxCiudad = "";
+      let maxHab = 0;
+      ciudades.forEach((h, c) => {
+        if (h > maxHab) { maxHab = h; maxCiudad = c; }
+      });
+      mostrarCiudades();
+      Array.from(document.querySelectorAll("li")).forEach(li => {
+        if (li.textContent.startsWith(maxCiudad)) li.style.color = "red";
+      });
+      document.getElementById("info").textContent = `Ciudad con más habitantes: ${maxCiudad} (${maxHab}).`;
+    }
+
+    function mostrarMenor() {
+      let minCiudad = "";
+      let minHab = Infinity;
+      ciudades.forEach((h, c) => {
+        if (h < minHab) { minHab = h; minCiudad = c; }
+      });
+      mostrarCiudades();
+      Array.from(document.querySelectorAll("li")).forEach(li => {
+        if (li.textContent.startsWith(minCiudad)) li.style.color = "green";
+      });
+      document.getElementById("info").textContent = `Ciudad con menos habitantes: ${minCiudad} (${minHab}).`;
+    }
+  </script>
+</body>
+</html>
