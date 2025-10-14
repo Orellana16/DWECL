@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Días de la semana</title>
+</head>
+<body>
+  <h2>Días de la semana</h2>
+  <p id="dias"></p>
+  <p id="longitudes"></p>
+  <p id="suma"></p>
+  <p id="masLargo"></p>
+  <p id="masCorto"></p>
+
+  <script>
+    // Array con los días de la semana
+    let dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+
+    // Mostrar los días
+    document.getElementById("dias").textContent = "Días: " + dias.join(", ");
+
+    // Obtener las longitudes
+    let longitudes = dias.map(dia => dia.length);
+    document.getElementById("longitudes").textContent = "Longitudes: " + longitudes.join(", ");
+
+    // Calcular la suma total
+    let suma = dias.reduce((acum, dia) => acum + dia.length, 0);
+    document.getElementById("suma").textContent = "Suma total de longitudes: " + suma;
+
+    // Día más largo y más corto
+    let masLargo = dias.reduce((a, b) => a.length > b.length ? a : b);
+    let masCorto = dias.reduce((a, b) => a.length < b.length ? a : b);
+    document.getElementById("masLargo").textContent = "Día más largo: " + masLargo;
+    document.getElementById("masCorto").textContent = "Día más corto: " + masCorto;
+
+    // También mostrar en consola
+    console.log("Días:", dias);
+    console.log("Longitudes:", longitudes);
+    console.log("Suma total:", suma);
+    console.log("Más largo:", masLargo);
+    console.log("Más corto:", masCorto);
+  </script>
+</body>
+</html>
