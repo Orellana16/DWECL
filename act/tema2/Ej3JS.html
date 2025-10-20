@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Conversor Temperaturas</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #ffffff; 
+      color: #333;
+    }
+    .wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .card {
+      width: 100%;
+      max-width: 400px;
+      padding: 20px;
+      border-radius: 10px;
+      background: #b64172; /* Fondo Morado */
+      color: white;
+      box-shadow: 0 4px 20px rgba(0,0,0,.1);
+    }
+    h1 {
+      margin: 0 0 16px;
+      font-size: 1.8rem;
+      color: #f39f18; /* Título Amarillo */
+    }
+    .row {
+      display: flex;
+      gap: 10px;
+      margin: 10px 0;
+    }
+    input[type=number], select, button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+    }
+    input[type=number] {
+      background: #fff;
+      color: #333;
+    }
+    select {
+      background: #f39f18; /* Fondo Amarillo */
+      color: #333;
+    }
+    button {
+      background: #b6760f; /* Fondo Naranja */
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #ffb640; /* Morado al pasar el ratón */
+      color: #333;
+    }
+    .result {
+      margin-top: 12px;
+      padding: 10px;
+      background: #e3f2fd;
+      border-radius: 5px;
+      color: #333;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <main class="card" role="main">
+      <h1>Conversor Celsius ↔ Fahrenheit</h1>
+      <form id="form" novalidate>
+        <label for="valor">Temperatura</label>
+        <div class="row">
+          <input id="valor" type="number" step="any" placeholder="ej. 36.6" />
+          <select id="modo">
+            <option value="CtoF">°C → °F</option>
+            <option value="FtoC">°F → °C</option>
+          </select>
+        </div>
+        <div class="row">
+          <button id="limpiar" type="button">Limpiar</button>
+          <button id="copiar" type="button">Copiar</button>
+        </div>
+        <div id="resultado" class="result">--</div>
+      </form>
+    </main>
+  </div>
+
+  <script>
+    (function(){
+      const cToF = c => (c * 9 / 5) + 32;
+      const fToC = f => (f - 32) * 5 / 9;
+      const fmt = (n, d=2) => isFinite(n) ? Number(n).toLocaleString(undefined,{maximumFractionDigits:d}) : String(n);
+
+      const form = document.getElementById('form');
+      const input = document.getElementById('valor');
+      const modo = document.getElementById('modo');
+      const resEl = document.getElementById('resultado');
+      const limpiarBtn = document.getElementById('limpiar');
+      const copiarBtn = document.getElementById('copiar');
+
+      function calcular(valStr){
+        const s = valStr.trim();
+        if (!s) { resEl.textContent = '--'; return; }
+        const v = parseFloat(s);
+        if (!isFinite(v)) { resEl.textContent = 'Valor no válido'; return; }
+        const out = modo.value === 'CtoF' ? cToF(v) : fToC(v);
+        resEl.textContent = modo.value === 'CtoF' ? `${fmt(v)} °C → ${fmt(out)} °F` : `${fmt(v)} °F → ${fmt(out)} °C`;
+      }
+
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        calcular(input.value);
+      });
+
+      input.addEventListener('input', () => calcular(input.value));
+      modo.addEventListener('change', () => calcular(input.value));
+
+      limpiarBtn.addEventListener('click', () => {
+        input.value = '';
+        resEl.textContent = '--';
+        input.focus();
+      });
+
+      copiarBtn.addEventListener('click', async () => {
+        const txt = resEl.textContent;
+        if (!txt || txt === '--') return alert('No hay resultado');
+        try {
+          await navigator.clipboard.writeText(txt);
+          alert('Copiado');
+        } catch {
+          alert('No se pudo copiar');
+        }
+      });
+
+      input.focus();
+    })();
+  </script>
+</body>
+</html>

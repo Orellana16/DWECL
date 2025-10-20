@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Días hasta Navidad</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff; 
+            color: #333;
+            text-align: center;
+        }
+        .container {
+            background: #b64172; /* Fondo Morado */
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            margin: 50px auto;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+        }
+        h1 { 
+            font-size: 2.5em; 
+            margin-bottom: 20px; 
+            color: #f39f18; /* Título Naranja */
+        }
+        .dias { 
+            font-size: 4em; 
+            font-weight: bold; 
+            color: #f39f18; /* Color Naranja */
+        }
+        p {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎄 Cuenta Regresiva para Navidad 🎅</h1>
+        <div class="dias" id="diasRestantes"></div>
+        <p id="mensaje"></p>
+    </div>
+
+    <script>
+        function calcularDiasHastaNavidad() {
+            const hoy = new Date();
+            const añoActual = hoy.getFullYear();
+            let navidad = new Date(añoActual, 11, 25);
+            if (hoy > navidad) {
+                navidad = new Date(añoActual + 1, 11, 25);
+            }
+            const diferencia = navidad - hoy;
+            const dias = Math.ceil(diferencia / (1000 * 60 * 60 * 24));
+            return dias;
+        }
+        
+        const diasRestantes = calcularDiasHastaNavidad();
+        document.getElementById('diasRestantes').textContent = diasRestantes;
+        
+        if (diasRestantes === 1) {
+            document.getElementById('mensaje').textContent = '¡Queda 1 día para Navidad!';
+        } else if (diasRestantes === 0) {
+            document.getElementById('mensaje').textContent = '¡Hoy es Navidad! 🎉';
+        } else {
+            document.getElementById('mensaje').textContent = `Quedan ${diasRestantes} días para Navidad`;
+        }
+    </script>
+</body>
+</html>

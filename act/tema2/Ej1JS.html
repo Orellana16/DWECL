@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Adivinanza</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff; 
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 4em;
+            margin-bottom: 0.2em;
+            color: #f39f18; /* Título Naranja */
+        }
+        
+        p {
+            font-size: 1.5em;
+            margin-top: 0;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            margin-top: 20px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #b64172; /* Botón Morado */
+            color: white;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background-color: #8c2a55; /* Morado más oscuro */
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <h1>🎲 Juego de Adivinanza</h1>
+    <p>Adivina un número entre 1 y 10</p>
+    <button id="startGame">Iniciar Juego</button>
+
+    <script>
+        document.getElementById('startGame').onclick = function() {
+            const numeroAleatorio = Math.floor(Math.random() * 10) + 1;
+            let numeroUsuario;
+
+            do {
+                numeroUsuario = parseInt(prompt("Ingresa un número entre 1 y 10:"));
+
+                if (isNaN(numeroUsuario) || numeroUsuario < 1 || numeroUsuario > 10) {
+                    alert("Por favor, ingresa un número válido entre 1 y 10.");
+                } else if (numeroUsuario < numeroAleatorio) {
+                    alert("El número es mayor ↑");
+                } else if (numeroUsuario > numeroAleatorio) {
+                    alert("El número es menor ↓");
+                } else {
+                    alert("¡Felicidades! Has adivinado el número.");
+                }
+            } while (numeroAleatorio !== numeroUsuario);
+        };
+    </script>
+</body>
+</html>

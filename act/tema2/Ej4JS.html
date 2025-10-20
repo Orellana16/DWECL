@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obtener URL</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: #f39f18;
+            padding: 2em;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        h1 {
+            font-size: 4em;
+            color: #b64172;
+            margin-bottom: 0.2em;
+        }
+        p {
+            font-size: 1.5em;
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌐 Información de la URL</h1>
+        <p id="urlDisplay"></p>
+    </div>
+    
+    <script>
+        const urlCompleta = window.location.href;
+        document.getElementById('urlDisplay').textContent = `La URL de esta página es: ${urlCompleta}`;
+        console.log("URL del sitio web:", urlCompleta);
+    </script>
+</body>
+</html>
