@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Juego de números</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .input-group {
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #f7f9fc;
+            border-radius: 5px;
+        }
+        input, button {
+            margin: 5px;
+            padding: 5px 10px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        #numbers, #result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Juego: ¡El más cercano gana!</h1>
+    <div class="input-group">
+        <label for="playerName">Nombre:</label>
+        <input type="text" id="playerName" placeholder="Nombre del jugador">
+        <label for="player">Número:</label>
+        <input type="number" id="player" placeholder="Introduce un número">
+        <button onclick="addNumber()">Añadir Jugador</button>
+        <button onclick="finishGame()">Terminar juego</button>
+    </div>
+    <div id="numbers"></div>
+    <div id="result"></div>
+
+    <script>
+        let players = [];
+
+        function addNumber() {
+            const playerInput = document.getElementById('player');
+            const nameInput = document.getElementById('playerName');
+            const number = parseInt(playerInput.value);
+            const name = nameInput.value.trim();
+            
+            if (!isNaN(number) && name) {
+                players.push({ name: name, number: number });
+                document.getElementById('numbers').innerHTML += 
+                    `Jugador añadido: ${name} con número ${number}<br>`;
+                playerInput.value = '';
+                nameInput.value = '';
+            } else {
+                alert('Por favor, introduce un nombre y un número válido');
+            }
+        }
+
+        function finishGame() {
+            if (players.length < 2) {
+                alert('Se necesitan al menos 2 jugadores para jugar');
+                return;
+            }
+
+            const randomNumber = Math.floor(Math.random() * 100) + 1;
+            let closest = players[0];
+            
+            for (let player of players) {
+                if (Math.abs(player.number - randomNumber) < Math.abs(closest.number - randomNumber)) {
+                    closest = player;
+                }
+            }
+
+            document.getElementById('result').innerHTML = 
+                `Número aleatorio: ${randomNumber}<br>
+                 El Jugador "${closest.name}" es el que Más se ha Acercado con el Número ${closest.number}!`;
+        }
+    </script>
+</body>
+</html>
