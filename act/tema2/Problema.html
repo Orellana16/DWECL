@@ -5,37 +5,46 @@
     <title>Juego de números</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 20px auto;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
             padding: 20px;
+            background-color: #ffffff; 
+            color: #333;
         }
         h1 {
-            color: #2c3e50;
+            color: #f39f18;
             text-align: center;
+            margin-bottom: 20px;
         }
         .input-group {
             margin: 20px 0;
-            padding: 10px;
-            background-color: #f7f9fc;
+            padding: 20px;
+            background-color: #b64172; /* Fondo Morado */
             border-radius: 5px;
+            color: white;
         }
         input, button {
             margin: 5px;
-            padding: 5px 10px;
+            padding: 10px;
+            border-radius: 3px;
+            border: none;
+        }
+        input {
+            width: calc(50% - 22px);
         }
         button {
-            background-color: #3498db;
+            background-color: #f39f18; /* Botón Naranja */
             color: white;
-            border: none;
-            border-radius: 3px;
             cursor: pointer;
         }
         button:hover {
-            background-color: #2980b9;
+            background-color: #d68a14; /* Naranja más oscuro */
         }
         #numbers, #result {
             margin-top: 20px;
+            background-color: #f7f9fc;
+            padding: 10px;
+            border-radius: 5px;
         }
     </style>
 </head>
