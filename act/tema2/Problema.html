@@ -53,6 +53,7 @@
     <div class="input-group">
         <label for="playerName">Nombre:</label>
         <input type="text" id="playerName" placeholder="Nombre del jugador">
+        <br>
         <label for="player">Número:</label>
         <input type="number" id="player" placeholder="Introduce un número">
         <button onclick="addNumber()">Añadir Jugador</button>
@@ -98,7 +99,7 @@
 
             document.getElementById('result').innerHTML = 
                 `Número aleatorio: ${randomNumber}<br>
-                 El Jugador "${closest.name}" es el que Más se ha Acercado con el Número ${closest.number}!`;
+                 El Jugador "${closest.name}" es el que más se ha acercado con el Número ${closest.number}!`;
         }
     </script>
 </body>
