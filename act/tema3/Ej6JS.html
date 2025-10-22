@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Búsqueda y Conteo de Palabras</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #e6f7ff;
+            color: #1a1a1a;
+        }
+        .container {
+            max-width: 650px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #007bff;
+            text-align: center;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        strong {
+            color: #ffc107;
+        }
+        pre {
+            background-color: #f0f8ff;
+            padding: 15px;
+            border-left: 5px solid #007bff;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Búsqueda de Palabras en una Cadena</h1>
+        <p>Este script define la función <code>palabra_busqueda(cadena, palabra)</code> para encontrar y contar las ocurrencias de una palabra completa en una cadena, devolviendo el resultado en el formato solicitado.</p>
+
+        <h2>Ejecución y Ejemplos</h2>
+        
+        <h3>Ejemplo 1: Búsqueda de 'zorro'</h3>
+        <p>Cadena: <strong>"El zorro marrón"</strong></p>
+        <pre id="resultado1"></pre>
+
+        <h3>Ejemplo 2: Búsqueda de 'aa'</h3>
+        <p>Cadena: <strong>"aa, bb, aa"</strong></p>
+        <pre id="resultado2"></pre>
+        
+        <h3>Ejemplo 3: Palabra parcial (no debe coincidir)</h3>
+        <p>Cadena: <strong>"El zorro y zorrito"</strong></p>
+        <pre id="resultado3"></pre>
+    </div>
+
+    <script>
+        /**
+         * Busca la ocurrencia de una palabra completa en una cadena y devuelve un 
+         * mensaje formateado con el resultado.
+         * * @param {string} cadena La cadena donde se buscará.
+         * @param {string} palabra La palabra completa a buscar.
+         * @returns {string} Mensaje formateado indicando el número de coincidencias.
+         */
+        function palabra_busqueda(cadena, palabra) {
+            // Validación de entrada
+            if (typeof cadena !== 'string' || typeof palabra !== 'string' || palabra.length === 0) {
+                return `Error: Parámetros inválidos o palabra vacía.`;
+            }
+
+            // 1. Sanitizar la palabra para tratarla como texto literal en RegEx.
+            const palabraEscapada = palabra.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); 
+            
+            // 2. Crear la expresión regular para buscar la palabra completa.
+            //    - \b: Coincide con el límite de palabra (asegura que 'zorro' no coincida con 'zorrito').
+            //    - g (global): Para encontrar todas las ocurrencias.
+            //    - i (ignore case): Opcional, pero se mantiene sensible para el ejemplo del usuario.
+            const regex = new RegExp('\\b' + palabraEscapada + '\\b', 'g');
+
+            // 3. Obtener todas las coincidencias
+            const coincidencias = cadena.match(regex);
+            
+            // 4. Contar
+            const count = coincidencias ? coincidencias.length : 0;
+
+            // 5. Formatear la salida como se solicita
+            return `'${palabra}' se encontró ${count} ${count === 1 ? 'vez' : 'veces'}.`;
+        }
+
+        // --- PRUEBAS según el ejemplo solicitado ---
+        
+        const cadena1 = 'El zorro marrón';
+        const palabra1 = 'zorro';
+        const resultado1 = palabra_busqueda(cadena1, palabra1);
+        console.log(`1. ${palabra_busqueda(cadena1, palabra1)}`); // Resultado: "'zorro' se encontró 1 vez."
+
+        const cadena2 = 'aa, bb, aa';
+        const palabra2 = 'aa';
+        const resultado2 = palabra_busqueda(cadena2, palabra2);
+        console.log(`2. ${palabra_busqueda(cadena2, palabra2)}`); // Resultado: "'aa' se encontró 2 veces."
+
+        // Prueba adicional para demostrar el límite de palabra (\b)
+        const cadena3 = "El zorro y zorrito";
+        const palabra3 = "zorro";
+        const resultado3 = palabra_busqueda(cadena3, palabra3);
+        console.log(`3. ${palabra_busqueda(cadena3, palabra3)}`); // Resultado: "'zorro' se encontró 1 vez."
+
+        // --- Mostrar resultados en el HTML ---
+        document.getElementById('resultado1').innerHTML = 
+            `palabra_busqueda('${cadena1}', '${palabra1}');<br>
+            // Resultado:<br>
+            "${resultado1}"`;
+
+        document.getElementById('resultado2').innerHTML = 
+            `palabra_busqueda('${cadena2}', '${palabra2}');<br>
+            // Resultado:<br>
+            "${resultado2}"`;
+
+        document.getElementById('resultado3').innerHTML = 
+            `palabra_busqueda('${cadena3}', '${palabra3}');<br>
+            // Resultado:<br>
+            "${resultado3}"`;
+    </script>
+
+</body>
+</html>

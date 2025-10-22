@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contar Apariciones de una Subcadena</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f0fff0;
+            color: #2f4f4f;
+        }
+        .container {
+            max-width: 650px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2e8b57;
+            text-align: center;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        strong {
+            color: #8b0000;
+        }
+        pre {
+            background-color: #e0f0e0;
+            padding: 15px;
+            border-left: 4px solid #2e8b57;
+            border-radius: 6px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Contador de Subcadenas</h1>
+        <p>Este script define la función <code>contar_subcadena(cadena_principal, subcadena)</code>. Utiliza expresiones regulares para contar el número de veces que aparece la subcadena dentro de la cadena principal.</p>
+
+        <h2>Ejecución y Ejemplos</h2>
+        <p>Cadena principal: <strong>"JavaScript es un lenguaje. JavaScript es genial."</strong></p>
+        
+        <h3>Ejemplo 1: Contar 'JavaScript' (distingue mayúsculas)</h3>
+        <pre id="resultado1"></pre>
+
+        <h3>Ejemplo 2: Contar 'es' (distingue mayúsculas)</h3>
+        <pre id="resultado2"></pre>
+
+        <h3>Ejemplo 3: Contar 'es' (ignorando mayúsculas)</h3>
+        <pre id="resultado3"></pre>
+    </div>
+
+    <script>
+        /**
+         * Cuenta las ocurrencias de una subcadena dentro de una cadena principal.
+         * Por defecto, la búsqueda distingue entre mayúsculas y minúsculas.
+         * * @param {string} cadena_principal La cadena donde se buscará.
+         * @param {string} subcadena La cadena a buscar y contar.
+         * @param {boolean} [sensible_a_mayusculas=true] Si la búsqueda debe distinguir mayúsculas y minúsculas.
+         * @returns {number} El número de veces que se encuentra la subcadena.
+         */
+        function contar_subcadena(cadena_principal, subcadena, sensible_a_mayusculas = true) {
+            // Validación básica
+            if (typeof cadena_principal !== 'string' || typeof subcadena !== 'string' || subcadena.length === 0) {
+                return 0;
+            }
+
+            // Sanitizamos la subcadena para asegurar que los caracteres especiales de RegEx 
+            // sean tratados como texto literal.
+            const subcadenaEscapada = subcadena.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); 
+            
+            // Creamos la expresión regular
+            // 'g' (global): Para encontrar todas las coincidencias
+            // 'i' (ignore case): Si la búsqueda no debe distinguir mayúsculas/minúsculas
+            const flags = 'g' + (sensible_a_mayusculas ? '' : 'i');
+            const regex = new RegExp(subcadenaEscapada, flags);
+
+            // Utilizamos .match() que devuelve un array de todas las coincidencias.
+            const coincidencias = cadena_principal.match(regex);
+
+            // Si .match() devuelve null (no hay coincidencias), retornamos 0.
+            // Si hay coincidencias, retornamos la longitud del array.
+            return coincidencias ? coincidencias.length : 0;
+        }
+
+        // --- PRUEBAS ---
+        const texto = "JavaScript es un lenguaje. JavaScript es genial.";
+
+        // Caso 1: Distingue mayúsculas
+        const resultado1 = contar_subcadena(texto, 'JavaScript'); 
+        console.log(`'JavaScript' (sensible): ${resultado1}`); // Esperado: 2
+
+        // Caso 2: Distingue mayúsculas
+        const resultado2 = contar_subcadena(texto, 'es'); 
+        console.log(`'es' (sensible): ${resultado2}`); // Esperado: 2
+
+        // Caso 3: Ignora mayúsculas
+        // Buscamos 'es' en "JavaScript es un lenguaje. JavaScript Es genial."
+        const resultado3 = contar_subcadena(texto, 'es', false); 
+        console.log(`'es' (INSENSIBLE): ${resultado3}`); // Esperado: 2
+
+        // Otro ejemplo insensible
+        const resultado4 = contar_subcadena(texto, 'javascript', false);
+        console.log(`'javascript' (INSENSIBLE): ${resultado4}`); // Esperado: 2
+
+
+        // --- Mostrar resultados en el HTML ---
+        document.getElementById('resultado1').innerHTML = 
+            `contar_subcadena("${texto}", 'JavaScript');<br>
+            // Resultado:<br>
+            ${resultado1}`;
+
+        document.getElementById('resultado2').innerHTML = 
+            `contar_subcadena("${texto}", 'es');<br>
+            // Resultado:<br>
+            ${resultado2}`;
+
+        document.getElementById('resultado3').innerHTML = 
+            `contar_subcadena("${texto}", 'es', false);<br>
+            // Resultado (insensible a mayúsculas/minúsculas):<br>
+            ${resultado3}`;
+    </script>
+
+</body>
+</html>

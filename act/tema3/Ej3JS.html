@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capitalizar la Primera Letra de Cada Palabra</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f0f8ff;
+            color: #2c3e50;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        h1 {
+            color: #3498db;
+            text-align: center;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        strong {
+            color: #e74c3c;
+        }
+        pre {
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-left: 5px solid #3498db;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Capitalizar Palabras (Title Case)</h1>
+        <p>Este script de JavaScript define la función <code>capitalizar_cadena(cadena)</code> para poner en mayúscula la primera letra de cada palabra en una frase.</p>
+
+        <h2>Ejecución y Resultado</h2>
+        <p>Cadena de ejemplo: <strong>"la funcion de javascript es muy util"</strong></p>
+        
+        <h3>Resultado de la función:</h3>
+        <pre id="resultado"></pre>
+    </div>
+
+    <script>
+        /**
+         * Pone en mayúscula la primera letra de cada palabra en una cadena.
+         * La función primero convierte toda la cadena a minúsculas para asegurar 
+         * una capitalización uniforme, y luego capitaliza la primera letra.
+         * * @param {string} cadena La cadena de texto a capitalizar.
+         * @returns {string} La cadena con la primera letra de cada palabra en mayúscula.
+         */
+        function capitalizar_cadena(cadena) {
+            if (typeof cadena !== 'string' || cadena.length === 0) {
+                return ''; // Retorna una cadena vacía si no es válida
+            }
+
+            // 1. Convertir toda la cadena a minúsculas. Esto asegura que no
+            //    se mantengan mayúsculas intermedias no deseadas.
+            const cadenaMinusculas = cadena.toLowerCase();
+
+            // 2. Usar el método replace() con una Expresión Regular (RegExp).
+            //    - \b: Coincide con un límite de palabra (el inicio de una palabra).
+            //    - \w: Coincide con cualquier carácter alfabético o número.
+            //    - g: Indica que debe buscar todas las coincidencias en la cadena.
+            // La función de reemplazo (match) toma la primera letra encontrada (\w) y
+            // la convierte a mayúscula con .toUpperCase().
+            return cadenaMinusculas.replace(/\b\w/g, function(match) {
+                return match.toUpperCase();
+            });
+        }
+
+        // --- PRUEBAS ---
+        const miCadena = "la funcion de javascript es muy util";
+        const resultado1 = capitalizar_cadena(miCadena); // Esperado: "La Funcion De Javascript Es Muy Util"
+        
+        const miCadena2 = "un ejemplo MAs COMPLETO";
+        const resultado2 = capitalizar_cadena(miCadena2); // Esperado: "Un Ejemplo Mas Completo"
+
+        // Mostrar resultados en la consola
+        console.log(`Original: "${miCadena}"`);
+        console.log(`Capitalizada: "${resultado1}"`);
+        console.log(`Original: "${miCadena2}"`);
+        console.log(`Capitalizada: "${resultado2}"`);
+
+        // --- Mostrar el resultado principal en el HTML ---
+        document.getElementById('resultado').innerHTML = 
+            `capitalizar_cadena("${miCadena}")<br>
+            // Resultado:<br>
+            "${resultado1}"`;
+    </script>
+
+</body>
+</html>

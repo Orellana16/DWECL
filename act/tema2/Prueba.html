@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejecución de Script JavaScript</title>
+</head>
+<body>
+
+    <h1>Ejemplo de Manipulación de Cadenas en JavaScript</h1>
+    <p>Este código JavaScript se ejecutará al cargar la página y mostrará varias alertas con los resultados de las manipulaciones de la cadena "Sergi:Garcia:123456".</p>
+
+    <script>
+        let cad="Sergi:Garcia:123456";
+        let tfo;
+
+        cad=cad.toUpperCase();
+        alert(cad);
+
+        splitTodosCampos=cad.split(":");
+        split1Campo=cad.split(":",1);
+
+        alert(splitTodosCampos);
+        alert(split1Campo);
+
+        tfo=splitTodosCampos[2];
+
+        tfo=tfo.replace("2","9"); 
+        alert(tfo);
+
+        alert(tfo.charAt(4));
+
+        alert("Bienvenido al CEEDCV");
+    </script>
+
+</body>
+</html>

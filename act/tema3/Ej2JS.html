@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proteger Email con JavaScript</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #0056b3;
+            text-align: center;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        strong {
+            color: #d9534f;
+        }
+        pre {
+            background-color: #eee;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Ofuscar Dirección de Correo Electrónico</h1>
+        <p>Este script de JavaScript protege una dirección de correo electrónico mostrando solo los tres primeros caracteres del nombre de usuario, reemplazando el resto con puntos suspensivos ("...") y conservando el dominio.</p>
+
+        <h2>Ejecución y Resultado</h2>
+        <p>Dirección original de ejemplo: <strong>rob_hood@example.com</strong></p>
+        <p>Resultado de la función:</p>
+        <pre id="resultado"></pre>
+    </div>
+
+    <script>
+        /**
+         * Oculta partes de una dirección de correo electrónico para protegerla de 
+         * usuarios no autorizados o bots.
+         * Muestra los primeros 3 caracteres del nombre de usuario y el dominio.
+         * * @param {string} email La dirección de correo electrónico a proteger.
+         * @returns {string} La dirección de correo electrónico ofuscada.
+         */
+        function protege_email(email) {
+            // Verifica si el input es una cadena de texto
+            if (typeof email !== 'string' || email.length === 0) {
+                return 'Entrada inválida';
+            }
+
+            // 1. Encuentra la posición del '@'
+            const atIndex = email.indexOf('@');
+            
+            // 2. Si no hay '@' o está al principio, devuelve el email original
+            if (atIndex <= 0) {
+                return email;
+            }
+
+            // 3. Extrae el nombre de usuario y el dominio
+            const nombreUsuario = email.substring(0, atIndex);
+            const dominio = email.substring(atIndex); // Incluye el '@'
+
+            // 4. Determina cuántos caracteres mostrar (máximo 3)
+            const charsToShow = Math.min(3, nombreUsuario.length);
+
+            // 5. Crea la parte ofuscada: los primeros 'n' caracteres + "..."
+            //    Asegura que solo se muestre '...' si el nombre de usuario tiene 
+            //    más de 3 caracteres, o si tiene 3 o menos, se muestra todo y ya.
+            let parteOfuscada = nombreUsuario.substring(0, charsToShow);
+            
+            // Agrega "..." si la parte del nombre de usuario es más larga que lo que mostramos
+            if (nombreUsuario.length > charsToShow) {
+                parteOfuscada += '...';
+            }
+            
+            // Si el nombre de usuario es "rob" (3 chars) el resultado es "rob@example.com"
+            // Si el nombre de usuario es "rob_hood" (8 chars) el resultado es "rob...@example.com"
+
+            // 6. Combina la parte ofuscada con el dominio
+            return parteOfuscada + dominio;
+        }
+
+        // --- PRUEBAS ---
+        const email1 = "rob_hood@example.com";
+        const resultado1 = protege_email(email1);
+
+        const email2 = "user@domain.com";
+        const resultado2 = protege_email(email2);
+
+        const email3 = "a@b.c"; // Caso límite: nombre corto
+        const resultado3 = protege_email(email3); 
+
+        const email4 = "abcd@e.f"; // Caso límite: 4 caracteres
+        const resultado4 = protege_email(email4); 
+
+        // Mostrar resultados en la consola y en el HTML
+        console.log(`Email 1: ${email1} -> ${resultado1}`); // Esperado: rob...@example.com
+        console.log(`Email 2: ${email2} -> ${resultado2}`); // Esperado: use...@domain.com
+        console.log(`Email 3: ${email3} -> ${resultado3}`); // Esperado: a@b.c
+        console.log(`Email 4: ${email4} -> ${resultado4}`); // Esperado: abc...@e.f
+
+        // Mostrar el resultado principal en el contenedor HTML
+        document.getElementById('resultado').innerHTML = 
+            `protege_email("${email1}")<br>
+            // Resultado:<br>
+            "${resultado1}"`;
+
+    </script>
+
+</body>
+</html>

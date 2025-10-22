@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extraer Caracteres de una Cadena</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #007bff;
+            text-align: center;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        strong {
+            color: #28a745;
+        }
+        pre {
+            background-color: #eee;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Función para Extraer Subcadena</h1>
+        <p>Este script de JavaScript define la función <code>extraer_caracteres(cadena, cantidad, inicio)</code> para obtener un número específico de caracteres de una cadena dada.</p>
+
+        <h2>Ejecución y Resultados</h2>
+        <p>Cadena de ejemplo: <strong>"Desarrollo Web con JavaScript"</strong></p>
+        
+        <h3>Ejemplo 1: Extraer los primeros 11 caracteres (desde el inicio)</h3>
+        <pre id="resultado1"></pre>
+
+        <h3>Ejemplo 2: Extraer 3 caracteres, empezando desde la posición 12</h3>
+        <pre id="resultado2"></pre>
+    </div>
+
+    <script>
+        /**
+         * Extrae un número específico de caracteres de una cadena.
+         * * @param {string} cadena La cadena de texto de la que se va a extraer.
+         * @param {number} cantidad El número de caracteres a extraer.
+         * @param {number} [inicio=0] La posición (índice) donde comenzar la extracción (por defecto es 0).
+         * @returns {string} La subcadena extraída.
+         */
+        function extraer_caracteres(cadena, cantidad, inicio = 0) {
+            // Aseguramos que la entrada sea una cadena y la cantidad/inicio sean números válidos
+            if (typeof cadena !== 'string' || typeof cantidad !== 'number' || cantidad < 0 || typeof inicio !== 'number' || inicio < 0) {
+                return "Error: Parámetros de entrada inválidos.";
+            }
+
+            // Utilizamos el método .substr(inicio, cantidad) que es ideal para este propósito.
+            // NOTA: .substring(inicio, fin) o .slice(inicio, fin) también funcionarían 
+            // pero requieren calcular el índice 'fin' (inicio + cantidad).
+            return cadena.substr(inicio, cantidad);
+        }
+
+        // --- PRUEBAS ---
+        const miCadena = "Desarrollo Web con JavaScript";
+
+        // Caso 1: Extraer 11 caracteres desde el inicio (índice 0)
+        const resultado1 = extraer_caracteres(miCadena, 11); // Esperado: "Desarrollo"
+        console.log(`Extraer los primeros 11 caracteres: "${resultado1}"`);
+
+        // Caso 2: Extraer 3 caracteres desde el índice 12 ("W", "e", "b")
+        const resultado2 = extraer_caracteres(miCadena, 3, 12); // Esperado: "Web"
+        console.log(`Extraer 3 caracteres desde el índice 12: "${resultado2}"`);
+
+        // Caso 3: Extraer más de lo que queda (debe devolver el resto)
+        const resultado3 = extraer_caracteres(miCadena, 100, 16); // Esperado: "con JavaScript"
+        console.log(`Extraer el resto de la cadena: "${extraer_caracteres(miCadena, 100, 16)}"`);
+
+
+        // --- Mostrar resultados en el HTML ---
+        document.getElementById('resultado1').innerHTML = 
+            `extraer_caracteres("${miCadena}", 11);<br>
+            // Resultado:<br>
+            "${resultado1}"`;
+
+        document.getElementById('resultado2').innerHTML = 
+            `extraer_caracteres("${miCadena}", 3, 12);<br>
+            // Resultado:<br>
+            "${resultado2}"`;
+    </script>
+
+</body>
+</html>
