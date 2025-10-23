@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Adivinanza</title>
+</head>
+<body>
+    <h1>Juego de Adivinanza de Contraseña</h1>
+    
+    <h3>Reglas del Juego:</h3>
+    <ul>
+        <li>Letra en posición correcta: puntuación x2 (vocal=2p, consonante=4p, número=6p)</li>
+        <li>Letra correcta pero otra posición: puntuación x1 (vocal=1p, consonante=2p, número=3p)</li>
+        <li>Cada jugador tiene 1 intento</li>
+    </ul>
+
+    <hr>
+
+    <p><strong>Jugador 1:</strong></p>
+    <input type="text" id="input1" placeholder="Intento Jugador 1...">
+    <button onclick="jugar1()">Jugar</button>
+
+    <p><strong>Jugador 2:</strong></p>
+    <input type="text" id="input2" placeholder="Intento Jugador 2...">
+    <button onclick="jugar2()">Jugar</button>
+
+    <p><strong>Jugador 3:</strong></p>
+    <input type="text" id="input3" placeholder="Intento Jugador 3...">
+    <button onclick="jugar3()">Jugar</button>
+
+    <hr>
+
+    <h2>Puntuaciones</h2>
+    <div id="puntuaciones">
+        <p id="puntos1">Jugador 1: 0 puntos</p>
+        <p id="puntos2">Jugador 2: 0 puntos</p>
+        <p id="puntos3">Jugador 3: 0 puntos</p>
+    </div>
+
+    <div id="ganador" style="display:none;">
+        <h2>GANADOR: <span id="nombreGanador"></span> con <span id="puntosGanador"></span> puntos</h2>
+    </div>
+
+    <script>
+        let contraseña = "SerRre7";
+        
+        let jugadores = [
+            { nombre: "Jugador 1", puntos: 0, haJugado: false },
+            { nombre: "Jugador 2", puntos: 0, haJugado: false },
+            { nombre: "Jugador 3", puntos: 0, haJugado: false }
+        ];
+        
+        function calcularPuntos(inputValue) {
+            let acierto = [];
+            let casi = [];
+            let puntos = 0;
+
+            if (inputValue === contraseña) {
+                return 100;
+            }
+
+            for (let i = 0; i < inputValue.length; i++) {
+                if (i < contraseña.length && inputValue.charAt(i) === contraseña.charAt(i)) {
+                    acierto.push(contraseña.charAt(i));
+                } else {
+                    for (let j = 0; j < contraseña.length; j++) {
+                        if (inputValue.charAt(i) === contraseña.charAt(j)) {
+                            casi.push(inputValue.charAt(i));
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            acierto.forEach(letra => {
+                switch (letra) {
+                    case 'a':
+                    case 'e':
+                    case 'i':
+                    case 'o':
+                    case 'u':
+                    case 'A':
+                    case 'E':
+                    case 'I':
+                    case 'O':
+                    case 'U':
+                        puntos += 2;
+                        break;
+                    case 'b':
+                    case 'c':
+                    case 'd':
+                    case 'f':
+                    case 'g':
+                    case 'h':
+                    case 'j':
+                    case 'k':
+                    case 'l':
+                    case 'm':
+                    case 'n':
+                    case 'p':
+                    case 'q':
+                    case 'r':
+                    case 's':
+                    case 't':
+                    case 'v':
+                    case 'w':
+                    case 'x':
+                    case 'y':
+                    case 'z':
+                    case 'B':
+                    case 'C':
+                    case 'D':
+                    case 'F':
+                    case 'G':
+                    case 'H':
+                    case 'J':
+                    case 'K':
+                    case 'L':
+                    case 'M':
+                    case 'N':
+                    case 'P':
+                    case 'Q':
+                    case 'R':
+                    case 'S':
+                    case 'T':
+                    case 'V':
+                    case 'W':
+                    case 'X':
+                    case 'Y':
+                    case 'Z':
+                        puntos += 4;
+                        break;
+                    case '0':
+                    case '1':
+                    case '2':
+                    case '3':
+                    case '4':
+                    case '5':
+                    case '6':
+                    case '7':
+                    case '8':
+                    case '9':
+                        puntos += 6;
+                        break;
+                }
+            });
+
+            casi.forEach(letra => {
+                switch (letra) {
+                    case 'a':
+                    case 'e':
+                    case 'i':
+                    case 'o':
+                    case 'u':
+                    case 'A':
+                    case 'E':
+                    case 'I':
+                    case 'O':
+                    case 'U':
+                        puntos += 1;
+                        break;
+                    case 'b':
+                    case 'c':
+                    case 'd':
+                    case 'f':
+                    case 'g':
+                    case 'h':
+                    case 'j':
+                    case 'k':
+                    case 'l':
+                    case 'm':
+                    case 'n':
+                    case 'p':
+                    case 'q':
+                    case 'r':
+                    case 's':
+                    case 't':
+                    case 'v':
+                    case 'w':
+                    case 'x':
+                    case 'y':
+                    case 'z':
+                    case 'B':
+                    case 'C':
+                    case 'D':
+                    case 'F':
+                    case 'G':
+                    case 'H':
+                    case 'J':
+                    case 'K':
+                    case 'L':
+                    case 'M':
+                    case 'N':
+                    case 'P':
+                    case 'Q':
+                    case 'R':
+                    case 'S':
+                    case 'T':
+                    case 'V':
+                    case 'W':
+                    case 'X':
+                    case 'Y':
+                    case 'Z':
+                        puntos += 2;
+                        break;
+                    case '0':
+                    case '1':
+                    case '2':
+                    case '3':
+                    case '4':
+                    case '5':
+                    case '6':
+                    case '7':
+                    case '8':
+                    case '9':
+                        puntos += 3;
+                        break;
+                }
+            });
+
+            return puntos;
+        }
+
+        jugar1 = () => {
+            if (jugadores[0].haJugado) {
+                alert("Jugador 1 ya ha jugado!");
+                return;
+            }
+
+            let inputValue = document.getElementById("input1").value;
+
+            if (inputValue === "") {
+                alert("Por favor, escribe una palabra!");
+                return;
+            }
+
+            let puntos = calcularPuntos(inputValue);
+            jugadores[0].puntos = puntos;
+            jugadores[0].haJugado = true;
+
+            alert("Puntos totales: " + puntos);
+            
+            actualizarPuntuaciones();
+            document.getElementById("input1").disabled = true;
+            verificarGanador();
+        }
+
+        jugar2 = () => {
+            if (jugadores[1].haJugado) {
+                alert("Jugador 2 ya ha jugado!");
+                return;
+            }
+
+            let inputValue = document.getElementById("input2").value;
+
+            if (inputValue === "") {
+                alert("Por favor, escribe una palabra!");
+                return;
+            }
+
+            let puntos = calcularPuntos(inputValue);
+            jugadores[1].puntos = puntos;
+            jugadores[1].haJugado = true;
+
+            alert("Puntos totales: " + puntos);
+            
+            actualizarPuntuaciones();
+            document.getElementById("input2").disabled = true;
+            verificarGanador();
+        }
+
+        jugar3 = () => {
+            if (jugadores[2].haJugado) {
+                alert("Jugador 3 ya ha jugado!");
+                return;
+            }
+
+            let inputValue = document.getElementById("input3").value;
+
+            if (inputValue === "") {
+                alert("Por favor, escribe una palabra!");
+                return;
+            }
+
+            let puntos = calcularPuntos(inputValue);
+            jugadores[2].puntos = puntos;
+            jugadores[2].haJugado = true;
+
+            alert("Puntos totales: " + puntos);
+            
+            actualizarPuntuaciones();
+            document.getElementById("input3").disabled = true;
+            verificarGanador();
+        }
+
+        function actualizarPuntuaciones() {
+            document.getElementById("puntos1").textContent = "Jugador 1: " + jugadores[0].puntos + " puntos";
+            document.getElementById("puntos2").textContent = "Jugador 2: " + jugadores[1].puntos + " puntos";
+            document.getElementById("puntos3").textContent = "Jugador 3: " + jugadores[2].puntos + " puntos";
+        }
+
+        function verificarGanador() {
+            if (jugadores[0].haJugado && jugadores[1].haJugado && jugadores[2].haJugado) {
+                mostrarGanador();
+            }
+        }
+
+        function mostrarGanador() {
+            let ganador = jugadores[0];
+            
+            for (let i = 1; i < jugadores.length; i++) {
+                if (jugadores[i].puntos > ganador.puntos) {
+                    ganador = jugadores[i];
+                }
+            }
+
+            document.getElementById("nombreGanador").textContent = ganador.nombre;
+            document.getElementById("puntosGanador").textContent = ganador.puntos;
+            document.getElementById("ganador").style.display = "block";
+
+            alert("GANADOR: " + ganador.nombre + " con " + ganador.puntos + " puntos!");
+        }
+    </script>
+</body>
+</html>
