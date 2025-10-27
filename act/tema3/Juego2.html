@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Adivinanza</title>
+    <style>
+        /* Colores: Naranja (#f39f18), Morado (#b64172), Blanco (#ffffff) */
+
+        /* ============================================== */
+        /* ESTILOS GLOBALES */
+        /* ============================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #b64172 0%, #f39f18 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        /* ============================================== */
+        /* CONTENEDOR PRINCIPAL */
+        /* ============================================== */
+        .contenedor-juego {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        /* ============================================== */
+        /* HEADER */
+        /* ============================================== */
+        header {
+            background-color: #b64172;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* ============================================== */
+        /* SECCIÓN DE REGLAS */
+        /* ============================================== */
+        .reglas {
+            background-color: #f39f18;
+            color: white;
+            padding: 25px 30px;
+        }
+
+        .reglas h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            border-bottom: 2px solid white;
+            padding-bottom: 10px;
+        }
+
+        .reglas ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .reglas li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .reglas li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            color: #b64172;
+            font-size: 1.2em;
+        }
+
+        .reglas .highlight {
+            font-weight: bold;
+            text-decoration: underline;
+        }
+
+        /* ============================================== */
+        /* SECCIÓN DE JUGADORES */
+        /* ============================================== */
+        .jugadores {
+            padding: 40px 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .jugador-card {
+            background-color: #f9f9f9;
+            border: 3px solid #b64172;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .jugador-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(182, 65, 114, 0.3);
+        }
+
+        .jugador-card h3 {
+            color: #b64172;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .jugador-card .input-jugador {
+            width: 100%;
+            padding: 12px;
+            font-size: 1em;
+            border: 2px solid #b64172;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .jugador-card .input-jugador:focus {
+            outline: none;
+            border-color: #f39f18;
+            box-shadow: 0 0 8px rgba(243, 159, 24, 0.5);
+        }
+
+        .jugador-card .input-jugador:disabled {
+            background-color: #e0e0e0;
+            cursor: not-allowed;
+        }
+
+        .jugador-card .btn-jugar {
+            width: 100%;
+            padding: 12px 20px;
+            background-color: #f39f18;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            margin-bottom: 15px;
+        }
+
+        .jugador-card .btn-jugar:hover {
+            background-color: #d88a0f;
+            transform: scale(1.05);
+        }
+
+        .jugador-card .btn-jugar:active {
+            transform: scale(0.98);
+        }
+
+        .jugador-card .btn-jugar:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .jugador-card .puntos {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #b64172;
+            padding: 10px;
+            background-color: white;
+            border-radius: 8px;
+            border: 2px solid #f39f18;
+        }
+
+        /* ============================================== */
+        /* SECCIÓN DE RESULTADOS */
+        /* ============================================== */
+        .resultados {
+            padding: 40px 30px;
+            background-color: #b64172;
+            text-align: center;
+        }
+
+        .ganador-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 500px;
+            margin: 0 auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: aparecer 0.5s ease-out;
+        }
+
+        @keyframes aparecer {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .ganador-card h2 {
+            color: #f39f18;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .ganador-card .nombre-ganador {
+            color: #b64172;
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .ganador-card .puntos-ganador {
+            color: #f39f18;
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        /* ============================================== */
+        /* RESPONSIVE */
+        /* ============================================== */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            .jugadores {
+                grid-template-columns: 1fr;
+                padding: 20px 15px;
+            }
+            
+            .ganador-card h2 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="contenedor-juego">
+        <header>
+            <h1>🎮 Juego de Adivinanza de Contraseña</h1>
+        </header>
+
+        <section class="reglas">
+            <h3>📋 Reglas del Juego:</h3>
+            <ul>
+                <li><span class="highlight">Letra en posición correcta:</span> puntuación x2 (vocal=2p, consonante=4p, número=6p)</li>
+                <li><span class="highlight">Letra correcta en otra posición:</span> puntuación x1 (vocal=1p, consonante=2p, número=3p)</li>
+                <li><span class="highlight">Contraseña exacta:</span> 100 puntos</li>
+                <li><span class="highlight">Cada jugador tiene 1 intento</span></li>
+            </ul>
+        </section>
+
+        <section class="jugadores">
+            <div class="jugador-card" data-jugador="0">
+                <h3>🎯 Jugador 1</h3>
+                <input type="text" class="input-jugador" placeholder="Escribe tu intento aquí...">
+                <button class="btn-jugar">Jugar</button>
+                <p class="puntos">0 puntos</p>
+            </div>
+
+            <div class="jugador-card" data-jugador="1">
+                <h3>🎯 Jugador 2</h3>
+                <input type="text" class="input-jugador" placeholder="Escribe tu intento aquí...">
+                <button class="btn-jugar">Jugar</button>
+                <p class="puntos">0 puntos</p>
+            </div>
+
+            <div class="jugador-card" data-jugador="2">
+                <h3>🎯 Jugador 3</h3>
+                <input type="text" class="input-jugador" placeholder="Escribe tu intento aquí...">
+                <button class="btn-jugar">Jugar</button>
+                <p class="puntos">0 puntos</p>
+            </div>
+        </section>
+
+        <section class="resultados" id="resultados" style="display:none;">
+            <div class="ganador-card">
+                <h2>🏆 GANADOR</h2>
+                <p class="nombre-ganador" id="nombreGanador"></p>
+                <p class="puntos-ganador"><span id="puntosGanador"></span> puntos</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Configuración del juego
+        const CONTRASEÑA = "SerRre7";
+        const PUNTOS_EXACTO = 100;
+
+        // Estado del juego
+        const jugadores = [
+            { nombre: "Jugador 1", puntos: 0, haJugado: false },
+            { nombre: "Jugador 2", puntos: 0, haJugado: false },
+            { nombre: "Jugador 3", puntos: 0, haJugado: false }
+        ];
+
+        // Utilidades para clasificar caracteres
+        const esVocal = (char) => /[aeiouáéíóúAEIOUÁÉÍÓÚ]/i.test(char);
+        const esNumero = (char) => /[0-9]/.test(char);
+        const esConsonante = (char) => /[a-záéíóúñ]/i.test(char) && !esVocal(char);
+
+        // Función para obtener puntos según el tipo de carácter
+        function obtenerPuntosCaracter(char, posicionCorrecta) {
+            const multiplicador = posicionCorrecta ? 2 : 1;
+            
+            if (esVocal(char)) return 1 * multiplicador;
+            if (esConsonante(char)) return 2 * multiplicador;
+            if (esNumero(char)) return 3 * multiplicador;
+            
+            return 0;
+        }
+
+        // Función principal para calcular puntos
+        function calcularPuntos(intento) {
+            // Si acierta exactamente, gana 100 puntos
+            if (intento === CONTRASEÑA) return PUNTOS_EXACTO;
+
+            let puntos = 0;
+            const contraseñaChars = CONTRASEÑA.split('');
+            const intentoChars = intento.split('');
+            const procesados = new Set();
+
+            // Primera pasada: caracteres en posición correcta
+            for (let i = 0; i < intentoChars.length; i++) {
+                if (i < contraseñaChars.length && intentoChars[i] === contraseñaChars[i]) {
+                    puntos += obtenerPuntosCaracter(intentoChars[i], true);
+                    procesados.add(i);
+                }
+            }
+
+            // Segunda pasada: caracteres correctos en posición incorrecta
+            for (let i = 0; i < intentoChars.length; i++) {
+                if (procesados.has(i)) continue;
+                
+                if (contraseñaChars.includes(intentoChars[i])) {
+                    puntos += obtenerPuntosCaracter(intentoChars[i], false);
+                }
+            }
+
+            return puntos;
+        }
+
+        // Función para manejar el intento de un jugador
+        function jugar(indiceJugador, input, boton, displayPuntos) {
+            const jugador = jugadores[indiceJugador];
+            
+            if (jugador.haJugado) {
+                alert(`${jugador.nombre} ya ha jugado!`);
+                return;
+            }
+
+            const intento = input.value.trim();
+
+            if (intento === "") {
+                alert("Por favor, escribe una palabra!");
+                input.focus();
+                return;
+            }
+
+            // Calcular puntos
+            const puntos = calcularPuntos(intento);
+            jugador.puntos = puntos;
+            jugador.haJugado = true;
+
+            // Actualizar interfaz
+            displayPuntos.textContent = `${puntos} puntos`;
+            input.disabled = true;
+            boton.disabled = true;
+            
+            // Mostrar resultado
+            if (puntos === PUNTOS_EXACTO) {
+                alert(`¡🎉 PERFECTO! ${jugador.nombre} adivinó la contraseña: ${puntos} puntos`);
+            } else {
+                alert(`${jugador.nombre} obtuvo: ${puntos} puntos`);
+            }
+
+            // Verificar si todos han jugado
+            verificarGanador();
+        }
+
+        // Función para verificar y mostrar ganador
+        function verificarGanador() {
+            const todosJugaron = jugadores.every(j => j.haJugado);
+            
+            if (todosJugaron) {
+                mostrarGanador();
+            }
+        }
+
+        // Función para mostrar el ganador
+        function mostrarGanador() {
+            const ganador = jugadores.reduce((max, jugador) => 
+                jugador.puntos > max.puntos ? jugador : max
+            );
+
+            document.getElementById("nombreGanador").textContent = ganador.nombre;
+            document.getElementById("puntosGanador").textContent = ganador.puntos;
+            document.getElementById("resultados").style.display = "block";
+
+            // Scroll suave hacia los resultados
+            document.getElementById("resultados").scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'center' 
+            });
+        }
+
+        // Inicialización: añadir event listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.jugador-card');
+            
+            cards.forEach((card, index) => {
+                const input = card.querySelector('.input-jugador');
+                const boton = card.querySelector('.btn-jugar');
+                const displayPuntos = card.querySelector('.puntos');
+                
+                // Event listener para el botón
+                boton.addEventListener('click', () => {
+                    jugar(index, input, boton, displayPuntos);
+                });
+                
+                // Event listener para Enter en el input
+                input.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        jugar(index, input, boton, displayPuntos);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
