@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba Completa de Eventos JavaScript</title>
+</head>
+
+<body>
+
+    <h1>1. Cambio de imagen al mantener pulsado</h1>
+    <p>Haz clic y mantén pulsado sobre la imagen del gato.</p>
+    <img id="imagenCambiante" src="https://placehold.co/400x300/orange/white?text=Gato+1" alt="Imagen 1" width="400" height="300">
+
+    <hr>
+
+    <h1>2. Cambio de color de fondo por eventos</h1>
+    <div id="cuadroMensaje" style="border: 1px solid black; padding: 20px; margin-top: 15px; background-color: white;">
+        Este es el cuadro de mensaje. Su color de fondo cambiará según tus acciones:
+        <ul>
+            <li><b>Pulsa el ratón:</b> Fondo Amarillo</li>
+            <li><b>Pulsa una tecla:</b> Fondo Azul</li>
+            <li><b>Mueve el ratón:</b> Fondo Blanco</li>
+        </ul>
+    </div>
+
+    <hr>
+
+    <h1>3. Deshabilitar botón derecho</h1>
+    <p>Intenta hacer clic derecho en cualquier parte de esta página. Se ha deshabilitado.</p>
+
+    <hr>
+
+    <h1>4. Identificar botón del ratón pulsado</h1>
+    <p id="infoClick">Haz clic en cualquier sitio para ver qué botón has pulsado...</p>
+
+    <hr>
+
+    <h1>5. Mostrar URL de la imagen al pasar el ratón</h1>
+    <p>Pasa el ratón por encima de cualquiera de las dos imágenes de abajo.</p>
+    <p id="infoUrl">URL de la imagen: (ninguna)</p>
+    <img src="https://placehold.co/200x150/green/white?text=Imagen+A" alt="Imagen A" style="margin-right: 10px;">
+    <img src="https://placehold.co/200x150/purple/white?text=Imagen+B" alt="Imagen B">
+    
+    <hr>
+    
+    <h1>6. Mostrar tecla y modificadores pulsados</h1>
+    <div id="infoTeclado" style="border: 1px solid #ccc; padding: 10px; min-height: 50px;">
+        Pulsa cualquier tecla...
+    </div>
+
+    <hr>
+
+    <h1>7. Mover una caja con las teclas de dirección</h1>
+    <p>Usa las flechas de dirección (tanto las normales como las del teclado numérico) para mover la caja roja.</p>
+    <div id="cajaMovil" style="position: relative; width: 50px; height: 50px; background-color: red; border: 1px solid black;"></div>
+
+
+    <script>
+        // Envolvemos todo el código en 'DOMContentLoaded' para asegurarnos de que el HTML
+        // está completamente cargado antes de intentar acceder a sus elementos.
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // --- REQUISITO 1: Cambiar imagen al hacer clic ---
+            const imagenCambiante = document.getElementById('imagenCambiante');
+            const urlImagen1 = "https://placehold.co/400x300/orange/white?text=Gato+1";
+            const urlImagen2 = "https://placehold.co/400x300/blue/white?text=Gato+2";
+
+            imagenCambiante.addEventListener('mousedown', function () {
+                this.src = urlImagen2;
+            });
+
+            // Se usa 'mouseup' en el documento por si el usuario suelta el clic fuera de la imagen
+            document.addEventListener('mouseup', function () {
+                if (imagenCambiante.src !== urlImagen1) {
+                    imagenCambiante.src = urlImagen1;
+                }
+            });
+
+
+            // --- REQUISITO 2: Cambiar color de fondo del cuadro de mensaje ---
+            const cuadroMensaje = document.getElementById('cuadroMensaje');
+
+            document.addEventListener('mousedown', function () {
+                cuadroMensaje.style.backgroundColor = '#FFFF00'; // Amarillo
+            });
+
+            document.addEventListener('keydown', function () {
+                cuadroMensaje.style.backgroundColor = '#CCE6FF'; // Azul
+            });
+
+            document.addEventListener('mousemove', function () {
+                cuadroMensaje.style.backgroundColor = 'white'; // Blanco
+            });
+
+
+            // --- REQUISITO 3: Deshabilitar el botón derecho ---
+            document.addEventListener('contextmenu', function (event) {
+                event.preventDefault();
+                alert('El botón derecho del ratón está deshabilitado en esta página.');
+            });
+
+
+            // --- REQUISITO 4: Identificar botón del ratón pulsado ---
+            const infoClick = document.getElementById('infoClick');
+            document.addEventListener('mousedown', function (event) {
+                let botonPulsado = '';
+                // event.button: 0=izquierdo, 1=central, 2=derecho
+                switch (event.button) {
+                    case 0:
+                        botonPulsado = 'izquierdo';
+                        break;
+                    case 1:
+                        botonPulsado = 'central';
+                        break;
+                    case 2:
+                        botonPulsado = 'derecho';
+                        break;
+                    default:
+                        botonPulsado = 'desconocido';
+                }
+                infoClick.textContent = `Has pulsado el botón: ${botonPulsado}.`;
+            });
+
+
+            // --- REQUISITO 5: Mostrar URL de la imagen al pasar el ratón ---
+            const infoUrl = document.getElementById('infoUrl');
+            const todasLasImagenes = document.querySelectorAll('img'); // Selecciona todas las <img> de la página
+
+            todasLasImagenes.forEach(img => {
+                img.addEventListener('mouseover', function (event) {
+                    // event.target se refiere al elemento que disparó el evento (la imagen)
+                    infoUrl.textContent = `URL de la imagen: ${event.target.src}`;
+                });
+
+                img.addEventListener('mouseout', function () {
+                    infoUrl.textContent = 'URL de la imagen: (ninguna)';
+                });
+            });
+
+
+            // --- REQUISITO 6: Mostrar tecla pulsada y modificadores ---
+            const infoTeclado = document.getElementById('infoTeclado');
+            document.addEventListener('keydown', function (event) {
+                let mensaje = `Tecla pulsada: <strong>${event.key}</strong> <br>`;
+                mensaje += `Código de tecla: <strong>${event.code}</strong> <br><br>`;
+                
+                let modificadores = [];
+                if (event.altKey) {
+                    modificadores.push('Alt');
+                }
+                if (event.shiftKey) {
+                    modificadores.push('Shift');
+                }
+                if (event.ctrlKey) {
+                    modificadores.push('Control');
+                }
+
+                if (modificadores.length > 0) {
+                    mensaje += `Modificadores activos: <strong>${modificadores.join(' + ')}</strong>`;
+                } else {
+                    mensaje += 'No se ha pulsado ninguna tecla modificadora.';
+                }
+
+                infoTeclado.innerHTML = mensaje;
+            });
+
+
+            // --- REQUISITO 7: Mover una caja con las teclas ---
+            const cajaMovil = document.getElementById('cajaMovil');
+            let posX = 0;
+            let posY = 0;
+            const paso = 10; // Píxeles que se moverá la caja en cada pulsación
+
+            document.addEventListener('keydown', function (event) {
+                // Usamos event.code para que funcione independientemente de la distribución del teclado
+                switch (event.code) {
+                    case 'ArrowUp':
+                    case 'Numpad8':
+                        posY -= paso;
+                        event.preventDefault(); // Evita el scroll de la página
+                        break;
+                    case 'ArrowDown':
+                    case 'Numpad2':
+                        posY += paso;
+                        event.preventDefault();
+                        break;
+                    case 'ArrowLeft':
+                    case 'Numpad4':
+                        posX -= paso;
+                        event.preventDefault();
+                        break;
+                    case 'ArrowRight':
+                    case 'Numpad6':
+                        posX += paso;
+                        event.preventDefault();
+                        break;
+                }
+                // Aplicamos la nueva posición a la caja
+                cajaMovil.style.top = posY + 'px';
+                cajaMovil.style.left = posX + 'px';
+            });
+
+        });
+    </script>
+
+</body>
+
+</html>
