@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ejercicio 31 - Eliminar un elemento de una matriz</title>
+</head>
+<body>
+  <h1>Ejercicio 31 - Eliminar un elemento de una matriz</h1>
+
+  <p>Introduce los elementos del array separados por comas:</p>
+  <input type="text" id="elementos" placeholder="Ejemplo: 2, 4, 5, 9"><br><br>
+
+  <label for="eliminar">Elemento a eliminar:</label>
+  <input type="text" id="eliminar" placeholder="Ejemplo: 5"><br><br>
+
+  <button onclick="eliminar()">Eliminar elemento</button>
+
+  <h3>Resultado:</h3>
+  <p id="resultado">—</p>
+
+  <script>
+    function eliminarElemento(array, elemento) {
+      return array.filter(e => e !== elemento);
+    }
+
+    function eliminar() {
+      const elementos = document.getElementById("elementos").value;
+      const eliminarValor = document.getElementById("eliminar").value;
+
+      if (!elementos || eliminarValor === "") {
+        document.getElementById("resultado").textContent = "Introduce el array y el elemento a eliminar.";
+        return;
+      }
+
+      const array = elementos.split(",").map(e => e.trim());
+      const resultado = eliminarElemento(array, eliminarValor);
+      document.getElementById("resultado").textContent = "Resultado: [" + resultado.join(", ") + "]";
+    }
+  </script>
+</body>
+</html>

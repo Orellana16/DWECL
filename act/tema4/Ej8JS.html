@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ejercicio 8b - Elemento más frecuente de una matriz</title>
+</head>
+<body>
+  <h1>Ejercicio 8b - Elemento más frecuente de una matriz</h1>
+
+  <p>Introduce los elementos del array separados por comas:</p>
+  <input type="text" id="elementos" placeholder="Ejemplo: 1, 3, 2, 3, 4, 3, 5, 2">
+  <button onclick="calcularFrecuente()">Calcular más frecuente</button>
+
+  <h3>Resultado:</h3>
+  <p id="resultado">—</p>
+
+  <script>
+    function elementoMasFrecuente(array) {
+      const contador = {};
+      let maxRepeticiones = 0;
+      let elementoFrecuente = null;
+
+      for (let num of array) {
+        contador[num] = (contador[num] || 0) + 1;
+        if (contador[num] > maxRepeticiones) {
+          maxRepeticiones = contador[num];
+          elementoFrecuente = num;
+        }
+      }
+      return elementoFrecuente;
+    }
+
+    function calcularFrecuente() {
+      const input = document.getElementById("elementos").value;
+      const array = input.split(",").map(e => e.trim()).filter(e => e !== "");
+
+      if (array.length === 0) {
+        document.getElementById("resultado").textContent = "Introduce al menos un valor válido.";
+        return;
+      }
+
+      const frecuente = elementoMasFrecuente(array);
+      document.getElementById("resultado").textContent = "El elemento más frecuente es: " + frecuente;
+    }
+  </script>
+</body>
+</html>

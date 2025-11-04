@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ejercicio 18 - Producto de valores en una matriz</title>
+</head>
+<body>
+  <h1>Ejercicio 18 - Producto de valores en una matriz</h1>
+
+  <p>Introduce los números separados por comas:</p>
+  <input type="text" id="numeros" placeholder="Ejemplo: 2, 3, 4">
+  <button onclick="calcularProducto()">Calcular producto</button>
+
+  <h3>Resultado:</h3>
+  <p id="resultado">—</p>
+
+  <script>
+    function productoArray(array) {
+      let producto = 1;
+      for (let i = 0; i < array.length; i++) {
+        producto *= array[i];
+      }
+      return producto;
+    }
+
+    function calcularProducto() {
+      const input = document.getElementById("numeros").value;
+      const array = input.split(",").map(num => Number(num.trim())).filter(n => !isNaN(n));
+
+      if (array.length === 0) {
+        document.getElementById("resultado").textContent = "Introduce al menos un número válido.";
+        return;
+      }
+
+      const producto = productoArray(array);
+      document.getElementById("resultado").textContent = "El producto es: " + producto;
+    }
+  </script>
+</body>
+</html>

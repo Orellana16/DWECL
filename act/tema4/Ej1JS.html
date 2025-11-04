@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ejercicio 4a — Sumar Array</title>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" role="main" aria-labelledby="title">
+      <header>
+        <div class="logo" aria-hidden="true">JS</div>
+        <div>
+          <h1 id="title">Ejercicio 4a — Sumar elementos de un array</h1>
+          <p class="lead">Introduce números separados por comas. El programa calculará la suma.</p>
+        </div>
+      </header>
+
+      <section class="grid" aria-label="Interfaz de suma">
+        <div class="panel" aria-labelledby="panel1">
+          <label for="inputArray">Array (ej. 1, 2, 3, 4)</label>
+          <input id="inputArray" type="text" placeholder="Introduce números separados por comas" aria-describedby="hint"/>
+
+          <div class="buttons" style="margin-top:12px;">
+            <button id="btnSum" class="btn-primary" title="Sumar">Sumar</button>
+            <button id="btnExample" class="btn-ghost" title="Cargar ejemplo">Cargar ejemplo</button>
+            <button id="btnClear" class="btn-ghost" title="Limpiar">Limpiar</button>
+          </div>
+
+          <p id="hint" class="hint">Puedes usar espacios o no. El input ignora entradas no numéricas.</p>
+        </div>
+
+        <aside class="panel result" aria-labelledby="resultadoLabel">
+          <label id="resultadoLabel">Resultado</label>
+          <div id="output" class="output" role="status" aria-live="polite">—</div>
+
+          <div style="width:100%; margin-top:8px;">
+            <label>Última operación</label>
+            <div id="last" class="output" style="color:#c9f7ff; font-size:0.92rem">Sin operación</div>
+          </div>
+        </aside>
+      </section>
+
+      <footer style="margin-top:18px; color:var(--muted); font-size:0.85rem;">
+        <strong>Nota:</strong> si introduces elementos no numéricos se ignorarán. Para arrays vacíos el resultado será 0.
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    // Función que implementa 4a: suma de elementos de una matriz
+    function sumarArray(array) {
+      let suma = 0;
+      for (let i = 0; i < array.length; i++) {
+        suma += array[i];
+      }
+      return suma;
+    }
+
+    // Parseo del input: "1, 2, 3" -> [1,2,3]
+    function parseInputToNumbers(text) {
+      if (!text) return [];
+      return text.split(',')
+                 .map(s => s.trim())
+                 .filter(s => s.length > 0)
+                 .map(s => {
+                   // intentar parsear como número
+                   const n = Number(s);
+                   return Number.isNaN(n) ? null : n;
+                 })
+                 .filter(v => v !== null);
+    }
+
+    // Elementos DOM
+    const input = document.getElementById('inputArray');
+    const btnSum = document.getElementById('btnSum');
+    const btnExample = document.getElementById('btnExample');
+    const btnClear = document.getElementById('btnClear');
+    const output = document.getElementById('output');
+    const last = document.getElementById('last');
+
+    // Eventos
+    btnSum.addEventListener('click', () => {
+      const raw = input.value;
+      const nums = parseInputToNumbers(raw);
+      const suma = sumarArray(nums);
+      output.textContent = String(suma);
+      last.textContent = `Array: [${nums.join(', ')}] → Suma = ${suma}`;
+    });
+
+    btnExample.addEventListener('click', () => {
+      const ejemplo = [1, 2, 3, 4, 5, 6];
+      input.value = ejemplo.join(', ');
+      // Ejecutar suma automáticamente tras cargar ejemplo
+      const suma = sumarArray(ejemplo);
+      output.textContent = String(suma);
+      last.textContent = `Array: [${ejemplo.join(', ')}] → Suma = ${suma}`;
+    });
+
+    btnClear.addEventListener('click', () => {
+      input.value = '';
+      output.textContent = '—';
+      last.textContent = 'Sin operación';
+      input.focus();
+    });
+
+    // Permitir Enter para sumar
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        btnSum.click();
+      }
+    });
+  </script>
+</body>
+</html>

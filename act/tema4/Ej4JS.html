@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ejercicio 8a - Diferencia entre dos fechas</title>
+</head>
+<body>
+  <h1>Ejercicio 8a - Diferencia entre dos fechas</h1>
+
+  <label for="fecha1">Primera fecha:</label>
+  <input type="date" id="fecha1"><br><br>
+
+  <label for="fecha2">Segunda fecha:</label>
+  <input type="date" id="fecha2"><br><br>
+
+  <button onclick="calcularDiferencia()">Calcular diferencia</button>
+
+  <h3>Resultado:</h3>
+  <p id="resultado">—</p>
+
+  <script>
+    function diferenciaEnDias(fecha1, fecha2) {
+      const f1 = new Date(fecha1);
+      const f2 = new Date(fecha2);
+      const diffTiempo = Math.abs(f2 - f1);
+      const diffDias = diffTiempo / (1000 * 60 * 60 * 24);
+      return Math.floor(diffDias);
+    }
+
+    function calcularDiferencia() {
+      const fecha1 = document.getElementById("fecha1").value;
+      const fecha2 = document.getElementById("fecha2").value;
+
+      if (!fecha1 || !fecha2) {
+        document.getElementById("resultado").textContent = "Por favor, selecciona ambas fechas.";
+        return;
+      }
+
+      const dias = diferenciaEnDias(fecha1, fecha2);
+      document.getElementById("resultado").textContent = "La diferencia es de " + dias + " días.";
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ejercicio 6 - Valor más alto de una matriz</title>
+</head>
+<body>
+  <h1>Ejercicio 6 - Valor más alto de una matriz</h1>
+
+  <p>Introduce los números separados por comas:</p>
+  <input type="text" id="numeros" placeholder="Ejemplo: 11, 3, 16, 90">
+  <button onclick="calcularMaximo()">Calcular máximo</button>
+
+  <h3>Resultado:</h3>
+  <p id="resultado">—</p>
+
+  <script>
+    function maximoArray(array) {
+      return Math.max(...array);
+    }
+
+    function calcularMaximo() {
+      const input = document.getElementById('numeros').value;
+      const array = input.split(',').map(num => Number(num.trim())).filter(n => !isNaN(n));
+
+      if (array.length === 0) {
+        document.getElementById('resultado').textContent = "Introduce al menos un número válido.";
+        return;
+      }
+
+      const maximo = maximoArray(array);
+      document.getElementById('resultado').textContent = "El número más alto es: " + maximo;
+    }
+  </script>
+</body>
+</html>

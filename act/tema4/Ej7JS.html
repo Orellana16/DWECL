@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ejercicio 5 - Unir elementos de una matriz</title>
+</head>
+<body>
+  <h1>Ejercicio 5 - Unir elementos de una matriz</h1>
+
+  <p>Introduce los elementos del array separados por comas:</p>
+  <input type="text" id="elementos" placeholder="Ejemplo: Rojo, Verde, Azul">
+  <button onclick="unirElementos()">Unir elementos</button>
+
+  <h3>Resultado:</h3>
+  <p id="resultado">—</p>
+
+  <script>
+    function unirArray(array) {
+      return array.join(", ");
+    }
+
+    function unirElementos() {
+      const input = document.getElementById("elementos").value;
+      const array = input.split(",").map(el => el.trim()).filter(el => el.length > 0);
+
+      if (array.length === 0) {
+        document.getElementById("resultado").textContent = "Introduce al menos un elemento válido.";
+        return;
+      }
+
+      const resultado = unirArray(array);
+      document.getElementById("resultado").textContent = "Resultado: " + resultado;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ejercicio 4b — Nombre del mes y días</title>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" role="main" aria-labelledby="title">
+      <header>
+        <div class="logo" aria-hidden="true">JS</div>
+        <div>
+          <h1 id="title">Ejercicio 4b — Nombre del mes y cantidad de días</h1>
+          <p class="lead">Introduce el número del mes (1–12) y el año.</p>
+        </div>
+      </header>
+
+      <section class="grid" aria-label="Interfaz mes y días">
+        <div class="panel" aria-labelledby="panel1">
+          <label for="mes">Mes</label>
+          <input id="mes" type="number" min="1" max="12" placeholder="Ej. 2 para febrero">
+
+          <label for="anio" style="margin-top:12px;">Año</label>
+          <input id="anio" type="number" min="1" placeholder="Ej. 2024">
+
+          <div class="buttons" style="margin-top:14px;">
+            <button id="btnCalcular" class="btn-primary">Calcular</button>
+            <button id="btnHoy" class="btn-ghost">Mes actual</button>
+            <button id="btnClear" class="btn-ghost">Limpiar</button>
+          </div>
+
+          <p class="hint">Usa "Mes actual" para obtener el nombre y días del mes de hoy.</p>
+        </div>
+
+        <aside class="panel result" aria-labelledby="resultadoLabel">
+          <label id="resultadoLabel">Resultado</label>
+          <div id="output" class="output" role="status" aria-live="polite">—</div>
+
+          <div style="width:100%; margin-top:8px;">
+            <label>Última operación</label>
+            <div id="last" class="output" style="color:#c9f7ff; font-size:0.92rem">Sin operación</div>
+          </div>
+        </aside>
+      </section>
+
+      <footer style="margin-top:18px; color:var(--muted); font-size:0.85rem;">
+        <strong>Nota:</strong> los años bisiestos afectan al número de días de febrero.
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    // Función principal (Ejercicio 4b)
+    function obtenerMesYDias(mes, año) {
+      const nombresMeses = [
+        "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+      ];
+      if (mes < 1 || mes > 12) return "Mes inválido. Introduce un número del 1 al 12.";
+      const nombre = nombresMeses[mes - 1];
+      const dias = new Date(año, mes, 0).getDate(); // Día 0 → último día del mes
+      return `${nombre} tiene ${dias} días en el año ${año}.`;
+    }
+
+    // Elementos del DOM
+    const mes = document.getElementById('mes');
+    const anio = document.getElementById('anio');
+    const output = document.getElementById('output');
+    const last = document.getElementById('last');
+    const btnCalcular = document.getElementById('btnCalcular');
+    const btnHoy = document.getElementById('btnHoy');
+    const btnClear = document.getElementById('btnClear');
+
+    // Eventos
+    btnCalcular.addEventListener('click', () => {
+      const m = parseInt(mes.value);
+      const a = parseInt(anio.value);
+      if (isNaN(m) || isNaN(a)) {
+        output.textContent = "Por favor introduce valores válidos.";
+        return;
+      }
+      const resultado = obtenerMesYDias(m, a);
+      output.textContent = resultado;
+      last.textContent = `Mes: ${m} | Año: ${a} → ${resultado}`;
+    });
+
+    btnHoy.addEventListener('click', () => {
+      const hoy = new Date();
+      const m = hoy.getMonth() + 1;
+      const a = hoy.getFullYear();
+      mes.value = m;
+      anio.value = a;
+      const resultado = obtenerMesYDias(m, a);
+      output.textContent = resultado;
+      last.textContent = `Mes actual (${m}/${a}) → ${resultado}`;
+    });
+
+    btnClear.addEventListener('click', () => {
+      mes.value = '';
+      anio.value = '';
+      output.textContent = '—';
+      last.textContent = 'Sin operación';
+      mes.focus();
+    });
+
+    // Permitir Enter
+    anio.addEventListener('keydown', e => {
+      if (e.key === 'Enter') btnCalcular.click();
+    });
+  </script>
+</body>
+</html>
