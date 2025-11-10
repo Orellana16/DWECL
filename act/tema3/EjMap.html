@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analizador de Texto</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<style>
+    /* Estilos generales */
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        background-color: #f4f7f9;
+        color: #333;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    /* Contenedor principal */
+    .container {
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    h1 {
+        color: #2c3e50;
+        text-align: center;
+        margin-top: 0;
+    }
+
+    h2 {
+        color: #34495e;
+        border-bottom: 2px solid #ecf0f1;
+        padding-bottom: 10px;
+        margin-top: 30px;
+    }
+
+    p {
+        line-height: 1.6;
+    }
+
+    /* Área de texto */
+    textarea {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        /* Asegura que el padding no afecte el ancho total */
+        margin-top: 10px;
+        resize: vertical;
+    }
+
+    /* Botón */
+    button {
+        display: block;
+        width: 100%;
+        padding: 15px;
+        margin-top: 20px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #fff;
+        background-color: #3498db;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+        background-color: #2980b9;
+    }
+
+    /* Contenedor de resultados */
+    #resultadoContainer {
+        margin-top: 20px;
+        background-color: #fafafa;
+        border: 1px solid #eee;
+        border-radius: 5px;
+        padding: 20px;
+        max-height: 300px;
+        overflow-y: auto;
+        /* Agrega scroll si los resultados son muchos */
+    }
+
+    .placeholder {
+        color: #999;
+        text-align: center;
+    }
+
+    /* Lista de resultados */
+    #resultadoLista {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    #resultadoLista li {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 5px;
+        border-bottom: 1px solid #ecf0f1;
+    }
+
+    #resultadoLista li:last-child {
+        border-bottom: none;
+    }
+
+    .palabra {
+        font-weight: 500;
+    }
+
+    .conteo {
+        font-weight: bold;
+        background-color: #e0eaf1;
+        color: #2c3e50;
+        padding: 2px 8px;
+        border-radius: 12px;
+        min-width: 20px;
+        text-align: center;
+    }
+</style>
+
+<body>
+
+    <div class="container">
+        <h1>Analizador de Frecuencia de Palabras</h1>
+        <p>Escribe o pega un texto en el siguiente cuadro y presiona "Analizar" para ver cuántas veces aparece cada
+            palabra.</p>
+
+        <textarea id="textoInput" rows="10"
+            placeholder="El rápido zorro marrón salta sobre el perro perezoso. ¡El zorro es muy, muy rápido!"></textarea>
+
+        <button id="analizarBtn">Analizar Texto</button>
+
+        <h2>Resultados:</h2>
+        <div id="resultadoContainer">
+            <p class="placeholder">Los resultados aparecerán aquí...</p>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. REFERENCIAS A ELEMENTOS DEL DOM ---
+        const textoInput = document.getElementById('textoInput');
+        const analizarBtn = document.getElementById('analizarBtn');
+        const resultadoContainer = document.getElementById('resultadoContainer');
+
+        // --- 2. LA FUNCIÓN PRINCIPAL DE ANÁLISIS ---
+
+        /**
+         * Analiza una cadena de texto, cuenta la frecuencia de cada palabra y devuelve un Map.
+         * Ignora mayúsculas/minúsculas y elimina signos de puntuación comunes.
+         *
+         * @param {string} texto La cadena de texto a analizar.
+         * @returns {Map<string, number>} Un Map con las palabras como clave y su frecuencia como valor.
+         */
+        function analizarTexto(texto) {
+            const conteoPalabras = new Map();
+
+            if (!texto || typeof texto !== 'string') {
+                return conteoPalabras;
+            }
+
+            // Procesa el texto: minúsculas, elimina puntuación y divide en palabras.
+            const palabras = texto
+                .toLowerCase()
+                .replace(/[.,;:!?]/g, ' ')
+                .split(/\s+/);
+
+            // Recorre las palabras para contarlas.
+            for (const palabra of palabras) {
+                if (palabra === '') continue; // Ignora cadenas vacías
+
+                // Si la palabra ya existe, incrementa su contador. Si no, la inicializa en 1.
+                const conteoActual = conteoPalabras.get(palabra) || 0;
+                conteoPalabras.set(palabra, conteoActual + 1);
+            }
+
+            return conteoPalabras;
+        }
+
+        // --- 3. FUNCIÓN PARA MOSTRAR LOS RESULTADOS EN LA PÁGINA ---
+
+        function mostrarResultados(mapaDeConteo) {
+            // Limpia el contenedor de resultados previos.
+            resultadoContainer.innerHTML = '';
+
+            if (mapaDeConteo.size === 0) {
+                resultadoContainer.innerHTML = '<p class="placeholder">No se encontraron palabras para analizar.</p>';
+                return;
+            }
+
+            // Crea una lista desordenada para los resultados.
+            const lista = document.createElement('ul');
+            lista.id = 'resultadoLista';
+
+            // Convierte el Map a un Array, lo ordena por frecuencia (de mayor a menor)
+            const resultadosOrdenados = [...mapaDeConteo.entries()].sort((a, b) => b[1] - a[1]);
+
+            // Itera sobre el array ordenado para crear cada elemento de la lista.
+            resultadosOrdenados.forEach(([palabra, conteo]) => {
+                const item = document.createElement('li');
+                // Usamos spans para poder darles estilo por separado
+                item.innerHTML = `
+      <span class="palabra">'${palabra}'</span>
+      <span class="conteo">${conteo}</span>
+    `;
+                lista.appendChild(item);
+            });
+
+            // Añade la lista completa al contenedor de resultados.
+            resultadoContainer.appendChild(lista);
+        }
+
+
+        // --- 4. EVENT LISTENER ---
+
+        // Escucha el evento 'click' en el botón.
+        analizarBtn.addEventListener('click', () => {
+            // Obtiene el texto del textarea.
+            const textoParaAnalizar = textoInput.value;
+
+            // Llama a la función de análisis.
+            const resultadoDelAnalisis = analizarTexto(textoParaAnalizar);
+
+            // Muestra los resultados en la página.
+            mostrarResultados(resultadoDelAnalisis);
+        });
+    </script>
+</body>
+
+</html>
