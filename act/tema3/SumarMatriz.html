@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Suma de matrices</title>
+  <style>
+    body {font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; line-height:1.45; padding:20px; background:#f7f7fb;}
+    .container{max-width:980px; margin:auto;}
+    .card{background:#fff; border:1px solid #eaeaea; border-radius:12px; padding:16px; margin-bottom:16px; box-shadow:0 1px 2px rgba(0,0,0,.03);}
+    h1 {font-size:1.25rem; margin:0 0 12px;}
+    .controls {display:flex; gap:12px; flex-wrap:wrap; align-items:end;}
+    label{display:flex; flex-direction:column; gap:6px; font-weight:600;}
+    input[type=number]{padding:8px;border:1px solid #d0d0d5; border-radius:8px; width:110px;}
+    button{padding:10px 14px; border:0; background:#4f46e5; color:white; border-radius:8px; cursor:pointer;}
+    button.secondary {background:#64748b;}
+    button:disabled{opacity:.6; cursor:not-allowed;}
+    .grid {display:inline-grid; gap:6px; margin:8px 0;}
+    .grid input{width:80px; text-align:right; padding:6px; border:1px solid #d0d0d5; border-radius:8px;}
+    .mats{display:flex; gap:24px; flex-wrap:wrap;}
+    table{border-collapse:collapse;}
+    td{border:1px solid #ddd; padding:8px 10px; min-width:70px; text-align:right;}
+    .caption{font-weight:700; margin-bottom:6px;}
+    .error {color:#b91c1c; font-weight:600; margin-top:8px;}
+    .success{color:#166534; font-weight:600; margin-top:8px;}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>Sumar dos matrices</h1>
+      <div class="controls">
+        <label>Filas
+          <input id="rows" type="number" min="1" max="10" value="2">
+        </label>
+        <label>Columnas
+          <input id="cols" type="number" min="1" max="10" value="2">
+        </label>
+        <button id="btnCreate">Crear matrices</button>
+        <button id="btnSum" class="secondary" disabled>Sumar matrices</button>
+      </div>
+      <div id="msg" class=""></div>
+    </div>
+
+    <div class="mats">
+      <div class="card" style="flex:1 1 280px">
+        <div class="caption">Matriz A</div>
+        <div id="matA"></div>
+      </div>
+      <div class="card" style="flex:1 1 280px">
+        <div class="caption">Matriz B</div>
+        <div id="matB"></div>
+      </div>
+      <div class="card" style="flex:1 1 280px">
+        <div class="caption">Resultado A + B</div>
+        <div id="result"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const $ = (sel)=>document.querySelector(sel);
+
+    function buildMatrixInputs(containerId, rows, cols){
+      const container = document.getElementById(containerId);
+      container.innerHTML = "";
+      const grid = document.createElement("div");
+      grid.className = "grid";
+      grid.style.gridTemplateColumns = `repeat(${cols}, minmax(70px, 1fr))`;
+      for(let r=0; r<rows; r++){
+        for(let c=0; c<cols; c++){
+          const input = document.createElement("input");
+          input.type = "number";
+          input.step = "any";
+          input.placeholder = `(${r+1},${c+1})`;
+          input.value = "0";
+          input.dataset.row = r;
+          input.dataset.col = c;
+          grid.appendChild(input);
+        }
+      }
+      container.appendChild(grid);
+    }
+
+    function readMatrix(containerId, rows, cols){
+      const container = document.getElementById(containerId);
+      const inputs = container.querySelectorAll("input");
+      if(inputs.length !== rows*cols) return null;
+      const M = Array.from({length: rows}, ()=> Array(cols).fill(0));
+      for(const inp of inputs){
+        const r = Number(inp.dataset.row);
+        const c = Number(inp.dataset.col);
+        const val = inp.value.trim() === "" ? 0 : Number(inp.value);
+        if(Number.isNaN(val)) throw new Error("Valores no numéricos detectados.");
+        M[r][c] = val;
+      }
+      return M;
+    }
+
+    function sumMatrices(A, B){
+      const rows = A.length, cols = A[0].length;
+      const R = Array.from({length: rows}, ()=> Array(cols).fill(0));
+      for(let r=0; r<rows; r++){
+        for(let c=0; c<cols; c++){
+          R[r][c] = A[r][c] + B[r][c];
+        }
+      }
+      return R;
+    }
+
+    function renderResult(containerId, M){
+      const container = document.getElementById(containerId);
+      container.innerHTML = "";
+      const table = document.createElement("table");
+      M.forEach(row=>{
+        const tr = document.createElement("tr");
+        row.forEach(val=>{
+          const td = document.createElement("td");
+          td.textContent = Number.isInteger(val) ? val : Number(val.toFixed(6));
+          tr.appendChild(td);
+        });
+        table.appendChild(tr);
+      });
+      container.appendChild(table);
+    }
+
+    $("#btnCreate").addEventListener("click", ()=>{
+      const rows = Number($("#rows").value);
+      const cols = Number($("#cols").value);
+      const msg = $("#msg");
+      msg.textContent = "";
+      msg.className = "";
+      if(!Number.isInteger(rows) || !Number.isInteger(cols) || rows<1 || cols<1 || rows>10 || cols>10){
+        msg.textContent = "Indica dimensiones válidas (1-10).";
+        msg.className = "error";
+        return;
+      }
+      buildMatrixInputs("matA", rows, cols);
+      buildMatrixInputs("matB", rows, cols);
+      $("#result").innerHTML = "";
+      $("#btnSum").disabled = false;
+    });
+
+    $("#btnSum").addEventListener("click", ()=>{
+      const rows = Number($("#rows").value);
+      const cols = Number($("#cols").value);
+      const msg = $("#msg");
+      msg.textContent = "";
+      msg.className = "";
+      try{
+        const A = readMatrix("matA", rows, cols);
+        const B = readMatrix("matB", rows, cols);
+        if(!A || !B){
+          msg.textContent = "Primero crea las matrices.";
+          msg.className = "error";
+          return;
+        }
+        const R = sumMatrices(A, B);
+        renderResult("result", R);
+        msg.textContent = "¡Listo! Resultado mostrado.";
+        msg.className = "success";
+      }catch(err){
+        msg.textContent = err.message || "Error al leer las matrices.";
+        msg.className = "error";
+      }
+    });
+  </script>
+</body>
+</html>

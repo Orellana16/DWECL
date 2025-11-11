@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Suma de matrices</title>
+</head>
+<body>
+<h1>Suma de matrices predefinidas</h1>
+
+<pre id="out"></pre>
+<h2> Añade Valores a las Matrices </h2>
+<table>
+    <tr><td colspan="3">Matriz A:</td></tr>
+    <tr><td>1</td><td>2</td><td>3</td></tr>
+    <tr><td>4</td><td>5</td><td>6</td></tr>
+    <tr><td>7</td><td>8</td><td>9</td></tr>
+</table>
+<table>
+    <tr><td colspan="3">Matriz B:</td></tr>
+    <tr><td>1</td><td>2</td><td>3</td></tr>
+    <tr><td>4</td><td>5</td><td>6</td></tr>
+    <tr><td>7</td><td>8</td><td>9</td></tr>
+</table>
+
+<script>
+  // Matrices predefinidas (mismo tamaño)
+  const A = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+  ];
+  const B = [
+    [7, 8, 9],
+    [10, 11, 12],
+    [8, 5, 7]
+  ];
+
+  // Suma
+  const S = A.map((fila, i) => fila.map((v, j) => v + B[i][j]));
+
+  // Mostrar
+  const mostrar = M => M.map(fila => fila.join(' ')).join('\n');
+  document.getElementById('out').textContent =
+    `A:\n${mostrar(A)}\n\nB:\n${mostrar(B)}\n\nA + B:\n${mostrar(S)}`;
+</script>
+</body>
+</html>
