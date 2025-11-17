@@ -1,0 +1,43 @@
+<!--Ejercicio 1.1: Solicitar un dato por pantalla en una ventana emergente y mostrarlo como contenido de un párrafo <p>.-->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+ <meta charset="UTF-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width,
+initial-scale=1.0">
+ <title>Pedir un dato y sacar un mensaje</title>
+</head>
+<body>
+<p id="info">Has seleccionado el número...</p>
+<p id="dibujo"></p>
+
+
+ <script>
+    //Manda un alert pidiendo uun numero y lo pide constantemente hasta que introduzca un numero valido
+do {
+ num = prompt("Introducir un número", "");
+} while (isNaN(num))
+
+info.textContent = `Has seleccionado el número ${num}.`;
+
+let asteriscos = [];
+
+for (i=0; i<num; i++) {
+    let asteriscosSub = [];
+    for (j=num; j>0; j--) {
+        asteriscosSub.push("*");
+        console.log("Hola")
+    }
+    asteriscos.push(asteriscosSub)
+}
+
+dibujo.textContent = `${asteriscos[2]}`;
+
+for (a in asteriscos){
+console.log(a)
+}
+
+ </script>
+</body>
+</html>

@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Palos del Flamenco — Explorador Interactivo</title>
+  <style>
+    :root{
+      --bg:#0f1221;
+      --card:#171a2c;
+      --muted:#aab1d0;
+      --fg:#e7ecff;
+      --accent:#6dd6ff;
+      --accent-2:#ff8b6a;
+      --chip:#232746;
+      --good:#15c47e;
+      --warn:#ffbf69;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 600px at 20% -10%, #1b1f3a 0%, #0f1221 45%, #0f1221 100%), var(--bg);
+      color:var(--fg);
+    }
+    a{color:var(--accent)}
+    .container{width:min(1100px,92vw); margin: 32px auto 64px; }
+    header h1{margin: 0 0 8px; font-size: clamp(1.6rem, 3vw, 2.2rem)}
+    header p{margin:0; color:var(--muted)}
+    .controls{
+      margin-top:18px; padding:16px; background:linear-gradient(180deg, rgba(255,255,255,.03), transparent 40%); border:1px solid rgba(255,255,255,.05);
+      border-radius:12px;
+    }
+    .row{display:grid; grid-template-columns: 1fr auto; gap:12px; align-items: center}
+    label{font-weight:600}
+    select{
+      width:100%; min-height: 220px; color:var(--fg); background: var(--card); border:1px solid rgba(255,255,255,.08);
+      border-radius:10px; padding:8px; outline:none;
+    }
+    option{padding:6px}
+    .btns{display:flex; gap:10px; flex-wrap: wrap; margin-top:10px}
+    button{
+      background: var(--chip); color:var(--fg); border:1px solid rgba(255,255,255,.1); border-radius:8px; padding:8px 12px; cursor:pointer;
+    }
+    button:hover{border-color: var(--accent)}
+    .results{
+      margin-top:22px;
+      display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:16px;
+    }
+    .placeholder{color:var(--muted); padding:14px}
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:14px; padding:16px;
+    }
+    .card h2{margin:0 0 10px; font-size: 1.15rem}
+    .meta{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px}
+    .chip{
+      background: var(--chip); color:var(--fg); border:1px solid rgba(255,255,255,.08); padding:4px 8px; border-radius:999px; font-size:.85rem
+    }
+    .tempo-lento{background: #2a2544}
+    .tempo-medio{background: #24324a}
+    .tempo-rapido{background:#243f4a}
+    .info{list-style:none; padding:0; margin:10px 0 0}
+    .info li{margin:6px 0; color:#d6dcfb}
+    .info strong{color:#fff}
+    details{margin-top:10px}
+    summary{cursor:pointer; color:var(--accent)}
+    .cols{display:grid; grid-template-columns: 1fr; gap:8px}
+    .cols h4{margin:10px 0 6px}
+    .cols ul{margin:0; padding-left:18px}
+    /* Compás */
+    .compas{margin:8px 0 8px}
+    .firma{color:var(--muted); font-size:.93rem; margin-bottom:6px}
+    .grid{
+      list-style:none; padding:0; margin:0; display:grid; gap:6px;
+    }
+    .grid.b-12{grid-template-columns: repeat(12, minmax(20px, 1fr))}
+    .grid.b-6{grid-template-columns: repeat(6, minmax(22px, 1fr))}
+    .grid.b-4{grid-template-columns: repeat(4, minmax(30px, 1fr))}
+    .grid.b-3{grid-template-columns: repeat(3, minmax(36px, 1fr))}
+    .grid li{
+      display:flex; align-items:center; justify-content:center;
+      aspect-ratio:1; min-height:28px; border-radius:10px;
+      background: #1a1e34; color:#cfd6ff; font-weight:600; font-size:.9rem;
+      border:1px solid rgba(255,255,255,.06);
+    }
+    .grid li.accent{ background: linear-gradient(180deg, rgba(109,214,255,.18), rgba(109,214,255,.05)); color:#e9faff; border-color: rgba(109,214,255,.45)}
+    .compas.simple{color:var(--muted); font-size:.95rem}
+    footer{margin-top:26px; color:var(--muted); font-size:.9rem}
+    .tip{color:var(--warn)}
+    @media (min-width: 720px){
+      .cols{grid-template-columns: 1fr 1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Palos del Flamenco — Explorador Interactivo</h1>
+      <p>Selecciona uno o varios palos para ver su información, compás y artistas de referencia.</p>
+    </header>
+
+    <section class="controls">
+      <div class="row">
+        <label for="paloSelect">Palos disponibles</label>
+        <span class="tip">Sostén Ctrl/Cmd para selección múltiple</span>
+      </div>
+      <select id="paloSelect" multiple size="10" aria-label="Selector de palos"></select>
+      <div class="btns">
+        <button id="btnSelectAll" title="Seleccionar todos">Seleccionar todos</button>
+        <button id="btnClear" title="Limpiar selección">Limpiar</button>
+      </div>
+    </section>
+
+    <section id="results" class="results">
+      <div class="placeholder">Elige palos en el selector para ver sus detalles.</div>
+    </section>
+
+    <footer>
+      Nota: el flamenco es amplio y con variaciones locales; esta guía resume rasgos habituales.
+    </footer>
+  </div>
+
+  <script>
+    // Datos base (resumen por palo)
+    const palos = [
+      {
+        id:"solea",
+        nombre:"Soleá",
+        familia:"Cante jondo",
+        tempo:"lento",
+        origen:"Sevilla (Triana, Alcalá) y Cádiz",
+        tonalidad:"Modo frigio: por arriba (Mi) o por medio (La)",
+        caracter:"grave, solemne e introspectivo",
+        estructura:"Letras de 3-4 versos; suele comenzar con temple y cierres en 10-12",
+        compas:{ firma:"12", beats:12, acentos:[12,3,6,8,10], texto:"Acentos típicos en 3, 6, 8, 10 y 12."},
+        artistas:["La Niña de los Peines","Antonio Mairena","Enrique Morente","Paco de Lucía (guitarra)"]
+      },
+      {
+        id:"bulerias",
+        nombre:"Bulerías",
+        familia:"Fiesta",
+        tempo:"rapido",
+        origen:"Jerez de la Frontera",
+        tonalidad:"Modo frigio por medio/arriba; cambios y remates frecuentes",
+        caracter:"festivo, picaresco e improvisado",
+        estructura:"Letras cortas, estribillos y llamadas; patá por bulerías en baile",
+        compas:{ firma:"12", beats:12, acentos:[12,3,6,8,10], texto:"Acentos flexibles; remates en 10-12 muy habituales."},
+        artistas:["La Paquera de Jerez","Camarón de la Isla","El Torta","Diego del Morao (guitarra)"]
+      },
+      {
+        id:"alegrias",
+        nombre:"Alegrías",
+        familia:"Cantiñas (Cádiz)",
+        tempo:"medio",
+        origen:"Cádiz",
+        tonalidad:"Mayor (frecuente Mi mayor) con cierres en frigio",
+        caracter:"luminoso, elegante y vivo",
+        estructura:"Estribillo + coplas; coletillas y remates típicos",
+        compas:{ firma:"12", beats:12, acentos:[12,3,6,8,10], texto:"Mismo ciclo de 12 que soleá, a tempo más vivo."},
+        artistas:["La Perla de Cádiz","Chano Lobato","Niña de los Peines","Paco de Lucía (guitarra)"]
+      },
+      {
+        id:"tangos",
+        nombre:"Tangos",
+        familia:"Tientos y tangos",
+        tempo:"medio",
+        origen:"Triana, Cádiz, Jerez (variantes locales)",
+        tonalidad:"Modo frigio y tonos menores",
+        caracter:"cadencioso, terrenal y rítmico",
+        estructura:"Letras de 4 versos; estribillos; llamadas claras",
+        compas:{ firma:"4/4", beats:4, acentos:[2,4], texto:"Palmas marcadas en 2 y 4."},
+        artistas:["La Niña de los Peines","Camarón de la Isla","El Pele","Paco de Lucía (guitarra)"]
+      },
+      {
+        id:"tientos",
+        nombre:"Tientos",
+        familia:"Tientos y tangos",
+        tempo:"lento",
+        origen:"Cádiz y Triana",
+        tonalidad:"Modo frigio",
+        caracter:"grave, arrastrado y expresivo",
+        estructura:"Suele modular a tangos (cambio de tempo) hacia el final",
+        compas:{ firma:"4/4", beats:4, acentos:[2,4], texto:"Mismo pulso que tangos, pero más lento y espacioso."},
+        artistas:["Antonio Mairena","Camarón de la Isla","Fosforito","Manolo Sanlúcar (guitarra)"]
+      },
+      {
+        id:"segui",
+        nombre:"Seguiriyas",
+        familia:"Cante jondo",
+        tempo:"lento",
+        origen:"Jerez, Cádiz y Triana",
+        tonalidad:"Modo frigio (por arriba/medio)",
+        caracter:"trágico, desgarrado y profundo",
+        estructura:"Letras de 3-4 versos; remates muy marcados",
+        compas:{ firma:"12 (agrupación 5)", beats:12, acentos:[1,3,5,8,11], texto:"Agrupación característica: 1-2, 3-4, 5-6-7, 8-9-10, 11-12."},
+        artistas:["Manuel Torre","Chocolate","Terremoto de Jerez","Paco de Lucía (guitarra)"]
+      },
+      {
+        id:"fandangos",
+        nombre:"Fandangos de Huelva",
+        familia:"Fandangos y cantes de Huelva",
+        tempo:"medio",
+        origen:"Huelva",
+        tonalidad:"Mayor/menor con giros característicos",
+        caracter:"campero, melódico y abierto",
+        estructura:"Coplas de 5 versos; estilos locales (Alosno, Valverde, etc.)",
+        compas:{ firma:"6/8–3/4 (abandolao)", beats:null, acentos:[], texto:"Alternancia 6/8–3/4; acentos balanceados tipo 'ta-ta-tá ta-tá-tá'."},
+        artistas:["Paco Toronjo","Arcángel","Pepa de Huelva"]
+      },
+      {
+        id:"malaguenas",
+        nombre:"Malagueñas",
+        familia:"Cantes de Málaga",
+        tempo:"lento",
+        origen:"Málaga",
+        tonalidad:"Libre; giros entre mayor y frigio",
+        caracter:"melismático, lírico y expresivo",
+        estructura:"Cante libre; falsetas de guitarra entre tercios",
+        compas:{ firma:"libre", beats:null, acentos:[], texto:"Sin pulso fijo (cante libre)."},
+        artistas:["La Trini","Antonio Chacón","Enrique Morente","Niño Ricardo (guitarra)"]
+      },
+      {
+        id:"tarantas",
+        nombre:"Tarantas",
+        familia:"Cantes de Levante (mineros)",
+        tempo:"lento",
+        origen:"Almería, Cartagena y La Unión",
+        tonalidad:"Tono por tarantas (modo frigio libre)",
+        caracter:"profundo, evocador y minero",
+        estructura:"Libre; a veces enlaza con taranto (con compás) en baile",
+        compas:{ firma:"libre", beats:null, acentos:[], texto:"Sin compás fijo; giros mineros característicos."},
+        artistas:["Antonio Piñana","Fosforito","Paco de Lucía (guitarra)"]
+      },
+      {
+        id:"tanguillos",
+        nombre:"Tanguillos",
+        familia:"Cantiñas (Cádiz)",
+        tempo:"medio",
+        origen:"Cádiz",
+        tonalidad:"Mayor (con síncopas)",
+        caracter:"juguetón, humorístico y sincopado",
+        estructura:"Letras graciosas; cortes y juegos rítmicos",
+        compas:{ firma:"6/8–2/4", beats:null, acentos:[], texto:"Híbrido 6/8–2/4 con síncopas muy marcadas."},
+        artistas:["Chano Lobato","Canalejas de Puerto Real","Carlos Heredia (guitarra)"]
+      },
+      {
+        id:"sevillanas",
+        nombre:"Sevillanas",
+        familia:"Fiesta y baile",
+        tempo:"rapido",
+        origen:"Sevilla",
+        tonalidad:"Mayor",
+        caracter:"festivo, rotundo y coreográfico",
+        estructura:"4 coplas por sevillana con paseíllos y remates",
+        compas:{ firma:"3/4", beats:3, acentos:[1], texto:"Pulso ternario con acento en 1."},
+        artistas:["Los Romeros de la Puebla","Ecos del Rocío","Los del Río"]
+      }
+    ];
+
+    const $ = (sel, root=document) => root.querySelector(sel);
+    const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+
+    const select = $("#paloSelect");
+    const results = $("#results");
+    const btnAll = $("#btnSelectAll");
+    const btnClear = $("#btnClear");
+
+    // 1) .map para generar las opciones del selector
+    select.innerHTML = palos
+      .slice() // copia
+      .sort((a,b)=> a.nombre.localeCompare(b.nombre))
+      .map(p => `<option value="${p.id}">${p.nombre}</option>`)
+      .join("");
+
+    select.addEventListener("change", renderSelection);
+    btnAll.addEventListener("click", () => {
+      [...select.options].forEach(o => o.selected = true);
+      renderSelection();
+    });
+    btnClear.addEventListener("click", () => {
+      [...select.options].forEach(o => o.selected = false);
+      renderSelection();
+    });
+
+    function renderSelection(){
+      const ids = [...select.selectedOptions].map(o => o.value);
+      if(ids.length === 0){
+        results.innerHTML = `<div class="placeholder">Elige palos en el selector para ver sus detalles.</div>`;
+        return;
+      }
+      const selected = palos.filter(p => ids.includes(p.id));
+      // 2) .map para generar las tarjetas
+      results.innerHTML = selected.map(renderPaloCard).join("");
+    }
+
+    function renderPaloCard(p){
+      const compasHTML = renderCompas(p.compas);
+      const artistasHTML = p.artistas.map(a => {
+        const q = `${p.nombre} ${a}`; // consulta combinada
+        return `<li><a href="${youtubeSearchURL(q)}" target="_blank" rel="noopener">${a}</a></li>`;
+      }).join("");
+
+      return `
+        <article class="card">
+          <h2>${p.nombre}</h2>
+          <div class="meta">
+            <span class="chip">${p.familia}</span>
+            <span class="chip tempo-${p.tempo}">Tempo: ${prettyTempo(p.tempo)}</span>
+            <span class="chip">${p.origen}</span>
+          </div>
+          ${compasHTML}
+          <ul class="info">
+            <li><strong>Carácter:</strong> ${p.caracter}</li>
+            <li><strong>Tonalidad típica:</strong> ${p.tonalidad}</li>
+            <li><strong>Estructura:</strong> ${p.estructura}</li>
+          </ul>
+          <details>
+            <summary>Artistas y escuchas sugeridas</summary>
+            <div class="cols">
+              <div>
+                <h4>Artistas</h4>
+                <ul>${artistasHTML}</ul>
+              </div>
+            </div>
+          </details>
+        </article>
+      `;
+    }
+
+    function renderCompas(c){
+      if(!c) return "";
+      // Casos sin compás fijo o mezcla
+      if(!c.beats){
+        const extra = c.texto ? ` · ${c.texto}` : "";
+        return `<div class="compas simple">Compás: ${c.firma}${extra}</div>`;
+      }
+      // 3) .map para generar la cuadrícula de compás
+      const beats = Array.from({length: c.beats}, (_,i)=> i+1)
+        .map(n => `<li class="${c.acentos.includes(n) ? 'accent' : ''}" title="Tiempo ${n}">${n}</li>`)
+        .join("");
+      const gridClass = `b-${c.beats}`;
+      const extra = c.texto ? ` · ${c.texto}` : "";
+      return `
+        <div class="compas">
+          <div class="firma">Compás: ${c.firma}${extra}</div>
+          <ol class="grid ${gridClass}">
+            ${beats}
+          </ol>
+        </div>
+      `;
+    }
+
+    function youtubeSearchURL(q){
+      return `https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`;
+    }
+    function prettyTempo(t){
+      return t === "lento" ? "lento" : t === "medio" ? "medio" : "rápido";
+    }
+
+    // Render inicial
+    renderSelection();
+  </script>
+</body>
+</html>

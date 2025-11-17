@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Simple</title>
+    <style>
+        /* Estilos básicos y estéticos */
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            display: grid;
+            place-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+        }
+        
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            box-sizing: border-box; /* Asegura que el padding no afecte el ancho */
+        }
+
+        button {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+        
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .resultado {
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        /* Span para resaltar el número del resultado */
+        .resultado span {
+            font-weight: bold;
+            color: #28a745; /* Verde para el éxito */
+            font-size: 1.3rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Calculadora Rápida</h1>
+
+        <!-- Todos los campos en una sola tarjeta -->
+        <div class="input-group">
+            <label for="valorA">Sumar el valor 'a':</label>
+            <input type="number" id="valorA" placeholder="Ej: 5">
+        </div>
+
+        <div class="input-group">
+            <label for="valorN">'n' veces:</label>
+            <input type="number" id="valorN" placeholder="Ej: 10">
+        </div>
+        
+        <div class="input-group">
+            <label for="valorB">Y multiplicar por 'b':</label>
+            <input type="number" id="valorB" placeholder="Ej: 3">
+        </div>
+
+        <button id="calcularBtn">Calcular Todo</button>
+
+        <!-- Área para mostrar los resultados -->
+        <p id="resultadoSumatorio" class="resultado"></p>
+        <p id="resultadoFinal" class="resultado"></p>
+
+    </div>
+
+    <script>
+        // Seleccionamos el botón y los párrafos de resultado
+        const calcularBtn = document.getElementById('calcularBtn');
+        const resultadoSumatorioP = document.getElementById('resultadoSumatorio');
+        const resultadoFinalP = document.getElementById('resultadoFinal');
+
+        // Añadimos un evento 'click' al botón
+        calcularBtn.addEventListener('click', () => {
+            // Obtenemos los valores de los inputs y los convertimos a número
+            const a = parseFloat(document.getElementById('valorA').value);
+            const n = parseFloat(document.getElementById('valorN').value);
+            const b = parseFloat(document.getElementById('valorB').value);
+
+            // Validamos que todos los campos contengan números válidos
+            if (isNaN(a) || isNaN(n) || isNaN(b)) {
+                alert('Por favor, rellena todos los campos con valores numéricos.');
+                return; // Detiene la ejecución si hay un error
+            }
+
+            // 1. Calculamos el sumatorio (a sumado n veces = a * n)
+            const sumatorio = a * n;
+
+            // 2. Calculamos el resultado final multiplicando por 'b'
+            const resultadoFinal = sumatorio * b;
+
+            // 3. Mostramos ambos resultados en la página
+            resultadoSumatorioP.innerHTML = `Sumatorio: <span>${sumatorio}</span>`;
+            resultadoFinalP.innerHTML = `Resultado Final: <span>${resultadoFinal}</span>`;
+        });
+    </script>
+
+</body>
+</html>

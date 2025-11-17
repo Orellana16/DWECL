@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debugging de Scope en JS</title>
+</head>
+<body>
+    <h1>Ejemplo de Debugging de Scope</h1>
+    <p>Abre las herramientas de desarrollador (F12) para seguir la ejecución del código.</p>
+
+    <script>
+        // --- INICIO DEL CÓDIGO A DEPURAR ---
+
+        let userName = 'John';
+
+        function showMessage() {
+          let userName = "Bob"; // declara variable local
+
+          let message = 'Hello, ' + userName; // Bob
+          alert(message);
+        }
+
+        // la función crea y utiliza su propia variable local userName
+        showMessage();
+
+        alert( userName ); // John, se mantiene, la función no accedió a la variable externa
+
+        // --- FIN DEL CÓDIGO ---
+    </script>
+</body>
+</html>

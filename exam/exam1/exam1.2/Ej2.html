@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modulos</title>
+</head>
+
+<body>
+    <h2>Resultados:</h2>
+    <div id="longitud"></div>
+    <div id="nombre"></div>
+    <div id="abv"></div>
+    <div id="comp"></div>
+    <div id="daw"></div>
+    <div id="nombre2"></div>
+
+
+    <script>
+        //map
+        const modulos = new Map();
+
+        modulos.set('DWECL', 'DWEC').set('DWESE', 'DWES').set('DIWEB', 'Diseño').set('Python', 'Pyth').set('Ingles', 'ING').set('DAW', 'Desarrollo Web');
+
+        //guardar longitud
+        let size = modulos.size
+
+        //A) mostrar longitud
+        longitud.textContent = `Hay ${size} modulos almacenados`
+
+        //mostrar contenido
+        const entries = [...structuredClone(modulos)];
+        entries.constructor.name; // "Array"
+        entries;
+
+        //B) Mostrar contenido
+        nombre.textContent = `${entries}`;
+
+        //Mostrar abreviacion
+        let abreviatura = [];
+        for (const valor of modulos.values()) {
+            abreviatura.push(valor);
+        }
+
+        //C) Mostrar abreviatura
+        abv.textContent = `${abreviatura}`;
+
+        //Mostrar nombre completo
+        let completo = [];
+        for (const clave of modulos.keys()) {
+            completo.push(clave);
+        }
+
+        //D) Mostrar nom completo
+        comp.textContent = `${completo}`;
+
+        //E) Tiene DAW?
+        if (modulos.has('DAW')) {
+            daw.textContent = `Si, si contiene DAW`;
+
+            //F) Borrar DAW y poner DAW2
+            modulos.delete('DAW');
+            modulos.set('DAW2', 'Desarrollo de Aplicaciones Web');
+
+            //G) Mostrar de nuevo
+            const entries2 = [...structuredClone(modulos)];
+            entries2.constructor.name; // "Array"
+            entries2;
+
+            nombre2.textContent = `${entries2}`;
+        } else {
+            daw.textContent = `No, no contiene DAW`;
+        }
+
+
+
+
+
+
+
+
+
+
+        /*
+                // --- 1. REFERENCIAS A ELEMENTOS DEL DOM ---
+                const resultadoContainer = document.getElementById('resultadoContainer');
+        
+                // --- 3. FUNCIÓN PARA MOSTRAR LOS RESULTADOS EN LA PÁGINA ---
+        
+                function mostrarResultados(mapaDeConteo) {
+                    // Limpia el contenedor de resultados previos.
+                    resultadoContainer.innerHTML = '';
+        
+                    if (mapaDeConteo.size === 0) {
+                        resultadoContainer.innerHTML = '<p class="placeholder">No se encontraron palabras para analizar.</p>';
+                        return;
+                    }
+        
+                    // Crea una lista desordenada para los resultados.
+                    const lista = document.createElement('ul');
+                    lista.id = 'resultadoLista';
+        
+                    // Convierte el Map a un Array, lo ordena por frecuencia (de mayor a menor)
+                    const resultadosOrdenados = [...mapaDeConteo.entries()].sort((a, b) => b[1] - a[1]);
+        
+                    // Itera sobre el array ordenado para crear cada elemento de la lista.
+                    resultadosOrdenados.forEach(([palabra, conteo]) => {
+                        const item = document.createElement('li');
+                        // Usamos spans para poder darles estilo por separado
+                        item.innerHTML = `
+              <span class="palabra">'${palabra}'</span>
+              <span class="conteo">${conteo}</span>
+            `;
+                        lista.appendChild(item);
+                    });
+        
+                    // Añade la lista completa al contenedor de resultados.
+                    resultadoContainer.appendChild(lista);
+                }
+        
+        
+                // --- 4. EVENT LISTENER ---
+        
+                // Escucha el evento 'click' en el botón.
+                analizarBtn.addEventListener('click', () => {
+                    // Obtiene el texto del textarea.
+                    const textoParaAnalizar = textoInput.value;
+        
+                    // Llama a la función de análisis.
+                    const resultadoDelAnalisis = analizarTexto(textoParaAnalizar);
+        
+                    // Muestra los resultados en la página.
+                    mostrarResultados(resultadoDelAnalisis);
+                });*/
+    </script>
+</body>
+
+</html>
