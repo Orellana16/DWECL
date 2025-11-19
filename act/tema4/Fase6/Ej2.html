@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Función Operar con Callback</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        pre {
+            background-color: #ecf0f1;
+            border: 1px solid #bdc3c7;
+            padding: 15px;
+            border-radius: 5px;
+            white-space: pre-wrap; /* Permite que el texto se ajuste */
+        }
+        .resultado {
+            font-weight: bold;
+            color: #e74c3c;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🚀 Función `operar` (Higher-Order Function)</h1>
+    <p>Esta función recibe dos números y una función como parámetro para realizar la operación deseada.</p>
+    <p>Abre la **Consola del desarrollador** (F12) para ver los detalles de los ejemplos.</p>
+
+    <pre id="output"></pre>
+
+    <script>
+        // --- 1. Funciones de Operación (Callbacks) ---
+
+        const suma = (a, b) => a + b;
+        const resta = (a, b) => a - b;
+        const multiplicacion = (a, b) => a * b;
+
+        // Función especial que primero suma y luego multiplica (a * b) + (a + b)
+        const suma_mul = (a, b) => {
+            const sum = a + b;
+            const mul = a * b;
+            return sum + mul;
+        };
+
+        // --- 2. Función Principal (Higher-Order Function) ---
+
+        /**
+         * Realiza una operación entre dos números utilizando una función de callback.
+         * @param {number} num1 - El primer número.
+         * @param {number} num2 - El segundo número.
+         * @param {function} operacion - La función que define la operación a realizar.
+         * @returns {number} El resultado de la operación.
+         */
+        function operar(num1, num2, operacion) {
+            // Se invoca la función 'operacion' con los dos números
+            return operacion(num1, num2);
+        }
+
+        // --- 3. Ejemplos de Uso ---
+        const ejemplos = [
+            { a: 2, b: 3, func: suma, name: "suma", expected: 5 },
+            { a: 10, b: 5, func: resta, name: "resta", expected: 5 },
+            { a: 4, b: 6, func: multiplicacion, name: "multiplicación", expected: 24 },
+            { a: 2, b: 3, func: suma_mul, name: "suma_mul", expected: 11, note: "Resultado: (2+3) + (2*3) = 5 + 6 = 11" },
+            { a: 5, b: 4, func: suma_mul, name: "suma_mul", expected: 29, note: "Resultado: (5+4) + (5*4) = 9 + 20 = 29" }
+        ];
+
+        let outputHTML = '<h3>Resultados en la página:</h3>';
+
+        ejemplos.forEach((ej) => {
+            const resultado = operar(ej.a, ej.b, ej.func);
+            
+            // Construir la salida para la página
+            outputHTML += `<p>operar(${ej.a}, ${ej.b}, ${ej.name}) = <span class="resultado">${resultado}</span>`;
+            if (ej.note) {
+                outputHTML += `<br><span>(${ej.note})</span>`;
+            }
+            outputHTML += `</p>`;
+
+            // Mostrar el detalle en la consola
+            console.log(`operar(${ej.a}, ${ej.b}, ${ej.name}):`);
+            console.log(`-> Resultado: ${resultado}`);
+            console.log(`-> Esperado: ${ej.expected}\n`);
+        });
+
+        document.getElementById('output').innerHTML = outputHTML;
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Recorrido Recursivo de Sistema de Archivos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #3498db;
+        }
+        pre {
+            background-color: #ecf0f1;
+            border: 1px solid #bdc3c7;
+            padding: 15px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+        }
+        .file-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .file-list li {
+            margin-bottom: 5px;
+            padding: 5px;
+            border-bottom: 1px dotted #ccc;
+        }
+        .folder-name {
+            color: #e67e22; /* Naranja para carpetas */
+            font-weight: bold;
+        }
+        .file-name {
+            color: #2ecc71; /* Verde para archivos */
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>📂 Recorrido Recursivo de Sistema de Archivos</h1>
+    <p>La función `listarArchivos` recorre la estructura de carpetas y archivos y devuelve una lista plana de todos los nombres de archivo.</p>
+
+    <h2>Estructura del Sistema de Archivos (Objeto `fs`):</h2>
+    <pre id="input-data"></pre>
+
+    <h2>Lista de Archivos Encontrados:</h2>
+    <ul id="file-output" class="file-list">
+        </ul>
+
+    <script>
+        // --- 1. Definición del Objeto de Sistema de Archivos ---
+        const fs = {
+            carpeta1: {
+                archivo1: "contenido1",
+                archivo2: "contenido2",
+                subcarpeta: {
+                    archivo3: "contenido3"
+                },
+                otra_subcarpeta: {
+                    archivoA: "contenidoA",
+                    archivoB: "contenidoB"
+                }
+            },
+            carpeta2: {
+                archivo4: "contenido4",
+                archivo5: "contenido5"
+            },
+            archivo_raiz: "contenido_raiz" // Un archivo en el nivel superior (opcional)
+        };
+
+        // Muestra el objeto de entrada en el HTML
+        document.getElementById('input-data').textContent = JSON.stringify(fs, null, 2);
+
+        // --- 2. Función Recursiva de Recorrido ---
+
+        /**
+         * Recorre recursivamente la estructura del sistema de archivos y extrae los nombres de archivo.
+         * * @param {object} directorio - El objeto que representa la carpeta/directorio actual.
+         * @returns {Array<string>} Una lista plana de todos los nombres de archivo.
+         */
+        function listarArchivos(directorio) {
+            let archivosEncontrados = [];
+
+            // Obtenemos las claves del objeto (pueden ser carpetas o archivos)
+            const claves = Object.keys(directorio);
+
+            // Iteramos sobre cada elemento (clave/valor) del directorio actual
+            for (const clave of claves) {
+                const valor = directorio[clave];
+
+                // Condición para determinar si es un archivo o una carpeta:
+                // Si el valor es un objeto Y no es null (y no es un Array, aunque aquí no aplica)
+                if (typeof valor === 'object' && valor !== null && !Array.isArray(valor)) {
+                    
+                    // Caso Recursivo: Es una CARPETA (un objeto anidado).
+                    // 1. Llamamos a la función con el objeto anidado (el valor).
+                    // 2. Concatenamos los archivos devueltos por la llamada recursiva a nuestra lista.
+                    archivosEncontrados = archivosEncontrados.concat(listarArchivos(valor));
+
+                    // Muestra en consola el paso por carpeta (opcional)
+                    console.log(`[Carpeta Encontrada]: ${clave}`);
+
+                } else {
+                    
+                    // Caso Base: Es un ARCHIVO (su valor es una cadena, número, etc., pero no un objeto).
+                    // Añadimos el nombre del archivo (la clave) a la lista.
+                    archivosEncontrados.push(clave);
+                    
+                    // Muestra en consola el archivo encontrado (opcional)
+                    console.log(`[Archivo Encontrado]: ${clave}`);
+                }
+            }
+
+            // Devolvemos la lista de archivos encontrados en este nivel y sus subniveles.
+            return archivosEncontrados;
+        }
+
+        // --- 3. Ejecución y Presentación de Resultados ---
+
+        const listaPlanaArchivos = listarArchivos(fs);
+
+        console.log("\n--- RESULTADO FINAL ---");
+        console.log("Lista Plana de Archivos:", listaPlanaArchivos);
+
+        // Insertar los resultados en el HTML
+        const outputList = document.getElementById('file-output');
+        listaPlanaArchivos.forEach(nombre => {
+            const listItem = document.createElement('li');
+            // Nota: Aquí se está asumiendo que las claves que no son objetos son archivos
+            listItem.innerHTML = `<span class="file-name">${nombre}</span>`;
+            outputList.appendChild(listItem);
+        });
+    </script>
+
+</body>
+</html>

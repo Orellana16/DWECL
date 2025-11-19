@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Función Recursiva Aplanar Array</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #16a085;
+        }
+        pre {
+            background-color: #ecf0f1;
+            border: 1px solid #bdc3c7;
+            padding: 15px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+        }
+        .input-array {
+            color: #c0392b;
+            font-weight: bold;
+        }
+        .output-array {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        code {
+            font-family: Consolas, monospace;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🔄 Función Recursiva `aplanar`</h1>
+    <p>Esta función utiliza la **recursividad** para convertir un array con arrays anidados en un único array plano.</p>
+    
+    <pre id="output">
+        // El array anidado de ejemplo:
+        const anidado = [1, [2, [3, 4]], 5];
+
+        // Resultado esperado:
+        [1, 2, 3, 4, 5]
+    </pre>
+
+    <script>
+        /**
+         * Aplana recursivamente un array de arrays en un array de un solo nivel.
+         * * @param {Array<any>} array - El array potentially anidado a aplanar.
+         * @returns {Array<any>} Un nuevo array completamente plano.
+         */
+        function aplanar(array) {
+            // 1. Inicializa el array que contendrá el resultado plano
+            let resultado = [];
+
+            // 2. Itera sobre cada elemento del array de entrada
+            for (const elemento of array) {
+                // 3. Condición de recursión: Si el elemento es un array, llama a la función aplanar
+                if (Array.isArray(elemento)) {
+                    // Si es un array, lo aplana recursivamente y concatena los resultados.
+                    // Se usa '...' (spread operator) para añadir los elementos del array aplanado.
+                    resultado.push(...aplanar(elemento));
+                } else {
+                    // 4. Caso base: Si el elemento NO es un array, se añade directamente al resultado.
+                    resultado.push(elemento);
+                }
+            }
+
+            // 5. Devuelve el array plano acumulado
+            return resultado;
+        }
+
+        // --- EJEMPLOS DE USO ---
+        const arrayAnidado = [1, [2, [3, 4]], 5, [6, 7, [8]], 9];
+        const arrayPlano = aplanar(arrayAnidado);
+
+        const outputDiv = document.getElementById('output');
+        
+        // Muestra la explicación de la función en la consola
+        console.log("--- FUNCIÓN RECURSIVA APLANAR ---");
+        console.log("Array Anidado (Input):", arrayAnidado);
+        console.log("Array Plano (Output):", arrayPlano);
+
+        // Actualiza el contenido del <pre> en el documento HTML
+        outputDiv.innerHTML = `<h3>Ejemplo:</h3>
+Input: <span class="input-array">${JSON.stringify(arrayAnidado)}</span>
+Output: <span class="output-array">${JSON.stringify(arrayPlano)}</span>`;
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Funciones Recursivas: Archivos y Permutaciones</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f9f9f9; }
+        h1, h2 { color: #34495e; border-bottom: 2px solid #34495e; padding-bottom: 5px; }
+        pre { background-color: #ecf0f1; border: 1px solid #bdc3c7; padding: 15px; border-radius: 5px; white-space: pre-wrap; }
+        .output-box { margin-bottom: 20px; padding: 10px; border: 1px dashed #2c3e50; }
+        .result { font-weight: bold; color: #27ae60; }
+        .input-data { color: #8e44ad; }
+    </style>
+</head>
+<body>
+
+    <h1>Funciones Recursivas Avanzadas</h1>
+
+    <div id="ejercicio1">
+        <h2>1. Listar Archivos en un Árbol (`listarArchivos`)</h2>
+        <p>Recorre un objeto anidado (sistema de archivos) y devuelve solo los nombres de archivo.</p>
+        <pre id="fs-output"></pre>
+    </div>
+
+    <hr>
+
+    <div id="ejercicio2">
+        <h2>2. Generar Permutaciones (`permutar`)</h2>
+        <p>Calcula todas las posibles formas de ordenar los elementos de un array.</p>
+        <pre id="permutations-output"></pre>
+    </div>
+
+    <script>
+        // =================================================================
+        // EJERCICIO 1: LISTAR ARCHIVOS
+        // =================================================================
+
+        const fs = {
+            carpeta1: {
+                archivo1: "contenido1",
+                archivo2: "contenido2",
+                subcarpeta: {
+                    archivo3: "contenido3"
+                }
+            },
+            carpeta2: {
+                archivo4: "contenido4",
+                otroArchivo: "contenido5"
+            }
+        };
+        document.getElementById('fs-output').innerHTML = `
+Input: <span class="input-data">${JSON.stringify(fs, null, 2)}</span>`;
+
+
+        /**
+         * Recorre recursivamente un objeto que simula un sistema de archivos
+         * y devuelve una lista plana de todos los nombres de archivo (claves).
+         * @param {object} directorio - El objeto que representa la carpeta/directorio actual.
+         * @returns {Array<string>} Lista de nombres de archivo.
+         */
+        function listarArchivos(directorio) {
+            let archivos = [];
+
+            // 1. Iteramos sobre cada clave del objeto actual
+            for (const clave in directorio) {
+                const valor = directorio[clave];
+
+                // 2. Comprobación: ¿Es una carpeta o un archivo?
+                // Si el valor es un objeto y no es null, es una CARPETA anidada.
+                if (typeof valor === 'object' && valor !== null) {
+                    
+                    // Caso Recursivo: Llamamos a la función con la subcarpeta
+                    // y usamos 'concat' para añadir el resultado a nuestro array.
+                    archivos = archivos.concat(listarArchivos(valor));
+
+                } else {
+                    
+                    // Caso Base: Es un ARCHIVO.
+                    // Añadimos el nombre del archivo (la clave) a la lista.
+                    archivos.push(clave);
+                }
+            }
+
+            return archivos;
+        }
+
+        const archivosEncontrados = listarArchivos(fs);
+        
+        // Mostrar resultados en la consola
+        console.log("--- Listar Archivos ---");
+        console.log("Archivos Encontrados:", archivosEncontrados);
+        
+        // Mostrar resultados en el HTML
+        document.getElementById('fs-output').innerHTML += `<hr>
+Output: <span class="result">${JSON.stringify(archivosEncontrados)}</span>`;
+
+
+        // =================================================================
+        // EJERCICIO 2: PERMUTAR ARRAY
+        // =================================================================
+
+        /**
+         * Genera todas las permutaciones posibles de un array de elementos.
+         * Usa el algoritmo Heap's Algorithm para optimizar (aunque aquí se usa una versión más sencilla).
+         * @param {Array<any>} arr - El array de entrada.
+         * @returns {Array<Array<any>>} Array con todas las permutaciones.
+         */
+        function permutar(arr) {
+            let resultados = []; // Array donde guardaremos todas las permutaciones
+
+            // Caso Base: Si el array tiene 0 o 1 elemento, solo hay una permutación: el propio array.
+            if (arr.length <= 1) {
+                return [arr];
+            }
+
+            // Paso Recursivo: Iteramos sobre el array.
+            for (let i = 0; i < arr.length; i++) {
+                // 1. Tomar el elemento actual como "cabeza"
+                const cabeza = arr[i];
+
+                // 2. Crear un array con los elementos "restantes"
+                // arr.slice(0, i) obtiene elementos antes de 'i'.
+                // arr.slice(i + 1) obtiene elementos después de 'i'.
+                const restantes = arr.slice(0, i).concat(arr.slice(i + 1));
+
+                // 3. Llamada Recursiva: Obtener todas las permutaciones de los elementos restantes.
+                const permutacionesRestantes = permutar(restantes);
+
+                // 4. Combinar: Añadir la "cabeza" a cada una de las permutaciones restantes.
+                for (const p of permutacionesRestantes) {
+                    resultados.push([cabeza].concat(p));
+                }
+            }
+
+            return resultados;
+        }
+
+        const arrayInput = [1, 2, 3];
+        const todasLasPermutaciones = permutar(arrayInput);
+        
+        // Mostrar resultados en la consola
+        console.log("\n--- Permutaciones ---");
+        console.log(`Input: ${arrayInput}`);
+        console.log(`Total de Permutaciones: ${todasLasPermutaciones.length} (esperado 3! = 6)`);
+        console.log(todasLasPermutaciones);
+
+        // Mostrar resultados en el HTML
+        document.getElementById('permutations-output').innerHTML = `
+Input: <span class="input-data">${JSON.stringify(arrayInput)}</span><hr>
+Total de Permutaciones: <span class="result">${todasLasPermutaciones.length}</span><br>
+Output (6 Permutaciones): <span class="result">${JSON.stringify(todasLasPermutaciones, null, 2)}</span>`;
+
+    </script>
+
+</body>
+</html>

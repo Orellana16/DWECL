@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Función crearUsuario (Básico)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Ejemplo de la función crearUsuario</h1>
+    <p>Abre la **Consola del desarrollador** (F12 o Ctrl+Shift+I / Cmd+Option+J) para ver los resultados de la función.</p>
+
+    <script>
+        /**
+         * Crea una cadena de texto de perfil de usuario a partir de un objeto.
+         * Usa valores por defecto si faltan datos en el objeto.
+         * * @param {object} usuario - Un objeto con propiedades nombre, edad, y pais.
+         * @returns {string} La cadena de texto formateada del usuario.
+         */
+        function crearUsuario(usuario) {
+            // Se utiliza la desestructuración de objetos con valores por defecto.
+            const { 
+                nombre = "Desconocido", // Valor por defecto: "Juan"
+                edad = 0,      // Valor por defecto: 20
+                pais = "Desconocido"  // Valor por defecto: "España"
+            } = usuario || {}; // Si 'usuario' es null o undefined, usa un objeto vacío {}
+
+            // Devuelve la cadena con el formato solicitado.
+            return `${nombre}, ${edad} años, ${pais}`;
+        }
+
+        // --- EJEMPLOS DE USO ---
+
+        // 1. Objeto completo:
+        const usuarioCompleto = { nombre: "María", edad: 35, pais: "México" };
+        const resultado1 = crearUsuario(usuarioCompleto);
+        console.log("Resultado 1 (Completo):", resultado1); 
+        // Salida: "María, 35 años, México"
+
+        // 2. Objeto con datos faltantes (usa valores por defecto para edad y pais):
+        const usuarioIncompleto1 = { nombre: "Carlos" };
+        const resultado2 = crearUsuario(usuarioIncompleto1);
+        console.log("Resultado 2 (Incompleto):", resultado2);
+        // Salida: "Carlos, 20 años, España"
+
+        // 3. Objeto vacío (usa todos los valores por defecto):
+        const usuarioVacio = {};
+        const resultado3 = crearUsuario(usuarioVacio);
+        console.log("Resultado 3 (Vacío):", resultado3);
+        // Salida: "Juan, 20 años, España"
+
+        // 4. Parámetro nulo (usa todos los valores por defecto):
+        const resultado4 = crearUsuario(null);
+        console.log("Resultado 4 (Nulo):", resultado4);
+        // Salida: "Juan, 20 años, España"
+
+    </script>
+
+</body>
+</html>
