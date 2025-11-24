@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <h3>Laberinto:</h3>
+    <pre>
+    S   X    
+    X   X    
+             
+    X   X   F
+    </pre>
+
+    <button onclick="jugar()">Ver si tiene solución</button>
+
+    <script>
+        // Definimos primero las variables del laberinto
+        var laberinto = [
+            ["S", " ", "X", " "],
+            ["X", " ", "X", " "],
+            [" ", " ", "X", " "],
+            ["X", "X", " ", "F"]
+        ];
+
+        var visitado = [
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0]
+        ];
+
+        // Definimos las variables para Start
+        var startX = 0;
+        var startY = 0;
+
+        for (var i = 0; i < 4; i++) {
+            for (var j = 0; j < 4; j++) {
+                if (laberinto[i][j] == "S") {
+                    startX = i;
+                    startY = j;
+                }
+            }
+        }
+
+        console.log("Empieza en fila: " + startX);
+        console.log("Empieza en col: " + startY);
+
+
+        function resolverLaberinto(lab, x, y, visitado) {
+            // 1. Fuera de limites
+            if (x < 0 || x > 3 || y < 0 || y > 3) return false;
+
+            // 2. Pared o visitado
+            if (lab[x][y] == "X" || visitado[x][y] == 1) return false;
+
+            // 3. Final encontrado
+            if (lab[x][y] == "F") {
+                return true;
+            }
+
+            // 4. Marcar visitado
+            visitado[x][y] = 1;
+
+            // 5. Moverse
+            if (resolverLaberinto(lab, x + 1, y, visitado) == true) return true; // Abajo
+            if (resolverLaberinto(lab, x - 1, y, visitado) == true) return true; // Arriba
+            if (resolverLaberinto(lab, x, y + 1, visitado) == true) return true; // Derecha
+            if (resolverLaberinto(lab, x, y - 1, visitado) == true) return true; // Izquierda
+            if (resolverLaberinto(lab, x + 1, y + 1, visitado) == true) return true; // Diagonal Abajo Derecha
+            if (resolverLaberinto(lab, x - 1, y - 1, visitado) == true) return true; // Diagonal Arriba Izquierda
+            if (resolverLaberinto(lab, x - 1, y + 1, visitado) == true) return true; // Diagonal Arriba Derecha
+            if (resolverLaberinto(lab, x + 1, y - 1, visitado) == true) return true; // Diagonal Abajo Izquierda
+
+            return false;
+        }
+
+        function jugar() {
+            var haySalida = resolverLaberinto(laberinto, startX, startY, visitado);
+
+            if (haySalida == true) {
+                alert("¡SI hay salida!");
+            } else {
+                alert("NO hay salida");
+            }
+        }
+    </script>
+</body>
+
+</html>
