@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Expresión de Función</title>
+</head>
+<body>
+
+    <h2>Conversión a Expresión de Función</h2>
+    
+    <p>Haz clic para ejecutar la función <code>greet</code>:</p>
+    <button onclick="ejecutar()">Saludar</button>
+
+    <h3>Mensaje: <span id="resultado">-</span></h3>
+
+    <script>
+        // --- EL EJERCICIO ---
+        
+        // ANTES (Declaración):
+        // function greet() { 
+        //    return "Hola"; 
+        // }
+
+        // AHORA (Expresión de Función):
+        // Guardamos la función dentro de una constante
+        const greet = function() {
+            return "Hola";
+        };
+
+        // --- LÓGICA PARA EL HTML ---
+        function ejecutar() {
+            // Llamamos a la variable 'greet' como si fuera una función normal
+            let mensaje = greet();
+
+            document.getElementById('resultado').innerText = mensaje;
+        }
+    </script>
+
+</body>
+</html>

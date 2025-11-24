@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Validador Caracteres</title>
+</head>
+<body>
+
+    <h2>Validador (> 10 caracteres)</h2>
+    
+    <input type="text" id="textoInput" placeholder="Escribe una frase...">
+    <button onclick="probarValidacion()">Validar</button>
+
+    <!-- Aquí mostramos el resultado -->
+    <h3>Resultado: <span id="resultado">-</span></h3>
+
+    <script>
+        // --- 1. LA EXPRESIÓN DE FUNCIÓN (Lo que pide el ejercicio) ---
+        // En lugar de "function validar()", la guardamos en una constante.
+        const validarLargo = function(cadena) {
+            return cadena.length > 10;
+        };
+
+        // --- 2. LÓGICA PARA EL HTML ---
+        function probarValidacion() {
+            // Obtenemos el texto del input
+            let texto = document.getElementById('textoInput').value;
+
+            // Usamos nuestra expresión de función
+            let esValido = validarLargo(texto);
+
+            // Mostramos mensaje según si es true o false
+            let span = document.getElementById('resultado');
+            
+            if (esValido) {
+                span.innerText = "✅ VÁLIDO (Tiene más de 10)";
+                span.style.color = "green";
+            } else {
+                span.innerText = "❌ NO VÁLIDO (10 o menos)";
+                span.style.color = "red";
+            }
+        }
+    </script>
+
+</body>
+</html>

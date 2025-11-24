@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Función que devuelve función</title>
+</head>
+<body>
+
+    <h2>Sumador con número fijo</h2>
+
+    <!-- Paso 1: Definir el número fijo -->
+    <p>1. Define el número fijo:</p>
+    <input type="number" id="numFijo" placeholder="Ej: 10">
+    <button onclick="crearLaFuncion()">Crear Función Sumadora</button>
+    <hr>
+
+    <!-- Paso 2: Usar la función creada -->
+    <p>2. Usa la función creada para sumar:</p>
+    <input type="number" id="numVariable" placeholder="Otro número">
+    <button onclick="usarLaFuncion()">Calcular</button>
+
+    <h3>Resultado: <span id="resultado">-</span></h3>
+
+    <script>
+        // Variable global para guardar la función que crearemos
+        let funcionSumadoraGuardada;
+
+        // --- 1. LA LÓGICA (Lo que pide el ejercicio) ---
+        function crearSumador(numeroFijo) {
+            // Devuelve una nueva función anónima
+            return function(numeroCualquiera) {
+                // Esta función interna "recuerda" el numeroFijo
+                return numeroFijo + numeroCualquiera;
+            };
+        }
+
+        // --- 2. INTERFAZ HTML ---
+
+        // Acción del primer botón
+        function crearLaFuncion() {
+            let fijo = Number(document.getElementById('numFijo').value);
+            
+            // Aquí llamamos a la función principal y GUARDAMOS lo que devuelve
+            // Ahora 'funcionSumadoraGuardada' es una función que siempre suma 'fijo'
+            funcionSumadoraGuardada = crearSumador(fijo);
+            
+            alert("¡Función creada! Ahora sumará " + fijo + " a todo.");
+        }
+
+        // Acción del segundo botón
+        function usarLaFuncion() {
+            if (!funcionSumadoraGuardada) {
+                alert("Primero debes crear la función en el paso 1.");
+                return;
+            }
+
+            let variable = Number(document.getElementById('numVariable').value);
+            
+            // Usamos la función que habíamos guardado
+            let total = funcionSumadoraGuardada(variable);
+
+            document.getElementById('resultado').innerText = total;
+        }
+    </script>
+
+</body>
+</html>

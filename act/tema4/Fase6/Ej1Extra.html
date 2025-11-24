@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Callback Simple</title>
+</head>
+<body>
+
+    <!-- Entradas de datos -->
+    <h2>Calculadora con Callbacks</h2>
+    <input type="number" id="num1" placeholder="Número 1">
+    <input type="number" id="num2" placeholder="Número 2">
+    <br><br>
+
+    <!-- Botones -->
+    <!-- Al hacer click, llamamos a una función auxiliar pasando el NOMBRE de la función matemática -->
+    <button onclick="calcular(sumar)">Sumar</button>
+    <button onclick="calcular(restar)">Restar</button>
+    <button onclick="calcular(multiplicar)">Multiplicar</button>
+
+    <!-- Resultado -->
+    <h3>Resultado: <span id="resultado">0</span></h3>
+
+    <script>
+        // --- 1. LA FUNCIÓN PRINCIPAL (Lo que pide el ejercicio) ---
+        function operar(a, b, callback) {
+            return callback(a, b);
+        }
+
+        // --- 2. LAS OPERACIONES (Callbacks) ---
+        function sumar(a, b) { return a + b; }
+        function restar(a, b) { return a - b; }
+        function multiplicar(a, b) { return a * b; }
+
+        // --- 3. LÓGICA PARA CONECTAR CON EL HTML ---
+        function calcular(funcionCallback) {
+            // Obtenemos los números de los inputs
+            // Usamos Number() para asegurar que no sea texto
+            let n1 = Number(document.getElementById('num1').value);
+            let n2 = Number(document.getElementById('num2').value);
+
+            // Usamos la función principal pasando los números y la función elegida
+            let total = operar(n1, n2, funcionCallback);
+
+            // Mostramos el resultado en la pantalla
+            document.getElementById('resultado').innerText = total;
+        }
+    </script>
+
+</body>
+</html>
