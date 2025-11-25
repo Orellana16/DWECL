@@ -35,9 +35,9 @@
         function crearUsuario(usuario) {
             // Se utiliza la desestructuración de objetos con valores por defecto.
             const { 
-                nombre = "Desconocido", // Valor por defecto: "Juan"
-                edad = 0,      // Valor por defecto: 20
-                pais = "Desconocido"  // Valor por defecto: "España"
+                nombre = "Desconocido", // Valor por defecto: "Desconocido"
+                edad = 0,      // Valor por defecto: 0
+                pais = "Desconocido"  // Valor por defecto: "Desconocido"
             } = usuario || {}; // Si 'usuario' es null o undefined, usa un objeto vacío {}
 
             // Devuelve la cadena con el formato solicitado.
@@ -56,18 +56,18 @@
         const usuarioIncompleto1 = { nombre: "Carlos" };
         const resultado2 = crearUsuario(usuarioIncompleto1);
         console.log("Resultado 2 (Incompleto):", resultado2);
-        // Salida: "Carlos, 20 años, España"
+        // Salida: "Carlos,0 años, Desconocido"
 
         // 3. Objeto vacío (usa todos los valores por defecto):
         const usuarioVacio = {};
         const resultado3 = crearUsuario(usuarioVacio);
         console.log("Resultado 3 (Vacío):", resultado3);
-        // Salida: "Juan, 20 años, España"
+        // Salida: "Desconocido, 0 años, Desconocido"
 
         // 4. Parámetro nulo (usa todos los valores por defecto):
         const resultado4 = crearUsuario(null);
         console.log("Resultado 4 (Nulo):", resultado4);
-        // Salida: "Juan, 20 años, España"
+        // Salida: ""
 
     </script>
 
