@@ -7,7 +7,7 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #ffffff; 
+    background-color: #ffffff;
     color: #333;
 }
 
@@ -25,7 +25,7 @@ body {
     color: white;
     padding: 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
-    overflow-y: auto;
+    overflow-y: auto; /* Scroll para todo el sidebar si es necesario */
 }
 
 .sidebar h2 {
@@ -56,6 +56,9 @@ body {
     color: #ffffff; /* Enlaces blancos */
     transition: background-color 0.2s;
     border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+    /* Asegura que el texto no exceda el ancho en el scroll */
+    white-space: normal; 
+    word-wrap: break-word;
 }
 
 .unidad li a:hover {
@@ -75,7 +78,7 @@ body {
 }
 
 /* ============================================== */
-/* ESTILOS DE LA PORTADA (index.html) */
+/* ESTILOS DE LA PORTADA (index.html) - Sin cambios */
 /* ============================================== */
 
 .portada {
@@ -125,7 +128,7 @@ body {
 }
 
 /* ============================================== */
-/* ESTILOS DE LA ANIMACIÓN DE IMÁGENES (.bubbles) */
+/* ESTILOS DE LA ANIMACIÓN DE IMÁGENES (.bubbles) - Sin cambios */
 /* ============================================== */
 
 /* Contenedor de las burbujas */
@@ -140,7 +143,7 @@ body {
     padding: 0;
     list-style: none;
     /* Necesario para que las burbujas estén posicionadas relativamente al contenedor */
-    position: absolute; 
+    position: absolute;
 }
 
 /* Estilo base de cada contenedor <li> */
@@ -154,7 +157,7 @@ body {
     top: 0;
     left: 0;
     will-change: transform, width, height; /* Optimización de rendimiento */
-    transform-origin: center; 
+    transform-origin: center;
 }
 
 /* Estilo para las imágenes dentro de los <li> */
@@ -174,10 +177,10 @@ body {
 .unidad h3.titulo-unidad {
     color: #f39f18;
     margin-bottom: 10px;
-    cursor: pointer; 
+    cursor: pointer;
     user-select: none;
     padding: 10px 0;
-    
+
     /* Preparamos el contenedor para la flecha ::before */
     position: relative;
     padding-right: 30px; /* Espacio para la flecha */
@@ -205,15 +208,18 @@ body {
 .actividades-lista {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.4s ease-in-out; 
+    transition: max-height 0.4s ease-in-out;
     list-style: none;
     padding-left: 0;
     padding-bottom: 0;
 }
 
 /* 4. Muestra la lista cuando JavaScript añade la clase 'activo' */
+/* CORREGIDO: Establecemos max-height fijo y habilitamos el scroll vertical */
 .actividades-lista.activo {
-    max-height: 500px; /* Suficiente altura para que se vea */
+    max-height: 350px; /* Altura máxima visible. Ajusta este valor si lo necesitas. */
+    overflow-y: auto; /* Habilita el scroll vertical cuando el contenido exceda el max-height */
+    overflow-x: hidden; /* Opcional: Evita el scroll horizontal */
     padding-bottom: 15px;
 }
 
