@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen de Práctica - Ejercicios Adicionales (17-24)</title>
+    
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            color: #343a40;
+        }
+
+        /* Contenedor principal: Centra el contenido */
+        .contenedor {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #007bff;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+
+        p {
+            line-height: 1.6;
+        }
+
+        /* Estilo para cada bloque de ejercicio */
+        .ejercicio {
+            border: 1px solid #dee2e6;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .ejercicio h2 {
+            color: #dc3545;
+            margin-top: 0;
+            border-bottom: 1px dashed #ced4da;
+            padding-bottom: 5px;
+        }
+
+        /* Estilo para la salida de los resultados */
+        .resultado-texto {
+            font-weight: 600;
+            color: #155724;
+            background-color: #e9f7ef;
+            padding: 10px;
+            border-left: 5px solid #28a745;
+            margin-top: 10px;
+            white-space: pre-wrap;
+        }
+        
+        /* Estilo para el código en línea */
+        code {
+            font-family: Consolas, 'Courier New', monospace;
+            background-color: #e9ecef;
+            padding: 2px 5px;
+            border-radius: 4px;
+            color: #6f42c1;
+        }
+
+        /* Mensajes de información y consola */
+        .importante {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .consola-aviso {
+            color: #c00000;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+
+        /* Estilo específico para los elementos de evento DOM */
+        .area-evento {
+            width: 200px;
+            height: 50px;
+            border: 2px solid #007bff;
+            background-color: #e6f0ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="contenedor">
+
+        <h1>Examen de Práctica - Ejercicios Adicionales (17-24) 🎯</h1>
+        <p>Este bloque cubre temas avanzados de HOFs, Recursividad y, específicamente, la gestión de Eventos DOM tal como se describe en el material de estudio. </p>
+        
+        <div class="importante">
+            💡 **Instrucción**: Los ejercicios de Eventos DOM (19-21) requieren interactuar con la página. El Ejercicio 23 se ve en la Consola.
+        </div>
+        
+        <hr>
+
+        <div class="ejercicio">
+            <h2>17. HOFs (`reduce`): Contar Frecuencia de Elementos</h2>
+            <p><strong>Enunciado:</strong> Usar el método `reduce` para contar la frecuencia de aparición de cada elemento en un array de cadenas y devolver un objeto.</p>
+            <p>Resultado:</p>
+            <div id="resultado17" class="resultado-texto"></div>
+
+            <script>
+                // Comentario: Usa `reduce` para inicializar un objeto (el acumulador) y, por cada elemento del array, incrementa su contador en el objeto. Si el elemento no existe, lo inicializa a 1.
+                function contarFrecuencia(array) {
+                    return array.reduce((acumulador, elementoActual) => {
+                        acumulador[elementoActual] = (acumulador[elementoActual] || 0) + 1;
+                        return acumulador;
+                    }, {}); // El acumulador inicial es un objeto vacío.
+                }
+
+                // --- Uso del ejemplo ---
+                const listaElementos = ["manzana", "banana", "manzana", "naranja", "banana", "manzana"];
+                const salida17 = contarFrecuencia(listaElementos);
+
+                document.getElementById('resultado17').innerHTML =
+                    `Lista: [${listaElementos.join(', ')}]<br>` +
+                    `Resultado (Frecuencia):<br>` +
+                    `**${JSON.stringify(salida17, null, 2)}**`;
+            </script>
+        </div>
+
+        <hr>
+
+        <div class="ejercicio">
+            <h2>18. Recursividad: Invertir una Cadena</h2>
+            <p><strong>Enunciado:</strong> Escribe una función recursiva `invertirCadena(cadena)` que invierta el orden de los caracteres de una cadena sin usar bucles ni métodos de array (`reverse`).</p>
+            <p>Resultado:</p>
+            <div id="resultado18" class="resultado-texto"></div>
+
+            <script>
+                // Comentario: La función recursiva toma el último carácter y lo concatena con el resultado de la función aplicada al resto de la cadena (sin el último carácter). El caso base es una cadena vacía.
+                function invertirCadena(cadena) {
+                    // Caso Base: Cadena vacía
+                    if (cadena === "") {
+                        return "";
+                    }
+                    // Paso Recursivo: Último carácter + invertirCadena(resto de la cadena)
+                    const ultimoCaracter = cadena[cadena.length - 1];
+                    const restoCadena = cadena.substring(0, cadena.length - 1);
+                    return ultimoCaracter + invertirCadena(restoCadena);
+                }
+
+                // --- Uso del ejemplo ---
+                const cadena1 = "javascript";
+                const res18 = invertirCadena(cadena1);
+
+                document.getElementById('resultado18').innerHTML =
+                    `Cadena original: "${cadena1}"<br>` +
+                    `Cadena invertida: **"${res18}"**`;
+            </script>
+        </div>
+
+        <hr>
+
+        <div class="ejercicio">
+            <h2>19. Eventos DOM: Asignación Clásica y `window.onload`</h2>
+            <p><strong>Enunciado:</strong> Asignar el manejador de evento `onclick` a un botón usando `document.getElementById().onclick` [cite: 71] y asegurar que la asignación se haga cuando el DOM esté completamente cargado usando `window.onload`[cite: 87].</p>
+            <div id="area-evento-19">
+                <button id="miBoton" disabled>Botón Deshabilitado (Cargando DOM...)</button>
+            </div>
+            <p><strong>Instrucción:</strong> El botón se habilitará y podrá mostrar un `alert` al hacer clic después de que el script se ejecute con <code>window.onload</code>.</p>
+
+            <script>
+                // Comentario: La función `iniciarDOM` se asigna a `window.onload` para garantizar que el elemento `miBoton` exista antes de intentar manipularlo o asignarle un evento[cite: 87].
+                function mostrarAlerta() {
+                    alert("¡Evento onclick asignado correctamente desde el código JS!");
+                }
+
+                function iniciarDOM() {
+                    console.log("EJERCICIO 19: DOM cargado. Asignando evento al botón.");
+                    const boton = document.getElementById("miBoton");
+                    
+                    if (boton) {
+                        boton.disabled = false;
+                        boton.textContent = "¡Haz clic para ver el Alert!";
+                        // Asignación del manejador de evento [cite: 71]
+                        boton.onclick = mostrarAlerta;
+                    }
+                }
+                
+                // Asignamos La función inicio al manejador window.onload [cite: 87]
+                window.onload = iniciarDOM;
+            </script>
+        </div>
+
+        <hr>
+
+        <div class="ejercicio">
+            <h2>20. Eventos DOM: Uso del Objeto `this`</h2>
+            <p><strong>Enunciado:</strong> Crear un `div` que cambie su color de fondo a rojo al pasar el ratón por encima (`onmouseover`) y vuelva a su color original al salir (`onmouseout`), usando el objeto `this` para referenciar el elemento[cite: 54].</p>
+            <div id="area-evento-20" class="area-evento" 
+                 onmouseover="this.style.backgroundColor='#dc3545'; this.style.color='white';"
+                 onmouseout="this.style.backgroundColor='#e6f0ff'; this.style.color='#343a40';">
+                Pasa el ratón por aquí
+            </div>
+            <p><strong>Instrucción:</strong> Mueve el puntero del ratón sobre el área azul para ver el cambio de estilo instantáneo usando <code>this</code>[cite: 61].</p>
+        </div>
+
+        <hr>
+
+        <div class="ejercicio">
+            <h2>21. Eventos DOM: Obtener Datos del Objeto `event`</h2>
+            <p><strong>Enunciado:</strong> Asignar un manejador usando `addEventListener` [cite: 124] que reciba el objeto `event` y muestre las coordenadas X e Y del clic (`clientX`, `clientY`)[cite: 99].</p>
+            <p>Coordenadas del último clic:</p>
+            <div id="coordenadas-21" class="resultado-texto"></div>
+            <div id="area-evento-21" class="area-evento">
+                ¡Haz clic en esta área!
+            </div>
+            
+            <script>
+                // Comentario: Usa `addEventListener` y el parámetro `evento` para acceder a propiedades específicas como `clientX` y `clientY`[cite: 99, 124].
+                function mostrarCoordenadas(evento) {
+                    const x = evento.clientX; // Coordenada X con referencia al navegador [cite: 99]
+                    const y = evento.clientY; // Coordenada Y con referencia al navegador [cite: 99]
+                    
+                    document.getElementById('coordenadas-21').innerHTML = 
+                        `Tipo de Evento: ${evento.type} [cite: 96]<br>` +
+                        `Coordenada X (clientX): **${x}**<br>` +
+                        `Coordenada Y (clientY): **${y}**`;
+                }
+
+                // Esperar a que exista el elemento (se puede simplificar con defer o módulos, pero usamos DOMContentLoaded para asegurar en este contexto)
+                document.addEventListener('DOMContentLoaded', () => {
+                    const area = document.getElementById("area-evento-21");
+                    // Asignación del manejador usando addEventListener [cite: 124]
+                    area.addEventListener("click", mostrarCoordenadas);
+                });
+            </script>
+        </div>
+
+        <hr>
+
+        <div class="ejercicio">
+            <h2>22. HOFs (`map` y `filter`): Transformación Condicional de Objetos</h2>
+            <p><strong>Enunciado:</strong> Filtrar un array de precios para eliminar los que son `0`. Luego, usar `map` para transformar los precios restantes en un objeto que incluya el precio y una etiqueta de estado (Si precio < 50 es 'Bajo', si no es 'Alto').</p>
+            <p>Resultado:</p>
+            <div id="resultado22" class="resultado-texto"></div>
+
+            <script>
+                // Comentario: Encadena `filter` para eliminar elementos no deseados, y luego `map` para crear una nueva estructura de datos (objetos) basada en una lógica condicional.
+                function clasificarPrecios(precios) {
+                    return precios
+                        // 1. Filter: Eliminar precios que son 0
+                        .filter(p => p > 0)
+                        // 2. Map: Crear objeto con estado condicional
+                        .map(p => ({
+                            precio: p,
+                            estado: p < 50 ? 'Bajo' : 'Alto'
+                        }));
+                }
+
+                // --- Uso del ejemplo ---
+                const listaPrecios = [10, 0, 55, 45, 120, 0, 8];
+                const salida22 = clasificarPrecios(listaPrecios);
+
+                document.getElementById('resultado22').innerHTML =
+                    `Lista de Precios: [${listaPrecios.join(', ')}]<br>` +
+                    `Precios procesados (${salida22.length}):<br>` +
+                    `**${JSON.stringify(salida22, null, 2)}**`;
+            </script>
+        </div>
+
+        <hr>
+
+        <div class="ejercicio">
+            <h2>23. HOF y Asincronía: Agrupación por Propiedad (`reduce` con Retardo)</h2>
+            <p><strong>Enunciado:</strong> Crear una función que reciba un array de usuarios y agrupe los nombres en un objeto por la propiedad `rol`. Simular un retardo con `setTimeout` antes de devolver el resultado.</p>
+            <p class="consola-aviso">El resultado SÓLO se ve en la **Consola del Navegador** después del retardo.</p>
+
+            <script>
+                // Comentario: Combina `reduce` para la lógica de agrupación de datos y `setTimeout` para simular un retardo asíncrono en la respuesta.
+                function agruparUsuariosAsync(usuarios, callback) {
+                    console.log("\n--- EJERCICIO 23: AGRUPACIÓN ASÍNCRONA ---");
+                    console.log("Iniciando agrupación de usuarios. Esperando 1.5s...");
+                    
+                    setTimeout(() => {
+                        const agrupados = usuarios.reduce((acc, user) => {
+                            const rol = user.rol;
+                            if (!acc[rol]) {
+                                acc[rol] = [];
+                            }
+                            acc[rol].push(user.nombre);
+                            return acc;
+                        }, {});
+
+                        callback(agrupados);
+                    }, 1500); // 1.5 segundos de retardo simulado
+                }
+
+                // --- Uso del ejemplo ---
+                const listaUsuarios23 = [
+                    { nombre: 'Ana', rol: 'Admin' },
+                    { nombre: 'Pedro', rol: 'User' },
+                    { nombre: 'Luis', rol: 'Admin' },
+                    { nombre: 'Maria', rol: 'Guest' }
+                ];
+
+                const callbackAgrupacion = (resultado) => {
+                    console.log("\n[FIN] Agrupación completada. Resultado:");
+                    console.log(resultado);
+                };
+
+                agruparUsuariosAsync(listaUsuarios23, callbackAgrupacion);
+            </script>
+        </div>
+
+        <hr>
+
+        <div class="ejercicio">
+            <h2>24. Recursividad: Calcular Fibonacci</h2>
+            <p><strong>Enunciado:</strong> Escribe una función recursiva `fibonacci(n)` que devuelva el n-ésimo número de la secuencia de Fibonacci. (La secuencia comienza con 0 y 1).</p>
+            <p>Resultado:</p>
+            <div id="resultado24" class="resultado-texto"></div>
+
+            <script>
+                // Comentario: Es el ejemplo clásico de recursión. El caso base define los dos primeros términos (0 y 1). El paso recursivo es la suma de los dos términos anteriores.
+                function fibonacci(n) {
+                    // Casos Base
+                    if (n === 0) return 0;
+                    if (n === 1) return 1;
+
+                    // Paso Recursivo: F(n) = F(n-1) + F(n-2)
+                    return fibonacci(n - 1) + fibonacci(n - 2);
+                }
+
+                // --- Uso de ejemplos ---
+                const nFib = 8;
+                const resF = fibonacci(nFib);
+
+                document.getElementById('resultado24').innerHTML =
+                    `Secuencia de Fibonacci (F(0)=0, F(1)=1):<br>` +
+                    `Términos: 0, 1, 1, 2, 3, 5, 8, 13, 21...<br>` +
+                    `El término F(${nFib}) es: **${resF}**`; // F(8) = 21
+            </script>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

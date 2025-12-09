@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solución Ejercicios JavaScript</title>
+    
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa; /* Fondo gris muy claro */
+            color: #343a40;
+        }
+
+        /* Contenedor principal: Centra el contenido */
+        .contenedor {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #007bff; /* Azul brillante */
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+
+        p {
+            line-height: 1.6;
+        }
+
+        /* Estilo para cada bloque de ejercicio */
+        .ejercicio {
+            border: 1px solid #dee2e6;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            background-color: #f8f9fa; /* Fondo ligeramente diferente para el bloque */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .ejercicio h2 {
+            color: #dc3545; /* Rojo de alerta para los títulos de ejercicio */
+            margin-top: 0;
+            border-bottom: 1px dashed #ced4da;
+            padding-bottom: 5px;
+        }
+
+        /* Estilo para la salida de los resultados */
+        .resultado-texto {
+            font-weight: 600;
+            color: #155724; /* Verde de éxito */
+            background-color: #e9f7ef;
+            padding: 10px;
+            border-left: 5px solid #28a745;
+            margin-top: 10px;
+            white-space: pre-wrap; /* Mantiene los saltos de línea (<br>) */
+        }
+        
+        /* Estilo para el código en línea */
+        code {
+            font-family: Consolas, 'Courier New', monospace;
+            background-color: #e9ecef;
+            padding: 2px 5px;
+            border-radius: 4px;
+            color: #6f42c1; /* Púrpura */
+        }
+
+        /* Mensajes de información y consola */
+        .importante {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .consola-aviso {
+            color: #c00000;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="contenedor">
+
+        <h1>Soluciones de Ejercicios JavaScript 🚀</h1>
+        <p>A continuación, se presentan las soluciones funcionales para los cuatro ejercicios de práctica solicitados, utilizando el DOM para mostrar los resultados síncronos y la Consola para la asincronía.</p>
+        
+        <div class="importante">
+            💡 **Nota sobre el Ejercicio 4**: Abre la **Consola del Navegador** (tecla F12, pestaña Console) para ver el orden de finalización de las tareas asíncronas.
+        </div>
+        
+        <hr>
+
+        <div class="ejercicio">
+            <h2>1. Arrays y Manipulación de Cadenas: Formatear Nombres y Contar 'A'</h2>
+            <p>Implementación de <code>formatearNombres(nombres)</code>.</p>
+            <p>Resultado:</p>
+            <div id="resultado1" class="resultado-texto"></div>
+
+            <script>
+                function formatearNombres(nombres) {
+                    let totalLetrasA = 0;
+                    // Incluimos vocales acentuadas en minúscula para la búsqueda
+                    const letrasA = 'aá'; 
+
+                    const nombresFormateados = nombres.map(nombreCompleto => {
+                        // 1. Convertir a minúsculas y dividir por espacio
+                        const palabras = nombreCompleto.toLowerCase().split(' ');
+                        
+                        const nombreFormateado = palabras.map(palabra => {
+                            if (palabra.length === 0) return "";
+                            // 2. Capitalizar (primera letra a mayúscula, resto minúscula)
+                            return palabra[0].toUpperCase() + palabra.slice(1);
+                        }).join(' ');
+
+                        // 3. Contar 'A' y 'a' (incluyendo acentos)
+                        const nombreLimpio = nombreCompleto.toLowerCase();
+                        for (const caracter of nombreLimpio) {
+                            if (letrasA.includes(caracter)) {
+                                totalLetrasA++;
+                            }
+                        }
+
+                        return nombreFormateado;
+                    });
+
+                    return {
+                        nombresFormateados: nombresFormateados,
+                        totalLetrasA: totalLetrasA
+                    };
+                }
+
+                // --- Uso del ejemplo ---
+                const entrada1 = ["paola áLVAREZ", "josé garcía", "ANTONIO RAmos"];
+                const salida1 = formatearNombres(entrada1);
+
+                document.getElementById('resultado1').innerHTML =
+                    `Entrada: [${entrada1.map(n => '"' + n + '"').join(', ')}]<br>` +
+                    `Nombres formateados: [${salida1.nombresFormateados.map(n => '"' + n + '"').join(', ')}]<br>` +
+                    `Total de letras 'A' o 'a' (incl. acentuadas) contadas: **${salida1.totalLetrasA}**`;
+            </script>
+        </div>
+
+        <hr>
+
+        <div class="ejercicio">
+            <h2>2. Recursividad: Contar Dígitos</h2>
+            <p>Función recursiva <code>contarDigitos(n)</code> sin usar bucles ni conversión a string.</p>
+            <p>Resultado:</p>
+            <div id="resultado2" class="resultado-texto"></div>
+
+            <script>
+                function contarDigitos(n) {
+                    // Caso Base 1: Si n es menor o igual a 0, devuelve 0 (según enunciado)
+                    if (n <= 0) {
+                        return 0;
+                    }
+                    // Caso Base 2: Si n es menor que 10, tiene un dígito
+                    if (n < 10) {
+                        return 1;
+                    }
+                    // Paso Recursivo: La cantidad es 1 + la cantidad de dígitos de (n / 10)
+                    // Math.floor asegura la división entera.
+                    return 1 + contarDigitos(Math.floor(n / 10));
+                }
+
+                // --- Uso de ejemplos ---
+                const n1 = 12345;
+                const res1 = contarDigitos(n1);
+                const n2 = 9;
+                const res2 = contarDigitos(n2);
+
+                document.getElementById('resultado2').innerHTML =
+                    `Entrada (n=${n1}):<br>` +
+                    `Resultado: **${res1}**<br>` +
+                    `<br>` +
+                    `Entrada (n=${n2}):<br>` +
+                    `Resultado: **${res2}**`;
+            </script>
+        </div>
+
+        <hr>
+
+        <div class="ejercicio">
+            <h2>3. Funciones Anónimas y HOF: Procesar Notas</h2>
+            <p>Función <code>procesarNotas(notas, esAprobatoria, calcularPuntaje)</code> usando funciones de orden superior (`filter` y `map`) o lógica similar con bucles.</p>
+            <p>Resultado:</p>
+            <div id="resultado3" class="resultado-texto"></div>
+
+            <script>
+                // Implementación con métodos HOF (map y filter) para concisión
+                function procesarNotas(notas, esAprobatoria, calcularPuntaje) {
+                    return notas
+                        // 1. Filtra las notas usando la función anónima `esAprobatoria`
+                        .filter(esAprobatoria)
+                        // 2. Transforma las notas aprobadas usando la función anónima `calcularPuntaje`
+                        .map(calcularPuntaje);
+                }
+
+                // --- Uso del ejemplo con Arrow Functions anónimas ---
+                const notas3 = [65, 80, 55, 90, 70];
+                
+                // Función anónima de filtro (mayor o igual a 70)
+                const filtroAprobatoria = nota => nota >= 70;
+                
+                // Función anónima de transformación (bonificación de +5)
+                const transformacionBonificacion = nota => nota + 5;
+                
+                const salida3 = procesarNotas(notas3, filtroAprobatoria, transformacionBonificacion);
+
+                document.getElementById('resultado3').innerHTML =
+                    `Lista inicial de notas: [${notas3.join(', ')}]<br>` +
+                    `Criterio de aprobación (filtro): >= 70<br>` +
+                    `Bonificación (transformación): + 5<br>` +
+                    `Notas aprobadas y transformadas: **[${salida3.join(', ')}]**`;
+            </script>
+        </div>
+
+        <hr>
+
+        <div class="ejercicio">
+            <h2>4. Callbacks y Asincronía: Procesar Tareas</h2>
+            <p>Usamos <code>setTimeout</code> para simular la finalización de tareas en diferente orden (la menor duración termina primero).</p>
+            <p class="consola-aviso">El resultado de este ejercicio SÓLO se ve en la **Consola del Navegador**.</p>
+            <p>Orden esperado en Consola: Tarea B, Tarea C, Tarea A. Callback final recibe <code>['B', 'C', 'A']</code>.</p>
+
+            <script>
+                function procesarTareas(tareas, callbackFinal) {
+                    let tareasCompletadas = 0;
+                    const idsCompletados = [];
+                    const totalTareas = tareas.length;
+
+                    if (totalTareas === 0) {
+                        callbackFinal(idsCompletados);
+                        return;
+                    }
+
+                    console.log("\n--- INICIO PROCESAMIENTO ASÍNCRONO ---");
+                    console.log(`Tareas: ${totalTareas}. La duración es en ms.`);
+
+                    tareas.forEach(tarea => {
+                        // Simulación de ejecución con setTimeout usando la duracion
+                        setTimeout(() => {
+                            // Callback en línea de la tarea individual (imprimir)
+                            console.log(`Tarea ${tarea.id} completada.`); 
+                            
+                            idsCompletados.push(tarea.id);
+                            tareasCompletadas++;
+
+                            // Verificación de finalización de todas las tareas
+                            if (tareasCompletadas === totalTareas) {
+                                // Llama a callbackFinal al terminar todas
+                                callbackFinal(idsCompletados);
+                            }
+                        }, tarea.duracion);
+                    });
+                }
+
+                // --- Uso del ejemplo ---
+                const listaTareas4 = [
+                    { id: 'A', duracion: 300 }, // Última en terminar
+                    { id: 'B', duracion: 100 }, // Primera en terminar
+                    { id: 'C', duracion: 200 }  // Segunda en terminar
+                ];
+
+                // Callback final para manejar el resultado
+                const miFuncionFinal = (resultado) => {
+                    console.log("\n--- ¡TODAS LAS TAREAS TERMINADAS! ---");
+                    console.log(`Resultado callbackFinal (orden de ids): ${resultado.join(' -> ')}`);
+                };
+
+                // Ejecución de la función
+                procesarTareas(listaTareas4, miFuncionFinal);
+            </script>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

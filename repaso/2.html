@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen de Práctica - Soluciones Extensas</title>
+    
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            color: #343a40;
+        }
+
+        /* Contenedor principal: Centra el contenido */
+        .contenedor {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #007bff;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+
+        p {
+            line-height: 1.6;
+        }
+
+        /* Estilo para cada bloque de ejercicio */
+        .ejercicio {
+            border: 1px solid #dee2e6;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .ejercicio h2 {
+            color: #dc3545;
+            margin-top: 0;
+            border-bottom: 1px dashed #ced4da;
+            padding-bottom: 5px;
+        }
+
+        /* Estilo para la salida de los resultados */
+        .resultado-texto {
+            font-weight: 600;
+            color: #155724;
+            background-color: #e9f7ef;
+            padding: 10px;
+            border-left: 5px solid #28a745;
+            margin-top: 10px;
+            white-space: pre-wrap;
+        }
+        
+        /* Estilo para el código en línea */
+        code {
+            font-family: Consolas, 'Courier New', monospace;
+            background-color: #e9ecef;
+            padding: 2px 5px;
+            border-radius: 4px;
+            color: #6f42c1;
+        }
+
+        /* Mensajes de información y consola */
+        .importante {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .consola-aviso {
+            color: #c00000;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="contenedor">
+
+        <h1>Examen de Práctica Extenso - Soluciones (Ejercicios 9-16) 🚀</h1>
+        <p>Esta segunda tanda de ejercicios se enfoca en variaciones y combinaciones avanzadas de Arrays, Recursividad y HOFs para una preparación completa.</p>
+        
+        <div class="importante">
+            💡 **Instrucción**: Los ejercicios de asincronía (12 y 15) requieren que abras la **Consola del navegador** (F12) para ver la secuencia de eventos.
+        </div>
+        
+        <hr>
+
+        <div class="ejercicio">
+            <h2>9. HOFs (`map`): Conversión de Temperatura</h2>
+            <p><strong>Enunciado:</strong> Crear una función que use `map` para transformar un array de temperaturas de Celsius a Fahrenheit. La fórmula es: $F = C \times 1.8 + 32$. El resultado debe redondearse al entero más cercano.</p>
+            <p>Resultado:</p>
+            <div id="resultado9" class="resultado-texto"></div>
+
+            <script>
+                // Comentario: Utiliza `map` para aplicar una fórmula matemática a cada elemento del array, transformando un array de números a otro array de números. Usa Math.round().
+                function celsiusToFahrenheit(celsiusTemps) {
+                    return celsiusTemps.map(c => {
+                        const fahrenheit = c * 1.8 + 32;
+                        return Math.round(fahrenheit);
+                    });
+                }
+
+                // --- Uso del ejemplo ---
+                const tempsC = [0, 25, 37, 10];
+                const salida9 = celsiusToFahrenheit(tempsC);
+
+                document.getElementById('resultado9').innerHTML =
+                    `Temperaturas en Celsius: [${tempsC.join(', ')}]<br>` +
+                    `Resultado en Fahrenheit (Redondeado): **[${salida9.join(', ')}]**`;
+            </script>
+        </div>
+
+        <hr>
+
+        <div class="ejercicio">
+            <h2>10. HOFs (`reduce`): Encontrar la Palabra Más Larga</h2>
+            <p><strong>Enunciado:</strong> Usar el método `reduce` para encontrar y devolver la palabra más larga en un array de cadenas.</p>
+            <p>Resultado:</p>
+            <div id="resultado10" class="resultado-texto"></div>
+
+            <script>
+                // Comentario: Usa `reduce` para comparar la longitud de la cadena acumulada (la palabra más larga hasta el momento) con la cadena actual, devolviendo siempre la más larga.
+                function encontrarPalabraMasLarga(palabras) {
+                    return palabras.reduce((palabraMasLarga, palabraActual) => {
+                        if (palabraActual.length > palabraMasLarga.length) {
+                            return palabraActual;
+                        }
+                        return palabraMasLarga;
+                    }, ""); // El acumulador inicial es una cadena vacía (longitud 0)
+                }
+
+                // --- Uso del ejemplo ---
+                const listaPalabras = ["sol", "luna", "estrellas", "tierra", "mar"];
+                const salida10 = encontrarPalabraMasLarga(listaPalabras);
+
+                document.getElementById('resultado10').innerHTML =
+                    `Lista de palabras: [${listaPalabras.join(', ')}]<br>` +
+                    `Palabra más larga encontrada: **"${salida10}"**`;
+            </script>
+        </div>
+
+        <hr>
+
+        <div class="ejercicio">
+            <h2>11. Recursividad: Palíndromo</h2>
+            <p><strong>Enunciado:</strong> Escribir una función recursiva `esPalindromo(cadena)` que determine si una cadena es un palíndromo (se lee igual de adelante hacia atrás que de atrás hacia adelante).</p>
+            <p>Resultado:</p>
+            <div id="resultado11" class="resultado-texto"></div>
+
+            <script>
+                // Comentario: La función recursiva compara el primer y último carácter. Si son iguales, llama recursivamente a sí misma con la subcadena sin esos caracteres. Los casos base son una cadena de 0 o 1 carácter.
+                function esPalindromo(cadena) {
+                    // Limpiar la cadena (quitar espacios y poner en minúsculas)
+                    const limpia = cadena.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+                    // Caso Base 1: Cadena de 0 o 1 carácter (siempre es palíndromo)
+                    if (limpia.length <= 1) {
+                        return true;
+                    }
+                    
+                    // Compara el primer y último carácter
+                    if (limpia[0] === limpia[limpia.length - 1]) {
+                        // Paso recursivo: Llamar con la subcadena que excluye el primero y el último
+                        return esPalindromo(limpia.slice(1, limpia.length - 1));
+                    }
+                    
+                    // Si el primero y último no coinciden
+                    return false;
+                }
+
+                // --- Uso de ejemplos ---
+                const p1 = "reconocer";
+                const p2 = "radar";
+                const p3 = "ordenador";
+
+                document.getElementById('resultado11').innerHTML =
+                    `Cadena 1 ("${p1}"): **${esPalindromo(p1) ? 'SÍ' : 'NO'}** es palíndromo.<br>` +
+                    `Cadena 2 ("${p2}"): **${esPalindromo(p2) ? 'SÍ' : 'NO'}** es palíndromo.<br>` +
+                    `Cadena 3 ("${p3}"): **${esPalindromo(p3) ? 'SÍ' : 'NO'}** es palíndromo.`;
+            </script>
+        </div>
+
+        <hr>
+
+        <div class="ejercicio">
+            <h2>12. HOF/Callback: Cronometrar la Ejecución</h2>
+            <p><strong>Enunciado:</strong> Crea una función `ejecutarConLog(callback)` que tome una función como argumento, la ejecute, y luego imprima en la consola el tiempo que tardó en ejecutarse (simulando un proceso costoso).</p>
+            <p class="consola-aviso">El resultado SÓLO se ve en la **Consola del Navegador**.</p>
+            
+            <script>
+                // Comentario: Es una HOF que recibe un callback, lo ejecuta entre dos puntos de tiempo (`performance.now()`) y utiliza el resultado para un efecto secundario (logging).
+                function ejecutarConLog(callback) {
+                    const inicio = performance.now();
+                    
+                    // Ejecuta el callback
+                    callback(); 
+                    
+                    const fin = performance.now();
+                    const duracion = (fin - inicio).toFixed(2);
+
+                    console.log(`\n--- EJERCICIO 12: CRONÓMETRO ---`);
+                    console.log(`Función ejecutada. Tiempo de duración: ${duracion} milisegundos.`);
+                }
+
+                // --- Uso del ejemplo ---
+                const tareaCostosa = () => {
+                    console.log("Iniciando tarea pesada...");
+                    // Simulación de un bucle o cálculo largo
+                    let sum = 0;
+                    for (let i = 0; i < 50000000; i++) {
+                        sum += i;
+                    }
+                    console.log(`Tarea finalizada. (Suma calculada: ${sum})`);
+                };
+
+                ejecutarConLog(tareaCostosa);
+            </script>
+        </div>
+
+        <hr>
+
+        <div class="ejercicio">
+            <h2>13. HOFs (`filter`): Filtrar Objetos Compuestos</h2>
+            <p><strong>Enunciado:</strong> Crear una función que use `filter` para seleccionar productos que cumplan dos condiciones: el stock es mayor que cero **Y** el precio es menor que un límite dado.</p>
+            <p>Resultado:</p>
+            <div id="resultado13" class="resultado-texto"></div>
+
+            <script>
+                // Comentario: Demuestra cómo utilizar múltiples condiciones lógicas (AND/OR) dentro del callback de `filter` al trabajar con arrays de objetos.
+                function filtrarProductos(productos, precioMaximo) {
+                    return productos.filter(p => {
+                        // Condición 1: Stock > 0
+                        const tieneStock = p.stock > 0;
+                        // Condición 2: Precio < precioMaximo
+                        const esAsequible = p.precio < precioMaximo;
+
+                        // Ambos deben ser verdaderos para incluir el producto
+                        return tieneStock && esAsequible; 
+                    });
+                }
+
+                // --- Uso del ejemplo ---
+                const listaProductos = [
+                    { nombre: 'A', precio: 15, stock: 10 }, // Incluido (15 < 20 y stock > 0)
+                    { nombre: 'B', precio: 25, stock: 5 }, // Excluido (25 > 20)
+                    { nombre: 'C', precio: 5, stock: 0 },   // Excluido (stock = 0)
+                    { nombre: 'D', precio: 10, stock: 30 } // Incluido (10 < 20 y stock > 0)
+                ];
+                const limitePrecio = 20;
+                const salida13 = filtrarProductos(listaProductos, limitePrecio);
+
+                document.getElementById('resultado13').innerHTML =
+                    `Filtro: Stock > 0 Y Precio < $${limitePrecio}.<br>` +
+                    `Productos filtrados (${salida13.length}):<br>` +
+                    `**${salida13.map(p => p.nombre + ` ($${p.precio})`).join(', ')}**`;
+            </script>
+        </div>
+        
+        <hr>
+
+        <div class="ejercicio">
+            <h2>14. Recursividad: Cálculo de Potencia ($x^n$)</h2>
+            <p><strong>Enunciado:</strong> Escribe una función recursiva `calcularPotencia(base, exponente)` que calcule el resultado de $base^exponente$ sin usar operadores de potencia nativos (ej. `**` o `Math.pow`).</p>
+            <p>Resultado:</p>
+            <div id="resultado14" class="resultado-texto"></div>
+
+            <script>
+                // Comentario: El caso base es cuando el exponente es 0 (resultado es 1). El paso recursivo es multiplicar la base por el resultado de la misma función con el exponente reducido en 1.
+                function calcularPotencia(base, exponente) {
+                    // Caso Base: Cualquier número elevado a 0 es 1
+                    if (exponente === 0) {
+                        return 1;
+                    }
+                    // Manejo de exponente negativo (opcional, pero útil)
+                    if (exponente < 0) {
+                        return 1 / calcularPotencia(base, -exponente);
+                    }
+                    // Paso Recursivo: base * (base^(exponente - 1))
+                    return base * calcularPotencia(base, exponente - 1);
+                }
+
+                // --- Uso de ejemplos ---
+                const resP1 = calcularPotencia(2, 4); // 16
+                const resP2 = calcularPotencia(5, 3); // 125
+                const resP3 = calcularPotencia(10, 0); // 1
+
+                document.getElementById('resultado14').innerHTML =
+                    `Cálculo 1: 2^4 = **${resP1}**<br>` +
+                    `Cálculo 2: 5^3 = **${resP2}**<br>` +
+                    `Cálculo 3: 10^0 = **${resP3}**`;
+            </script>
+        </div>
+
+        <hr>
+
+        <div class="ejercicio">
+            <h2>15. Asincronía: Tareas Secuenciales con Callbacks (Callback Hell)</h2>
+            <p><strong>Enunciado:</strong> Simular una cadena de 3 operaciones que deben ejecutarse una después de la otra. Utiliza callbacks anidados para asegurar la secuencia, ejemplificando el "Callback Hell".</p>
+            <p class="consola-aviso">El resultado SÓLO se ve en la **Consola del Navegador**.</p>
+            <p>Orden de ejecución en consola: Tarea 1 -> Tarea 2 -> Tarea 3. Final.</p>
+
+            <script>
+                // Comentario: Demuestra la anidación (Hell) de callbacks. La función interna llama a la siguiente función con un retardo, asegurando que el proceso 2 no inicie hasta que el proceso 1 haya terminado.
+                function tareaAsincrona(nombre, duracion, callback) {
+                    console.log(`[INICIO] Tarea: ${nombre}. Esperando ${duracion}ms...`);
+                    setTimeout(() => {
+                        console.log(`[FIN] Tarea: ${nombre} completada.`);
+                        // Llama al siguiente paso/callback
+                        callback(); 
+                    }, duracion);
+                }
+
+                // --- Simulación de la Secuencia ---
+                function ejecutarCadenaDeTareas() {
+                    console.log("\n--- EJERCICIO 15: CALLBACK HELL SIMULADO ---");
+
+                    // Tarea 1: La función externa
+                    tareaAsincrona("Conexión a DB", 500, () => {
+                        
+                        // Tarea 2: Callback anidado (se ejecuta después de Tarea 1)
+                        tareaAsincrona("Cálculo de Reporte", 800, () => {
+                            
+                            // Tarea 3: Callback anidado (se ejecuta después de Tarea 2)
+                            tareaAsincrona("Envío de Correo", 300, () => {
+                                
+                                // Último paso: Callback final
+                                console.log("[FINAL] Cadena de tareas completada exitosamente.");
+                            });
+                        });
+                    });
+                }
+
+                ejecutarCadenaDeTareas();
+            </script>
+        </div>
+
+        <hr>
+        
+        <div class="ejercicio">
+            <h2>16. HOFs Encadenadas: Media Condicional (Filter, Map, Reduce)</h2>
+            <p><strong>Enunciado:</strong> Usar `filter`, `map` y `reduce` para calcular la **nota promedio** de las notas que son **iguales o superiores a 70** (aprobatorias).</p>
+            <p>Resultado:</p>
+            <div id="resultado16" class="resultado-texto"></div>
+
+            <script>
+                // Comentario: Combina las 3 principales HOFs para obtener un resultado estadístico: 1. `filter` para seleccionar el subconjunto. 2. `map` (opcionalmente) o `reduce` para sumar. 3. El resultado final se divide por la longitud del array filtrado.
+                function calcularMediaAprobados(notas) {
+                    // 1. Filtrar: Obtener solo las notas >= 70
+                    const notasAprobadas = notas.filter(n => n >= 70);
+                    
+                    if (notasAprobadas.length === 0) {
+                        return 0;
+                    }
+
+                    // 2. Reducir: Sumar las notas aprobadas
+                    const suma = notasAprobadas.reduce((acc, n) => acc + n, 0);
+                    
+                    // 3. Cálculo final: Dividir la suma por el conteo
+                    const media = suma / notasAprobadas.length;
+
+                    return media.toFixed(2); // Redondeado a 2 decimales
+                }
+
+                // --- Uso del ejemplo ---
+                const todasLasNotas = [65, 90, 50, 75, 80, 60, 100];
+                const salida16 = calcularMediaAprobados(todasLasNotas);
+
+                document.getElementById('resultado16').innerHTML =
+                    `Lista de notas: [${todasLasNotas.join(', ')}]<br>` +
+                    `Notas Aprobadas (>= 70): [90, 75, 80, 100]<br>` +
+                    `Suma: 345. Conteo: 4.<br>` +
+                    `Nota Promedio de Aprobados: **${salida16}**`; // 345 / 4 = 86.25
+            </script>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

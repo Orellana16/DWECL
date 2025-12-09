@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicios JavaScript - Estética Mejorada</title>
+    
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa; /* Fondo gris muy claro */
+            color: #343a40;
+        }
+
+        /* Contenedor principal: Centra el contenido */
+        .contenedor {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #007bff; /* Azul brillante */
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+
+        p {
+            line-height: 1.6;
+        }
+
+        /* Estilo para cada bloque de ejercicio */
+        .ejercicio {
+            border: 1px solid #dee2e6;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            background-color: #f8f9fa; /* Fondo ligeramente diferente para el bloque */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .ejercicio h2 {
+            color: #dc3545; /* Rojo de alerta para los títulos de ejercicio */
+            margin-top: 0;
+            border-bottom: 1px dashed #ced4da;
+            padding-bottom: 5px;
+        }
+
+        /* Estilo para la salida de los resultados */
+        .resultado-texto {
+            font-weight: 600;
+            color: #155724; /* Verde de éxito */
+            background-color: #e9f7ef;
+            padding: 10px;
+            border-left: 5px solid #28a745;
+            margin-top: 10px;
+            white-space: pre-wrap; /* Mantiene los saltos de línea (<br>) */
+        }
+        
+        /* Estilo para el código en línea */
+        code {
+            font-family: Consolas, 'Courier New', monospace;
+            background-color: #e9ecef;
+            padding: 2px 5px;
+            border-radius: 4px;
+            color: #6f42c1; /* Púrpura */
+        }
+
+        /* Mensajes de información y consola */
+        .importante {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .consola-aviso {
+            color: #c00000;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="contenedor">
+
+        <h1>Ejercicios de JavaScript Sencillos 🚀</h1>
+        <p>Este es el código simple con una mejor presentación visual (CSS).</p>
+        
+        <div class="importante">
+            💡 **Importante**: Para el Ejercicio 4 (Asíncrono), abre la **Consola del Navegador** (tecla F12) para ver el orden de ejecución.
+        </div>
+        
+        <hr>
+
+        <div class="ejercicio">
+            <h2>1. Capitalizar y Contar Vocales</h2>
+            <p>Resultado de la función <code>capitalizarYContarVocales()</code>:</p>
+            <div id="resultado1" class="resultado-texto"></div>
+
+            <script>
+                function capitalizarYContarVocales(words) {
+                    let totalVocales = 0;
+                    const palabrasCapitalizadas = [];
+                    const vocales = 'aeiouáéíóúü';
+
+                    for (let i = 0; i < words.length; i++) {
+                        const palabra = words[i];
+
+                        if (palabra.length === 0) {
+                            palabrasCapitalizadas.push("");
+                            continue;
+                        }
+
+                        const palabraEnMinuscula = palabra.toLowerCase();
+                        const primeraLetra = palabraEnMinuscula[0].toUpperCase();
+                        const restoDePalabra = palabraEnMinuscula.slice(1);
+                        const capitalizada = primeraLetra + restoDePalabra;
+                        palabrasCapitalizadas.push(capitalizada);
+
+                        for (let j = 0; j < palabraEnMinuscula.length; j++) {
+                            const caracter = palabraEnMinuscula[j];
+                            if (vocales.includes(caracter)) {
+                                totalVocales++;
+                            }
+                        }
+                    }
+
+                    return {
+                        palabras: palabrasCapitalizadas,
+                        totalVocales: totalVocales
+                    };
+                }
+
+                // --- Uso del ejemplo y salida simple ---
+                const entrada1 = ["hola", "mUndo", "árbol", "PIrrAmiDe"];
+                const salida1 = capitalizarYContarVocales(entrada1);
+
+                document.getElementById('resultado1').innerHTML =
+                    `Entrada: [${entrada1.join(', ')}]<br>` +
+                    `Palabras capitalizadas: [${salida1.palabras.join(', ')}]<br>` +
+                    `Total de vocales contadas: **${salida1.totalVocales}**`;
+            </script>
+        </div>
+
+        <hr>
+
+        <div class="ejercicio">
+            <h2>2. Suma Recursiva</h2>
+            <p>Función <code>sumarHasta(n)</code> que se llama a sí misma.</p>
+            <p>Resultado:</p>
+            <div id="resultado2" class="resultado-texto"></div>
+
+            <script>
+                function sumarHasta(n) {
+                    if (n <= 0) {
+                        return 0;
+                    }
+                    return n + sumarHasta(n - 1);
+                }
+
+                // --- Uso del ejemplo y salida simple ---
+                const n1 = 5;
+                const res1 = sumarHasta(n1);
+
+                document.getElementById('resultado2').innerHTML =
+                    `Entrada (n=5): **${n1}**<br>` +
+                    `Cálculo: 5 + 4 + 3 + 2 + 1<br>` +
+                    `Resultado: **${res1}**`;
+            </script>
+        </div>
+
+        <hr>
+
+        <div class="ejercicio">
+            <h2>3. Filtrar y Transformar con Funciones</h2>
+            <p>Se aplica un filtro para obtener solo **pares** y una transformación para calcular el **cuadrado**.</p>
+            <p>Resultado:</p>
+            <div id="resultado3" class="resultado-texto"></div>
+
+            <script>
+                function filtrarYTransformar(arr, filtro, transformacion) {
+                    const arrayFiltrado = [];
+
+                    for (let i = 0; i < arr.length; i++) {
+                        const numero = arr[i];
+                        if (filtro(numero)) {
+                            arrayFiltrado.push(numero);
+                        }
+                    }
+
+                    const arrayTransformado = [];
+
+                    for (let i = 0; i < arrayFiltrado.length; i++) {
+                        const numero = arrayFiltrado[i];
+                        const transformado = transformacion(numero);
+                        arrayTransformado.push(transformado);
+                    }
+
+                    return arrayTransformado;
+                }
+
+                // --- Uso del ejemplo y salida simple ---
+                const numeros3 = [1, 2, 3, 4, 5, 6];
+                const filtroPares = n => n % 2 === 0;
+                const transformacionCuadrado = n => n * n;
+                const salida3 = filtrarYTransformar(numeros3, filtroPares, transformacionCuadrado);
+
+                document.getElementById('resultado3').innerHTML =
+                    `Lista inicial: [${numeros3.join(', ')}]<br>` +
+                    `Números pares seleccionados: [2, 4, 6]<br>` +
+                    `Resultado final (al cuadrado): **[${salida3.join(', ')}]**`;
+            </script>
+        </div>
+
+        <hr>
+
+        <div class="ejercicio">
+            <h2>4. Tareas Asíncronas (Callback Final)</h2>
+            <p>Usamos <code>setTimeout</code> para simular tareas con retardo.</p>
+            <p class="consola-aviso">El resultado de este ejercicio SÓLO se ve en la Consola del navegador.</p>
+
+            <script>
+                function procesarTareas(tareas, callbackFinal) {
+                    let tareasCompletadas = 0;
+                    const idsCompletados = [];
+                    const totalTareas = tareas.length;
+
+                    if (totalTareas === 0) {
+                        callbackFinal(idsCompletados);
+                        return;
+                    }
+
+                    console.log("\n--- INICIO ASÍNCRONO ---");
+                    console.log(`Tareas: ${totalTareas}. La más rápida terminará primero.`);
+
+                    tareas.forEach(tarea => {
+                        setTimeout(() => {
+
+                            console.log(`[OK] Tarea ${tarea.id} completada.`);
+                            idsCompletados.push(tarea.id);
+                            tareasCompletadas++;
+
+                            if (tareasCompletadas === totalTareas) {
+                                callbackFinal(idsCompletados);
+                            }
+                        }, tarea.duracion);
+                    });
+                }
+
+                // --- Uso del ejemplo ---
+                const listaTareas4 = [
+                    { id: 'A', duracion: 300 },
+                    { id: 'B', duracion: 100 },
+                    { id: 'C', duracion: 200 }
+                ];
+
+                const miFuncionFinal = (resultado) => {
+                    console.log("\n--- ¡TODAS LAS TAREAS TERMINADAS! ---");
+                    console.log(`Orden de finalización: ${resultado.join(' -> ')} (esperado: B -> C -> A)`);
+                };
+
+                procesarTareas(listaTareas4, miFuncionFinal);
+            </script>
+        </div>
+
+    </div>
+
+</body>
+
+</html>
