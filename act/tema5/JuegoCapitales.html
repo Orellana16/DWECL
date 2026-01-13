@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Juego Tema 4</title>
+</head>
+
+<body>
+    <div>
+        <label>Introduce 6 nombre de capitales (separadas por espacio):</label>
+        <input type="text" id="capitales" placeholder="Madrid Paris Roma Berlin Praga Viena">
+    </div>
+    <br>
+    <div>
+        <button onclick="iniciarJuego()">Cargar Palabras y Jugar</button>
+    </div>
+    <br>
+    <div id="seccionAdivinanza" style="display:none;">
+        <label>Ahora intenta adivinar una de las palabras:</label>
+        <input type="text" id="adivinanza">
+        <button onclick="comprobarAdivinanza()">Comprobar</button>
+    </div>
+
+    <script>
+        /*PSEUDOCODIGO DE EXPLICACION
+1. Entrada y Filtro
+El programa recibe una cadena, la convierte en lista y aplica un doble control: primero verifica que haya 6 elementos y luego obliga a que cada uno tenga al menos 5 caracteres (si no, pide sustituirlos).
+
+2. Selección del Objetivo
+Normaliza las palabras a minúsculas para evitar errores de coincidencia y elige un índice aleatorio de la lista para establecer la palabra "secreta".
+
+3. Evaluación y Pistas
+Al recibir un intento, el programa bifurca el camino:
+
+Acierto: Detiene el juego y asigna un premio decreciente basado en el número de fallos acumulados (a más errores, menos dinero).
+
+Fallo: Aumenta el contador de errores y genera una revelación progresiva. Toma una parte de la palabra real (substring) proporcional a los fallos y rellena el resto con guiones para guiar al usuario.
+
+4. Fin del Ciclo
+El juego termina cuando el usuario acierta o cuando la pista ya ha revelado la palabra completa, agotando así las oportunidades.*/
+        let arrayCapitales = [];
+        let capitalElegida = "";
+        let fallos = 0;
+
+        function iniciarJuego() {
+            const inputCapitales = document.getElementById("capitales").value.trim();
+
+            if (!inputCapitales) {
+                alert("Por favor, introduce las capitales.");
+                return;
+            }
+
+            arrayCapitales = inputCapitales.split(" ");
+
+            if (arrayCapitales.length !== 6) {
+                alert("Error: Introduce exactamente 6 capitales.");
+                return;
+            }
+
+            arrayCapitales.forEach((capital, i) => {
+                if (capital.length < 5) {
+                    arrayCapitales[i] = nuevaCap(capital);
+                } else {
+                    arrayCapitales[i] = capital.toLowerCase(); // Corregido: 'capital', no 'palabra'
+                }
+            });
+
+            const indiceRandom = Math.floor(Math.random() * arrayCapitales.length);
+            capitalElegida = arrayCapitales[indiceRandom];
+
+            document.getElementById("seccionAdivinanza").style.display = "block";
+            alert("¡Capitales cargadas! Intenta adivinar cuál he seleccionado.");
+            console.log("Truco:", capitalElegida);
+        }
+
+        function nuevaCap(capitalMal) {
+            let nueva = prompt("La capital '" + capitalMal + "' es muy corta. Mínimo 5 letras:");
+            while (!nueva || nueva.length < 5) {
+                nueva = prompt("Error. Introduce una capital válida (mín. 5 letras):");
+            }
+            return nueva.toLowerCase();
+        }
+
+        function comprobarAdivinanza() {
+            const intento = document.getElementById("adivinanza").value.toLowerCase();
+
+            if (intento === capitalElegida) {
+                switch (fallos) {
+                    case 0: alert("¡Felicidades! Has acertado la capital " + capitalElegida.toUpperCase() + ", por lo que has ganado 500€.");
+                        break;
+                    case 1: alert("¡Felicidades! Has acertado la capital " + capitalElegida.toUpperCase() + ", por lo que has ganado 300€.");
+                        break;
+                    case 2: alert("¡Felicidades! Has acertado la capital " + capitalElegida.toUpperCase() + ", por lo que has ganado 100€.");
+                        break;
+                    default: alert("¡Felicidades! Has acertado la capital " + capitalElegida.toUpperCase() + ".");
+                }
+            } else {
+                fallos++;
+                let faltantes = capitalElegida.length - fallos;
+                let barraBaja = "";
+
+
+                for (i = 0; i < faltantes; i++) {
+                    barraBaja += " _ "
+                }
+
+                if (fallos < capitalElegida.length) {
+                    let pista = capitalElegida.substring(0, fallos);
+                    alert("Incorrecto. Pista: La palabra empieza por '" + pista + barraBaja + "'");
+                } else {
+                    alert("¡Se acabaron las pistas! La capital era: " + capitalElegida.toUpperCase());
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Juego Tema 4</title>
+</head>
+
+<body>
+    <div>
+        <label>Introduce al menos 8 palabras (separadas por espacio):</label>
+        <input type="text" id="palabras" placeholder="palabra1 palabra2...">
+    </div>
+    <br>
+    <div>
+        <button onclick="iniciarJuego()">Cargar Palabras y Jugar</button>
+    </div>
+    <br>
+    <div id="seccionAdivinanza" style="display:none;">
+        <label>Ahora intenta adivinar una de las palabras:</label>
+        <input type="text" id="adivinanza">
+        <button onclick="comprobarAdivinanza()">Comprobar</button>
+    </div>
+
+    <script>
+        let arrayPalabras = [];
+        let palabraElegida = "";
+        let fallos = 0;
+
+        function iniciarJuego() {
+            const inputPalabras = document.getElementById("palabras").value.trim();
+            arrayPalabras = inputPalabras.split(" ");
+
+            // Validación de cantidad
+            if (arrayPalabras.length < 8) {
+                alert("Error: Introduce al menos 8 palabras.");
+                return;
+            }
+
+            // Validación de longitud de cada palabra
+            arrayPalabras.forEach((palabra, i) => {
+                if (palabra.length < 6) {
+                    arrayPalabras[i] = nuevaPal(); // Accedemos a la posición real
+                } else {
+                    arrayPalabras[i] = palabra.toUpperCase();
+                }
+            });
+
+            // Seleccionar palabra aleatoria
+            const indiceRandom = Math.floor(Math.random() * arrayPalabras.length);
+            palabraElegida = arrayPalabras[indiceRandom];
+
+            // Mostrar la siguiente parte del juego
+            document.getElementById("seccionAdivinanza").style.display = "block";
+            alert("¡Palabras cargadas! Intenta adivinar cuál he seleccionado.");
+            console.log("Truco (palabra secreta):", palabraElegida); // Para debug
+        }
+
+        function nuevaPal() {
+            let nueva = prompt("Una palabra era muy corta. Introduce una nueva (mín. 6 letras):");
+            while (!nueva || nueva.length < 6) {
+                nueva = prompt("Error. Introduce una palabra válida de al menos 6 letras:");
+            }
+            alert("Palabra guardada con éxito!");
+            return nueva.toUpperCase();
+        }
+
+        function comprobarAdivinanza() {
+            const intento = document.getElementById("adivinanza").value.toUpperCase();
+
+            if (intento === palabraElegida) {
+                alert("¡Felicidades! Has acertado la palabra: " + palabraElegida);
+            } else {
+                fallos++; // Incrementamos el error
+
+                // Comprobamos si aún quedan letras por mostrar
+                if (fallos <= palabraElegida.length) {
+                    // Obtenemos las letras de la palabra hasta el número de fallos cometido
+                    let pista = palabraElegida.substring(0, fallos);
+                    alert("Incorrecto. Pista: La palabra empieza por '" + pista + "'");
+                } else {
+                    alert("Has fallado demasiadas veces. La palabra era: " + palabraElegida);
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

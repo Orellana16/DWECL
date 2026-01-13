@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Palabras Palíndromas</title>
+</head>
+
+<body>
+  <h1>Detección de Palíndromos</h1>
+  <p>Escribe una palabra para verificar si es palíndroma.</p>
+
+  <input type="text" id="palabra" placeholder="Escribe una palabra" />
+  <button onclick="verificarPal()">Verificar</button>
+  <p id="result"></p>
+
+  <script>
+    let esPalindroma = true;
+
+    function verificarPal() {
+      const palabra = document.getElementById("palabra").value;
+      const palabraLimpia = palabra.toLowerCase().replaceAll(" ", "");
+      if (!palabraLimpia) {
+        document.getElementById("result").innerText = "Por favor, ingresa una palabra válida.";
+        return;
+      }
+
+      for (i = 0; i <= palabraLimpia.length / 2; i++) {
+        if (palabraLimpia.charAt(i) != palabraLimpia.charAt(palabraLimpia.length - 1 - i)) {
+          esPalindroma = false;
+          break;
+        }
+      }
+
+      document.getElementById("result").innerText = esPalindroma ? "Es palíndroma" : "No es palíndroma";
+    }
+  </script>
+</body>
+
+</html>
