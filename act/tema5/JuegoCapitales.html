@@ -97,7 +97,7 @@ El juego termina cuando el usuario acierta o cuando la pista ya ha revelado la p
                 }
             } else {
                 fallos++;
-                let faltantes = capitalElegida.length - fallos;
+                let faltantes = capitalElegida.length - fallos + 1;
                 let barraBaja = "";
 
 
@@ -106,7 +106,7 @@ El juego termina cuando el usuario acierta o cuando la pista ya ha revelado la p
                 }
 
                 if (fallos < capitalElegida.length) {
-                    let pista = capitalElegida.substring(0, fallos);
+                    let pista = capitalElegida.substring(0, fallos - 1);
                     alert("Incorrecto. Pista: La palabra empieza por '" + pista + barraBaja + "'");
                 } else {
                     alert("¡Se acabaron las pistas! La capital era: " + capitalElegida.toUpperCase());

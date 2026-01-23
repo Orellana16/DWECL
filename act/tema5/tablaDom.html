@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            background-color: #eee;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 500px;
+        }
+
+        input {
+            display: block;
+            margin-bottom: 10px;
+            width: 100%;
+            padding: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h3>Registro de Alumnos</h3>
+        <form id="formularioAlumno">
+            <input type="text" id="nombre" placeholder="Nombre completo" required>
+            <input type="email" id="correo" placeholder="Email" required>
+            <input type="number" id="nota" placeholder="8.5" required>
+            <button type="submit">Agregar a la lista</button>
+            <button id="eliminar">Eliminar ultimo registro</button>
+        </form>
+
+        <table id="tablaUsuarios">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Nota</th>
+                </tr>
+            </thead>
+            <tbody id="cuerpoTabla">
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // 1. EL ESTADO: Un array que guarda nuestros objetos
+        const alumnos = [];
+
+        // 2. REFERENCIAS AL DOM
+        const form = document.getElementById('formularioAlumno');
+        const tabla = document.getElementById('cuerpoTabla');
+
+        // 3. EVENTO SUBMIT (Más avanzado que el click)
+        form.addEventListener('submit', (event) => {
+            // Evitamos que la página se recargue
+            event.preventDefault();
+
+            // 4. EL OBJETO: Capturamos los datos
+            const nuevoAlumno = {
+                nombre: document.getElementById('nombre').value,
+                email: document.getElementById('correo').value,
+                nota: document.getElementById('nota').value
+            };
+
+            // 5. ACTUALIZAMOS LOS DATOS (El Array)
+            alumnos.push(nuevoAlumno);
+
+            // 6. ACTUALIZAMOS EL DOM (Pintar la tabla)
+            renderizarTabla();
+
+            // Limpiar campos
+            form.reset();
+        });
+
+        // Función para "dibujar" el DOM basándose en el Array
+        function renderizarTabla() {
+            // Limpiamos la tabla antes de volver a pintar
+            tabla.innerHTML = "";
+
+            // Recorremos el array de objetos
+            alumnos.forEach(alumno => {
+                const suspenso = alumno.nota < 5 ? "color: red" : "";
+                const fila = document.createElement('tr');
+                fila.innerHTML = `
+                <td>${alumno.nombre}</td>
+                <td>${alumno.email}</td>
+                <td style="${suspenso}">${alumno.nota}</td>
+            `;
+                tabla.appendChild(fila);
+            });
+        }
+
+        const botonEliminar = document.getElementById('eliminar');
+
+        botonEliminar.onclick = eliminarResgistro;
+
+        function eliminarResgistro() {
+            alumnos.pop()
+
+            renderizarTabla();
+        }
+    </script>
+
+</body>
+
+</html>

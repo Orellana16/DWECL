@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            padding: 30px;
+            background-color: #f4f7f6;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 700px;
+            margin: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+            text-align: center;
+        }
+
+        .grid-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        .botones {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            color: white;
+            min-width: 140px;
+        }
+
+        .btn-add {
+            background-color: #28a745;
+        }
+
+        .btn-clear {
+            background-color: #dc3545;
+        }
+
+        .btn-download {
+            background-color: #17a2b8;
+        }
+
+        .btn-upload {
+            background-color: #6c757d;
+            position: relative;
+        }
+
+        /* Ocultar el input file real para usar el botón de diseño */
+        #inputArchivo {
+            display: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Gestión de Alumnos Pro</h2>
+
+        <form id="formAlumno">
+            <div class="grid-form">
+                <input type="text" id="nombre" placeholder="Nombre" required>
+                <input type="text" id="apellidos" placeholder="Apellidos" required>
+                <input type="number" id="edad" placeholder="Edad" required min="1" max="120">
+                <input type="number" id="nota" placeholder="Nota (0-10)" step="0.1" required min="0" max="10">
+                <input type="tel" id="movil" placeholder="Móvil (Ej: 612345678)" pattern="^[6][0-9]{8}$"
+                    title="Debe empezar por 6 y tener 9 dígitos" required class="full-width">
+            </div>
+
+            <div class="botones">
+                <button type="submit" class="btn-add">Añadir Alumno</button>
+                <button type="button" id="btnDescargar" class="btn-download">Descargar JSON</button>
+                <button type="button" class="btn-upload" onclick="document.getElementById('inputArchivo').click()">Subir
+                    JSON</button>
+                <input type="file" id="inputArchivo" accept=".json">
+                <button type="button" id="btnBorrarTodo" class="btn-clear">Borrar Todo</button>
+            </div>
+        </form>
+
+        <table id="tabla">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th>Apellidos</th>
+                    <th>Edad</th>
+                    <th>Nota</th>
+                    <th>Móvil</th>
+                </tr>
+            </thead>
+            <tbody id="cuerpo"></tbody>
+        </table>
+    </div>
+
+    <script>
+        let alumnos = JSON.parse(localStorage.getItem('alumnos_completo')) || [];
+
+        const form = document.getElementById('formAlumno');
+        const cuerpo = document.getElementById('cuerpo');
+        const btnClear = document.getElementById('btnBorrarTodo');
+        const btnDescargar = document.getElementById('btnDescargar');
+        const inputArchivo = document.getElementById('inputArchivo');
+
+        renderizar();
+
+        // --- GESTIÓN DE DATOS ---
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const nuevo = {
+                nombre: document.getElementById('nombre').value,
+                apellidos: document.getElementById('apellidos').value,
+                edad: document.getElementById('edad').value,
+                nota: document.getElementById('nota').value,
+                movil: document.getElementById('movil').value
+            };
+
+            alumnos.push(nuevo);
+            guardarYSincronizar();
+            form.reset();
+        });
+
+        btnClear.addEventListener('click', () => {
+            if (confirm("¿Seguro que quieres borrar toda la lista?")) {
+                alumnos = [];
+                guardarYSincronizar();
+            }
+        });
+
+        // --- DESCARGAR JSON ---
+        btnDescargar.addEventListener('click', () => {
+            if (alumnos.length === 0) return alert("No hay datos para descargar");
+
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(alumnos, null, 2));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "alumnos.json");
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        });
+
+        // --- SUBIR JSON ---
+        inputArchivo.addEventListener('change', (e) => {
+            const archivo = e.target.files[0];
+            if (!archivo) return;
+
+            const lector = new FileReader();
+            lector.onload = function (event) {
+                try {
+                    const datosCargados = JSON.parse(event.target.result);
+                    if (Array.isArray(datosCargados)) {
+                        alumnos = datosCargados;
+                        guardarYSincronizar();
+                        alert("¡Datos cargados correctamente!");
+                    } else {
+                        alert("El formato del archivo no es un array válido.");
+                    }
+                } catch (error) {
+                    alert("Error al leer el archivo JSON.");
+                }
+            };
+            lector.readAsText(archivo);
+            inputArchivo.value = ""; // Resetear para permitir subir el mismo archivo después
+        });
+
+        // --- PERSISTENCIA Y VISTA ---
+
+        function guardarYSincronizar() {
+            localStorage.setItem('alumnos_completo', JSON.stringify(alumnos));
+            renderizar();
+        }
+
+        function renderizar() {
+            cuerpo.innerHTML = "";
+            alumnos.forEach((alum, i) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                <td>${i + 1}</td>
+                <td>${alum.nombre}</td>
+                <td>${alum.apellidos}</td>
+                <td>${alum.edad}</td>
+                <td><b>${alum.nota}</b></td>
+                <td>${alum.movil}</td>
+            `;
+                cuerpo.appendChild(tr);
+            });
+        }
+    </script>
+
+</body>
+
+</html>
