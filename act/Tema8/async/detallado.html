@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Ejercicio 3 - Buscador</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        .error {
+            color: orange;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        img {
+            width: 60px;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Buscador de Productos</h2>
+    <input type="text" id="inputBusqueda" placeholder="Ej: phone, laptop..."> <button
+        onclick="buscarProducto()">Buscar</button>
+
+    <div id="mensaje-error" class="error"></div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Imagen</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Descuento</th>
+            </tr>
+        </thead>
+        <tbody id="resultados-busqueda"></tbody>
+    </table>
+
+    <script>
+        async function buscarProducto() {
+            const query = document.getElementById('inputBusqueda').value; // [cite: 19]
+            const tabla = document.getElementById('resultados-busqueda');
+            const mensaje = document.getElementById('mensaje-error');
+
+            tabla.innerHTML = "";
+            mensaje.innerText = "";
+
+            try {
+                const respuesta = await fetch(`https://dummyjson.com/products/search?q=${query}`); // [cite: 17]
+                const data = await respuesta.json();
+
+                // Reto: Manejo de resultados vacíos [cite: 21]
+                if (data.products.length === 0) {
+                    mensaje.innerText = "No se encontraron productos que coincidan con tu búsqueda.";
+                    return;
+                }
+
+                // Pintar resultados [cite: 20]
+                data.products.forEach(p => {
+                    const fila = `
+                        <tr>
+                            <td><img src="${p.thumbnail}"></td>
+                            <td>${p.title}</td>
+                            <td>${p.description}</td>
+                            <td>${p.discountPercentage}%</td>
+                        </tr>`;
+                    tabla.innerHTML += fila;
+                });
+            } catch (error) {
+                mensaje.innerText = "Hubo un error al realizar la búsqueda.";
+            }
+        }
+    </script>
+</body>
+
+</html>

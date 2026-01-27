@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Poké-Dex Retro Team</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --pk-yellow: #ffcb05;
+            --pk-blue: #3b4cca;
+            --pk-red: #ee1515;
+            --pk-dark: #1f1f1f;
+            --gb-bg: #9bbc0f;
+            --gb-dark: #0f380f;
+            --gb-light: #e0f8d0;
+            --gb-medium: #8bac0f;
+            --gb-shadow: #306230;
+            --shadow-hard: 6px 6px 0 #0004;
+            --shadow-soft: 0 10px 30px #0006;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Press Start 2P', system-ui, sans-serif;
+            background: linear-gradient(135deg, #111 0%, #1a1a1a 100%);
+            color: var(--gb-dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+            font-size: 13px;
+            image-rendering: pixelated;
+        }
+
+        h1,
+        h2 {
+            margin: 0.4em 0 0.8em;
+            color: var(--pk-yellow);
+            text-shadow:
+                4px 4px 0 var(--pk-blue),
+                -2px -2px 0 #000,
+                2px 2px 0 #000;
+            letter-spacing: 3px;
+            line-height: 1.4;
+            text-align: center;
+            font-size: 1.9rem;
+            -webkit-font-smoothing: none;
+        }
+
+        /* Consola retro más realista */
+        .console-outer {
+            width: min(92vw, 680px);
+            background: linear-gradient(145deg, #444 0%, #222 40%, #111 100%);
+            border-radius: 18px;
+            padding: 1.6rem 1.4rem 2.2rem;
+            box-shadow:
+                var(--shadow-soft),
+                inset 0 8px 20px #0008,
+                0 0 0 8px #333;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .console-outer::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 20%, #fff2 12%, transparent 14%);
+            pointer-events: none;
+            opacity: 0.15;
+        }
+
+        .screen-bezel {
+            background: #0f380f;
+            border: 10px solid #306230;
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: inset 0 4px 12px #0009, 0 0 0 4px #8bac0f;
+        }
+
+        .screen {
+            background: var(--gb-light);
+            min-height: 260px;
+            padding: 1.2rem;
+            border-radius: 8px;
+            box-shadow: inset 4px 4px 10px #0005;
+            position: relative;
+            overflow: hidden;
+            color: var(--gb-dark);
+        }
+
+        /* Input zone */
+        .input-group {
+            background: var(--gb-medium);
+            border: 5px solid var(--gb-dark);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1.4rem;
+            box-shadow: var(--shadow-hard), inset 0 3px 8px #0004;
+        }
+
+        label {
+            font-size: 0.78rem;
+            margin-bottom: 0.5rem;
+            display: block;
+            color: var(--gb-dark);
+            text-shadow: 1px 1px 0 #fff4;
+        }
+
+        input {
+            width: 100%;
+            font-family: inherit;
+            font-size: 1rem;
+            padding: 0.7rem 0.9rem;
+            background: #e0f8d0;
+            border: 4px solid var(--gb-dark);
+            border-radius: 6px;
+            color: var(--gb-dark);
+            outline: none;
+            box-shadow: inset 3px 3px 6px #0003;
+        }
+
+        input:focus {
+            border-color: var(--pk-red);
+            box-shadow: 0 0 0 4px #ffcb0533;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        button {
+            font-family: inherit;
+            font-size: 0.82rem;
+            padding: 0.9rem 1.1rem;
+            border: 5px solid #000;
+            border-radius: 8px;
+            cursor: pointer;
+            color: white;
+            text-shadow: 1.5px 1.5px 0 #000;
+            box-shadow: 4px 4px 0 #0008;
+            transition: all 0.08s ease;
+            user-select: none;
+        }
+
+        button:active {
+            transform: translate(3px, 3px);
+            box-shadow: 1px 1px 0 #0008;
+        }
+
+        .btn-load {
+            background: var(--pk-blue);
+        }
+
+        .btn-gen {
+            background: var(--pk-yellow);
+            color: #000;
+            text-shadow: none;
+        }
+
+        .btn-clear {
+            background: var(--pk-red);
+        }
+
+        /* Pokémon cards ── modern-retro style */
+        #display {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 12px;
+            display: none;
+        }
+
+        tbody tr {
+            background: #222;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 5px 5px 0 #0005, inset 0 1px 3px #fff2;
+            height: 82px;
+            animation: cardPop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            position: relative;
+        }
+
+        @keyframes cardPop {
+            0% {
+                opacity: 0;
+                transform: scale(0.88) translateY(30px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        /* Fondo gradiente tipo + pokeball sutil */
+        tbody tr::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: inherit;
+            opacity: 0.92;
+            z-index: 0;
+        }
+
+        tbody tr::after {
+            content: "";
+            position: absolute;
+            right: -18px;
+            bottom: -28px;
+            width: 110px;
+            height: 110px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='white' fill-opacity='0.07'%3E%3Ccircle cx='50' cy='50' r='48'/%3E%3Crect x='0' y='46' width='100' height='8'/%3E%3Ccircle cx='50' cy='50' r='14' fill='%23000' fill-opacity='0.15'/%3E%3C/svg%3E") no-repeat;
+            background-size: contain;
+            transform: rotate(-18deg);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        td {
+            padding: 8px 12px;
+            vertical-align: middle;
+            position: relative;
+            z-index: 1;
+            color: white;
+            text-shadow: 2px 2px 3px #000;
+            border: none;
+        }
+
+        td:first-child {
+            width: 78px;
+            text-align: center;
+            background: linear-gradient(90deg, #0003, transparent);
+        }
+
+        .poke-sprite {
+            width: 68px;
+            height: 68px;
+            image-rendering: pixelated;
+            filter: drop-shadow(4px 6px 4px #0006);
+            transform: scale(1.15);
+            transition: transform 0.25s ease;
+        }
+
+        tr:hover .poke-sprite {
+            transform: scale(1.28);
+        }
+
+        .poke-name {
+            font-size: 1.15rem;
+            font-weight: bold;
+            letter-spacing: 1.2px;
+            display: block;
+        }
+
+        .poke-number {
+            font-size: 0.72rem;
+            opacity: 0.85;
+            margin-top: 3px;
+            display: block;
+        }
+
+        .types-container {
+            text-align: right;
+            font-size: 0.78rem;
+        }
+
+        .type-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            margin: 0 0 4px 6px;
+            border-radius: 6px;
+            font-size: 0.72rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            border: 3px solid #000;
+            box-shadow: 2px 2px 0 #0006;
+            background: #fff;
+            color: #000;
+        }
+
+        /* Loading */
+        #loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 56, 15, 0.94);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            color: white;
+            font-size: 1.1rem;
+            text-shadow: 3px 3px 6px #000;
+        }
+
+        .pokeball-loader {
+            width: 70px;
+            height: 70px;
+            background: white;
+            border: 7px solid #000;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            animation: spin 1.2s infinite linear;
+            box-shadow: 0 10px 30px #0008;
+        }
+
+        .pokeball-loader::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: var(--pk-red);
+            border-bottom: 7px solid #000;
+        }
+
+        .pokeball-loader::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 18px;
+            height: 18px;
+            background: white;
+            border: 7px solid #000;
+            border-radius: 50%;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-text {
+            margin-top: 2rem;
+            text-align: center;
+            line-height: 1.7;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="loading-overlay">
+        <div class="pokeball-loader"></div>
+        <div class="loading-text">CAPTURANDO<br>DATOS...</div>
+    </div>
+
+    <h2>POKE-TEAM</h2>
+
+    <div class="console-outer">
+        <div class="screen-bezel">
+            <div class="screen">
+
+                <div class="input-group">
+                    <label>CONSTRUYE TU EQUIPO</label>
+                    <input id="equipo" type="text" placeholder="25 6 150 GENGAR  o 1 4 7..." autocomplete="off"
+                        spellcheck="false" />
+                    <div class="controls">
+                        <button class="btn-load" onclick="cargarEquipo()">BUSCAR</button>
+                        <button class="btn-gen" onclick="generarEquipo()">RANDOM</button>
+                        <button class="btn-clear" onclick="limpiarEquipo()">BORRAR</button>
+                    </div>
+                </div>
+
+                <table id="display">
+                    <tbody id="tabla-pokemon"></tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ──────────────────────────────────────────────
+        // Tu JavaScript original ── solo pequeños ajustes
+        // ──────────────────────────────────────────────
+
+        const tabla = document.getElementById('tabla-pokemon');
+        const overlay = document.getElementById('loading-overlay');
+        let pokemons = 0;
+
+        const typeColors = {
+            normal: '#A8A878', fire: '#F08030', water: '#6890F0', grass: '#78C850',
+            electric: '#F8D030', ice: '#98D8D8', fighting: '#C22E28', poison: '#A040A0',
+            ground: '#E0C068', flying: '#A890F0', psychic: '#F85888', bug: '#A8B820',
+            rock: '#B8A038', ghost: '#705898', dragon: '#7038F8', steel: '#B8B8D0',
+            dark: '#705848', fairy: '#EE99AC'
+        };
+
+        const typeNamesEs = {
+            normal: 'Normal', fire: 'Fuego', water: 'Agua', grass: 'Planta',
+            electric: 'Elec.', ice: 'Hielo', fighting: 'Lucha', poison: 'Veneno',
+            ground: 'Tierra', flying: 'Volador', psychic: 'Psiq.', bug: 'Bicho',
+            rock: 'Roca', ghost: 'Fantas.', dragon: 'Dragón', steel: 'Acero',
+            dark: 'Siniest.', fairy: 'Hada'
+        };
+
+        function toggleLoading(show) {
+            overlay.style.display = show ? "flex" : "none";
+        }
+
+        function limpiarEquipo() {
+            tabla.innerHTML = "";
+            pokemons = 0;
+            document.getElementById('equipo').value = "";
+            document.getElementById('display').style.display = 'none';
+        }
+
+        async function cargarEquipo() {
+
+            const input = document.getElementById('equipo');
+            const texto = input.value.trim();
+            if (!texto) return;
+
+            toggleLoading(true);
+            const pokemonIds = texto.split(/\s+/).slice(0, 6).filter(Boolean);
+            await encontrarPoke(pokemonIds);
+            toggleLoading(false);
+        }
+
+        async function generarEquipo() {
+
+            if (pokemons >= 6) {
+                alert("¡EQUIPO LLENO!");
+                return;
+            }
+
+            toggleLoading(true);
+            const pRestantes = 6 - pokemons;
+            const ids = Array(pRestantes).fill(0).map(() => Math.floor(Math.random() * 898) + 1);
+            await encontrarPoke(ids);
+            toggleLoading(false);
+        }
+
+        async function encontrarPoke(pokemonIds) {
+            document.getElementById('display').style.display = 'table';
+
+            for (const id of pokemonIds) {
+                if (pokemons >= 6) {
+                    alert("¡EQUIPO LLENO!");
+                    return;
+                }
+
+                try {
+                    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+                    if (!res.ok) throw new Error();
+                    const data = await res.json();
+
+                    let sprite = data.sprites?.versions?.['generation-v']?.['black-white']?.animated?.front_default;
+                    if (!sprite) sprite = data.sprites?.front_default || '';
+
+                    const tipo1 = data.types[0]?.type?.name;
+                    const color1 = typeColors[tipo1] || '#777';
+
+                    let bgStyle = `background: linear-gradient(135deg, ${color1} 0%, #111 100%);`;
+
+                    if (data.types[1]) {
+                        const tipo2 = data.types[1].type.name;
+                        const color2 = typeColors[tipo2] || '#777';
+                        bgStyle = `background: linear-gradient(135deg, ${color1}, ${color2});`;
+                    }
+
+                    let tiposHtml = '';
+                    data.types.forEach(t => {
+                        const nameEs = typeNamesEs[t.type.name] || t.type.name;
+                        tiposHtml += `<span class="type-badge" style="background:#${typeColors[t.type.name]?.slice(1) || 'ccc'}55; color:white;">${nameEs}</span>`;
+                    });
+
+                    const fila = `
+      <tr style="${bgStyle}">
+        <td>
+          ${sprite ? `<img class="poke-sprite" src="${sprite}" alt="${data.name}" loading="lazy">` : ''}
+        </td>
+        <td>
+          <span class="poke-name">${data.name.toUpperCase()}</span>
+          <span class="poke-number">Nº ${data.id}</span>
+        </td>
+        <td class="types-container">
+          ${tiposHtml}
+        </td>
+      </tr>`;
+
+                    tabla.innerHTML += fila;
+                    pokemons++;
+                    await new Promise(r => setTimeout(r, 120)); // efecto entrada más suave
+
+                } catch (e) {
+                    console.error("Error al cargar Pokémon", id, e);
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

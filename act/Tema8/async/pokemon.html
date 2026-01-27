@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poké-Dex DX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Colores Carcasa */
+            --body-color: #d6d6d6;
+            --body-shadow: #9ea0a5;
+            --curve-shadow: rgba(0, 0, 0, 0.15);
+
+            /* Colores Pantalla */
+            --screen-bezel: #555560;
+            --lcd-off: #788525;
+            --lcd-on: #9bbc0f;
+            --lcd-text: #0f380f;
+
+            /* Botones */
+            --btn-a: #ba2146;
+            --btn-b: #ba2146;
+            --dpad: #222;
+            --select-start: #777;
+        }
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background-color: #121212;
+            background-image: radial-gradient(#2a2a2a 15%, transparent 16%);
+            background-size: 20px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        /* --- CUERPO DE LA CONSOLA --- */
+        .console-body {
+            position: relative;
+            width: 400px;
+            /* Más ancha */
+            height: 720px;
+            /* Más alta */
+            background: linear-gradient(160deg, #e6e6e6 0%, #c0c0c0 100%);
+            border-radius: 15px 15px 60px 15px;
+            box-shadow:
+                inset 5px 5px 15px rgba(255, 255, 255, 0.8),
+                inset -5px -5px 15px rgba(0, 0, 0, 0.1),
+                10px 10px 30px rgba(0, 0, 0, 0.5);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* --- MARCO PANTALLA (BEZEL) --- */
+        .screen-lens {
+            background-color: var(--screen-bezel);
+            width: 100%;
+            height: 420px;
+            /* PANTALLA GRANDE */
+            border-radius: 10px 10px 40px 10px;
+            padding: 20px 30px;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Decoración líneas roja/azul */
+        .lens-lines {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            right: 20px;
+            height: 2px;
+            background: linear-gradient(90deg, #8b1d45 30%, #283485 30%, #283485 70%, #222 70%);
+        }
+
+        .lens-lines.bottom {
+            top: auto;
+            bottom: 10px;
+            background: linear-gradient(90deg, #222 30%, #283485 30%, #283485 70%, #8b1d45 70%);
+        }
+
+        /* LED */
+        .power-led {
+            position: absolute;
+            top: 150px;
+            left: 8px;
+            width: 8px;
+            height: 8px;
+            background: #4a1a1a;
+            border-radius: 50%;
+            transition: 0.3s;
+            box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .power-led.on {
+            background: #ff0000;
+            box-shadow: 0 0 10px #ff0000;
+        }
+
+        /* --- PANTALLA LCD --- */
+        .lcd-screen {
+            background-color: var(--lcd-off);
+            flex-grow: 1;
+            margin: 15px 0;
+            border: 2px solid #4a4a50;
+            border-radius: 4px;
+            box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+            transition: background-color 0.8s;
+        }
+
+        .lcd-screen.active {
+            background-color: var(--lcd-on);
+        }
+
+        /* Rejilla de píxeles */
+        .lcd-screen::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                linear-gradient(transparent 50%, rgba(0, 0, 0, 0.1) 50%),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.05) 50%, transparent 50%);
+            background-size: 4px 4px;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* Contenido LCD */
+        .lcd-content {
+            height: 100%;
+            padding: 10px;
+            opacity: 0;
+            display: flex;
+            flex-direction: column;
+            color: var(--lcd-text);
+            overflow-y: auto;
+            transition: opacity 0.5s;
+            position: relative;
+            z-index: 5;
+            font-size: 10px;
+        }
+
+        .lcd-content.visible {
+            opacity: 1;
+        }
+
+        /* Scrollbar Retro */
+        .lcd-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .lcd-content::-webkit-scrollbar-thumb {
+            background: var(--lcd-text);
+        }
+
+        /* --- UI ELEMENTOS --- */
+        .boot-sequence {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--lcd-on);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 20;
+        }
+
+        .logo-nintendo {
+            background: var(--lcd-text);
+            color: var(--lcd-on);
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-size: 14px;
+            transform: translateY(-200px);
+            animation: fallDown 2.5s ease-out forwards;
+        }
+
+        @keyframes fallDown {
+            0% {
+                transform: translateY(-200px);
+            }
+
+            60% {
+                transform: translateY(0);
+            }
+
+            80% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        .search-row {
+            border-bottom: 2px solid var(--lcd-text);
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            font-family: 'Press Start 2P';
+            font-size: 12px;
+            color: var(--lcd-text);
+            outline: none;
+            text-transform: uppercase;
+            margin-left: 5px;
+        }
+
+        .poke-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .poke-card {
+            display: flex;
+            align-items: center;
+            border: 2px solid var(--lcd-text);
+            padding: 5px;
+            background: rgba(15, 56, 15, 0.05);
+            animation: slideIn 0.3s ease-out;
+            box-shadow: 2px 2px 0 rgba(15, 56, 15, 0.3);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .sprite {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+            image-rendering: pixelated;
+        }
+
+        .type-tag {
+            background: var(--lcd-text);
+            color: var(--lcd-on);
+            padding: 2px 4px;
+            font-size: 7px;
+            margin-right: 3px;
+        }
+
+        /* --- CONTROLES --- */
+        .controls-area {
+            width: 100%;
+            height: 200px;
+            position: relative;
+        }
+
+        /* D-PAD */
+        .dpad {
+            position: absolute;
+            top: 30px;
+            left: 10px;
+            width: 100px;
+            height: 100px;
+        }
+
+        .dpad div {
+            background: var(--dpad);
+            position: absolute;
+            border-radius: 4px;
+            box-shadow:
+                3px 3px 5px rgba(0, 0, 0, 0.5),
+                inset 2px 2px 5px rgba(255, 255, 255, 0.1);
+        }
+
+        .d-h {
+            width: 100%;
+            height: 32px;
+            top: 34px;
+        }
+
+        .d-v {
+            height: 100%;
+            width: 32px;
+            left: 34px;
+        }
+
+        .d-center {
+            width: 20px;
+            height: 20px;
+            top: 40px;
+            left: 40px;
+            background: radial-gradient(circle, #333, #111);
+            border-radius: 50%;
+            z-index: 2;
+        }
+
+        /* Botones A B */
+        .action-container {
+            position: absolute;
+            top: 40px;
+            right: 10px;
+            width: 130px;
+            height: 70px;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 35px;
+            transform: rotate(-25deg);
+            box-shadow: inset 1px 1px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-round {
+            width: 45px;
+            height: 45px;
+            background-color: var(--btn-a);
+            border-radius: 50%;
+            border: none;
+            position: absolute;
+            box-shadow:
+                3px 3px 0 #7a152d,
+                5px 5px 10px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+
+        .btn-round:active {
+            transform: translate(3px, 3px);
+            box-shadow: 0 0 0 #7a152d;
+        }
+
+        .btn-a {
+            right: 10px;
+            top: 3px;
+        }
+
+        .btn-b {
+            left: 5px;
+            bottom: 20px;
+        }
+
+        .btn-label {
+            position: absolute;
+            font-weight: bold;
+            color: #383a85;
+            font-size: 12px;
+            transform: rotate(25deg);
+        }
+
+        /* Start Select */
+        .pill-container {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+        }
+
+        .pill-btn {
+            width: 55px;
+            height: 14px;
+            background: var(--select-start);
+            border-radius: 10px;
+            border: none;
+            transform: rotate(-25deg);
+            box-shadow: 2px 2px 0 #444;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .pill-btn:active {
+            transform: rotate(-25deg) translate(2px, 2px);
+            box-shadow: none;
+        }
+
+        .pill-text {
+            text-align: center;
+            font-size: 9px;
+            margin-top: 15px;
+            color: #383a85;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        /* Speaker */
+        .speaker {
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+            transform: rotate(-25deg);
+        }
+
+        .grill {
+            width: 70px;
+            height: 6px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 3px;
+            margin-bottom: 5px;
+            box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.4);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="console-body">
+
+        <!-- PANTALLA -->
+        <div class="screen-lens">
+            <div class="lens-lines"></div>
+            <div style="display:flex; justify-content:space-between; font-size:9px; color:#b0b0b0; margin-bottom:5px;">
+                <span>DOT MATRIX WITH STEREO SOUND</span>
+            </div>
+
+            <div class="power-led" id="led"></div>
+
+            <div class="lcd-screen" id="lcd">
+
+                <!-- Secuencia Boot -->
+                <div class="boot-sequence" id="boot">
+                    <div class="logo-nintendo">Nintendo®</div>
+                </div>
+
+                <!-- UI Principal -->
+                <div class="lcd-content" id="ui">
+
+                    <div class="search-row">
+                        <span>▶</span>
+                        <input id="search-input" type="text" placeholder="TYPE NAME OR ID" autocomplete="off">
+                    </div>
+
+                    <div class="poke-list" id="results">
+                        <div style="text-align:center; margin-top:50px; opacity:0.6; line-height:1.5;">
+                            SYSTEM READY.<br><br>
+                            PRESS 'A' TO SEARCH<br>
+                            PRESS 'B' TO RANDOM
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Mensaje apagado -->
+                <div id="off-msg"
+                    style="position:absolute; top:45%; width:100%; text-align:center; color:rgba(0,0,0,0.2); font-size:14px;">
+                    PRESS START
+                </div>
+            </div>
+
+            <div style="display:flex; justify-content:center; margin-top:10px;">
+                <span style="font-style:italic; font-weight:bold; color:#383a85; font-size:14px;">Nintendo <span
+                        style="font-size:18px; font-family:sans-serif;">GAME BOY</span>TM</span>
+            </div>
+            <div class="lens-lines bottom"></div>
+        </div>
+
+        <!-- CONTROLES -->
+        <div class="controls-area">
+
+            <div class="dpad">
+                <div class="d-h"></div>
+                <div class="d-v"></div>
+                <div class="d-center"></div>
+            </div>
+
+            <div class="action-container">
+                <button class="btn-round btn-a" onclick="fetchPokemon()"></button>
+                <div class="btn-label" style="bottom:5px; right:10px;">A</div>
+
+                <button class="btn-round btn-b" onclick="fetchRandom()"></button>
+                <div class="btn-label" style="bottom:5px; left:40px;">B</div>
+            </div>
+
+            <div class="pill-container">
+                <div>
+                    <button class="pill-btn" onclick="clearScreen()"></button>
+                    <div class="pill-text">SELECT</div>
+                </div>
+                <div>
+                    <button class="pill-btn" onclick="turnOn()"></button>
+                    <div class="pill-text">START</div>
+                </div>
+            </div>
+
+            <div class="speaker">
+                <div class="grill"></div>
+                <div class="grill"></div>
+                <div class="grill"></div>
+                <div class="grill"></div>
+                <div class="grill"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        const lcd = document.getElementById('lcd');
+        const ui = document.getElementById('ui');
+        const boot = document.getElementById('boot');
+        const led = document.getElementById('led');
+        const offMsg = document.getElementById('off-msg');
+        const input = document.getElementById('search-input');
+        const results = document.getElementById('results');
+
+        let isPowered = false;
+
+        function turnOn() {
+            if (isPowered) return;
+
+            // 1. Efectos físicos
+            led.classList.add('on');
+            lcd.classList.add('active');
+            offMsg.style.display = 'none';
+
+            // 2. Animación Boot
+            boot.style.display = 'flex';
+
+            // 3. Audio simulado (retardo)
+            setTimeout(() => {
+                boot.style.display = 'none';
+                ui.classList.add('visible');
+                input.focus();
+                isPowered = true;
+            }, 2800);
+        }
+
+        function clearScreen() {
+            if (!isPowered) return;
+            results.innerHTML = `<div style="text-align:center; margin-top:50px; opacity:0.6;">LIST CLEARED.<br>READY.</div>`;
+            input.value = "";
+            input.focus();
+        }
+
+        async function fetchPokemon() {
+            if (!isPowered) return;
+
+            const query = input.value.trim().toLowerCase();
+            if (!query) return;
+
+            results.innerHTML = `<div style="text-align:center; margin-top:20px;">CONNECTING...</div>`;
+
+            try {
+                // Soporta múltiples IDs separados por espacio
+                const ids = query.split(" ").slice(0, 5);
+                results.innerHTML = ""; // Limpiar loading
+
+                for (let id of ids) {
+                    await getPokeData(id);
+                }
+                input.value = "";
+            } catch (e) {
+                results.innerHTML = `<div style="text-align:center; margin-top:20px; color:#522;">ERROR: NOT FOUND</div>`;
+            }
+        }
+
+        async function fetchRandom() {
+            if (!isPowered) return;
+            results.innerHTML = `<div style="text-align:center; margin-top:20px;">CATCHING...</div>`;
+            results.innerHTML = "";
+
+            // Generar 3 randoms
+            for (let i = 0; i < 3; i++) {
+                // Generación 1 a 5 (hasta 649) para asegurar sprites animados
+                const id = Math.floor(Math.random() * 649) + 1;
+                await getPokeData(id);
+            }
+        }
+
+        async function getPokeData(idOrName) {
+            try {
+                const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${idOrName}`);
+                if (!res.ok) throw new Error();
+                const data = await res.json();
+
+                // Intentar obtener sprite animado (Gen 5 BW)
+                let sprite = data.sprites.versions['generation-v']['black-white'].animated.front_default;
+                if (!sprite) sprite = data.sprites.front_default;
+
+                const types = data.types.map(t => `<span class="type-tag">${t.type.name.toUpperCase()}</span>`).join("");
+
+                const card = document.createElement('div');
+                card.className = 'poke-card';
+                card.innerHTML = `
+                    <img src="${sprite}" class="sprite">
+                    <div style="flex-grow:1;">
+                        <div style="font-weight:bold; font-size:12px; margin-bottom:5px;">${data.name.toUpperCase()}</div>
+                        <div style="display:flex;">${types}</div>
+                    </div>
+                    <div style="font-size:8px;">#${data.id}</div>
+                `;
+                results.appendChild(card);
+
+                // Auto scroll
+                const container = document.querySelector('.lcd-content');
+                container.scrollTop = container.scrollHeight;
+
+            } catch (e) {
+                console.log(e);
+            }
+        }
+
+        // Tecla Enter
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') fetchPokemon();
+        });
+
+    </script>
+</body>
+
+</html>

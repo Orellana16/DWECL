@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Ejercicio 2 - Catálogo</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .bajo-stock {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body onload="obtenerProductos()">
+    <h2>Catálogo de Productos</h2>
+    <button onclick="filtrarStockBajo()">Filtrar por stock bajo</button>
+    <button onclick="obtenerProductos()">Mostrar todos</button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Marca</th>
+            </tr>
+        </thead>
+        <tbody id="cuerpo-productos"></tbody>
+    </table>
+
+    <script>
+        let todosLosProductos = [];
+
+        async function obtenerProductos() { // [cite: 12]
+            try {
+                const respuesta = await fetch('https://dummyjson.com/products');
+                const data = await respuesta.json();
+                todosLosProductos = data.products;
+                renderizarTabla(todosLosProductos);
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+
+        function renderizarTabla(lista) { // [cite: 13]
+            const cuerpo = document.getElementById('cuerpo-productos');
+            cuerpo.innerHTML = "";
+            lista.forEach(p => {
+                const fila = `
+                    <tr>
+                        <td>${p.title}</td>
+                        <td>$${p.price}</td>
+                        <td class="${p.stock < 10 ? 'bajo-stock' : ''}">${p.stock}</td>
+                        <td>${p.brand || 'N/A'}</td>
+                    </tr>`;
+                cuerpo.innerHTML += fila;
+            });
+        }
+
+        function filtrarStockBajo() { // [cite: 14]
+            const filtrados = todosLosProductos.filter(p => p.stock < 10);
+            renderizarTabla(filtrados);
+        }
+    </script>
+</body>
+
+</html>
