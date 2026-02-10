@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Usuarios (CRUD)</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h2>Gestión de Usuarios (CRUD)</h2>
+    
+    <form id="miFormulario">
+        <input type="hidden" name="id" id="userId"> <input type="text" name="nombre" id="nombre" placeholder="Nombre" required>
+        <input type="email" name="correo" id="correo" placeholder="Correo" required>
+        <input type="text" name="movil" id="movil" placeholder="Móvil" required>
+        <input type="number" name="edad" id="edad" placeholder="Edad" min="18" required>
+        <select name="idioma" id="idioma">
+            <option value="A1">A1</option>
+            <option value="B1">B1</option>
+            <option value="B2">B2</option>
+            <option value="C1">C1</option>
+        </select>
+        <button type="submit" id="btnEnviar">Guardar</button>
+    </form>
+
+    <div id="mensajeRespuesta"></div>
+
+    <h3>Listado de Usuarios</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th><th>Nombre</th><th>Correo</th><th>Móvil</th><th>Edad</th><th>Idioma</th><th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="tablaUsuarios">
+            </tbody>
+    </table>
+
+    <script src="app.js"></script>
+</body>
+</html>

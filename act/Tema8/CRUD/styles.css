@@ -1,0 +1,224 @@
+/* Reset básico y tipografía */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 24px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: linear-gradient(135deg, #eef2ff, #f9fafb);
+    color: #111827;
+}
+
+h2, h3 {
+    margin: 0 0 16px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+h2 {
+    font-size: 1.8rem;
+}
+
+h3 {
+    font-size: 1.3rem;
+    margin-top: 32px;
+}
+
+/* FORMULARIO */
+#miFormulario {
+    background: #ffffff;
+    padding: 20px 24px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px 16px;
+    align-items: flex-end;
+    margin-top: 12px;
+}
+
+#miFormulario input[type="hidden"] {
+    display: none;
+}
+
+#miFormulario input,
+#miFormulario select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 0.95rem;
+    outline: none;
+    background-color: #f9fafb;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+#miFormulario input::placeholder {
+    color: #9ca3af;
+}
+
+#miFormulario input:focus,
+#miFormulario select:focus {
+    border-color: #2563eb;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+/* Botón principal */
+#btnEnviar {
+    padding: 10px 18px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.35);
+    transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.15s ease;
+}
+
+#btnEnviar:hover {
+    filter: brightness(1.05);
+    box-shadow: 0 10px 22px rgba(37, 99, 235, 0.45);
+}
+
+#btnEnviar:active {
+    transform: translateY(1px) scale(0.98);
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35);
+}
+
+/* MENSAJE DE RESPUESTA */
+#mensajeRespuesta {
+    margin-top: 16px;
+    min-height: 22px;
+    font-size: 0.95rem;
+}
+
+/* Usa estas clases desde JS para éxito/error si quieres */
+#mensajeRespuesta.mensaje-exito {
+    padding: 10px 12px;
+    border-radius: 8px;
+    background-color: #ecfdf3;
+    border: 1px solid #4ade80;
+    color: #166534;
+}
+
+#mensajeRespuesta.mensaje-error {
+    padding: 10px 12px;
+    border-radius: 8px;
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #991b1b;
+}
+
+/* TABLA DE USUARIOS */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+}
+
+thead {
+    background: #f3f4f6;
+}
+
+th,
+td {
+    padding: 12px 14px;
+    text-align: left;
+    font-size: 0.92rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+th {
+    font-weight: 600;
+    color: #374151;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.8rem;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9fafb;
+}
+
+tbody tr:hover {
+    background-color: #eef2ff;
+}
+
+/* Botones dentro de la tabla (Editar / Eliminar) */
+table button {
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: none;
+    font-size: 0.8rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+}
+
+table button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(15, 23, 42, 0.15);
+}
+
+table button:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* Si en tu JS les pones clases específicas */
+table .btn-editar {
+    background-color: #e0f2fe;
+    color: #0369a1;
+}
+
+table .btn-eliminar {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+/* Fallback si no usas clases: primer botón editar, segundo eliminar */
+table button:first-child {
+    background-color: #e0f2fe;
+    color: #0369a1;
+}
+table button:last-child {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    #miFormulario {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 16px;
+    }
+
+    #miFormulario {
+        grid-template-columns: 1fr;
+    }
+
+    table {
+        font-size: 0.85rem;
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+}
