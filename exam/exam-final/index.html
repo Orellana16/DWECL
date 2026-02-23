@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Gestión de Inventario - Tienda de Ropa</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <h2>Gestión de Productos (CRUD)</h2>
-    
+
     <form id="formProducto">
-        <input type="hidden" name="id" id="prodId"> 
-        
-        <input type="text" name="codigo" id="codigo" placeholder="Código (9 carac.)" minlength="9" maxlength="9" required>
+        <input type="hidden" name="id" id="prodId">
+
+        <input type="text" name="codigo" id="codigo" placeholder="Código (9 carac.)" minlength="9" maxlength="9"
+            required>
         <input type="text" name="nombre" id="nombre" placeholder="Nombre Prenda" required>
-        
+
         <select name="talla" id="talla">
             <option value="XS">XS</option>
             <option value="S">S</option>
@@ -21,10 +24,10 @@
             <option value="L">L</option>
             <option value="XL">XL</option>
         </select>
-        
+
         <input type="number" name="precio" id="precio" placeholder="Precio" step="0.01" min="0.01" required>
         <input type="email" name="email_creador" id="email_creador" placeholder="Email Creador" required>
-        
+
         <button type="submit" id="btnEnviar">Guardar Producto</button>
     </form>
 
@@ -38,12 +41,19 @@
     <table>
         <thead>
             <tr>
-                <th>ID</th><th>Código</th><th>Nombre</th><th>Talla</th><th>Precio</th><th>Creador</th><th>Acciones</th>
+                <th>ID</th>
+                <th>Código</th>
+                <th>Nombre</th>
+                <th>Talla</th>
+                <th>Precio</th>
+                <th>Creador</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody id="tablaProductos"></tbody>
     </table>
 
-    <script src="app.js"></script>
+    <script type="module" src="app.js"></script>
 </body>
+
 </html>

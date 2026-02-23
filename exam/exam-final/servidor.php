@@ -5,7 +5,7 @@ header("Content-Type: application/json; charset=UTF-8");
 $host = 'localhost';
 $db = 'tienda_ropa'; // Base de datos del examen
 $user = 'root';
-$pass = 'toorF'; // Cambia según tu configuración
+$pass = 'toor'; // Cambia según tu configuración
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
