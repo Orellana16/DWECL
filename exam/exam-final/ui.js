@@ -18,6 +18,7 @@ export const UI = {
                 <td>${p.nombre}</td>
                 <td>${p.talla}</td>
                 <td>${p.precio}€</td>
+                <td>${p.email_creador}</td>
                 <td>
                     <button class="btn-edit">Editar</button>
                     <button class="btn-delete">Borrar</button>
@@ -27,7 +28,7 @@ export const UI = {
             // Asignación de eventos delegada a funciones callback para mayor modularidad
             tr.querySelector('.btn-edit').onclick = () => onEdit(p);
             tr.querySelector('.btn-delete').onclick = () => onDelete(p.id);
-            
+
             this.tabla.appendChild(tr);
         });
     },

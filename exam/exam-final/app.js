@@ -18,6 +18,8 @@ async function actualizarVista() {
         // 2. Si funciona, actualizamos la "foto" en el almacén local
         localStorage.setItem('productos_cache', JSON.stringify(productos));
 
+        console.log("Datos recibidos:", productos[0]);
+
         // 3. Pintamos los datos reales
         UI.renderizar(productos, {
             onEdit: (p) => llenarCamposForm(p),
